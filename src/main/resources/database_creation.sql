@@ -4,15 +4,15 @@ USE study_planner;
 
 
 CREATE TABLE course (
-                        course_name VARCHAR(100) PRIMARY KEY,
+                        course_name VARCHAR(50) PRIMARY KEY,
                         start_date DATE,
                         end_date DATE
 );
 
 CREATE TABLE study_sessions (
                                 session_id INT AUTO_INCREMENT PRIMARY KEY,
-                                course_name VARCHAR(100),
-                                title VARCHAR(100),
+                                course_name VARCHAR(50),
+                                title VARCHAR(50),
                                 description TEXT,
                                 start_time DATETIME,
                                 end_time DATETIME,
@@ -21,8 +21,8 @@ CREATE TABLE study_sessions (
 
 CREATE TABLE assignments (
                              assignment_id INT AUTO_INCREMENT PRIMARY KEY,
-                             course_name VARCHAR(100),
-                             title VARCHAR(100),
+                             course_name VARCHAR(50),
+                             title VARCHAR(50),
                              description TEXT,
                              due_date DATETIME,
                              status VARCHAR(20),
@@ -31,7 +31,7 @@ CREATE TABLE assignments (
 
 CREATE TABLE exams (
                        exam_id INT AUTO_INCREMENT PRIMARY KEY,
-                       course_name VARCHAR(100),
+                       course_name VARCHAR(50),
                        exam_date DATETIME,
                        description TEXT,
                        FOREIGN KEY (course_name) REFERENCES course(course_name)
@@ -39,7 +39,7 @@ CREATE TABLE exams (
 
 CREATE TABLE class_schedule (
                                 class_id INT AUTO_INCREMENT PRIMARY KEY,
-                                course_name VARCHAR(100),
+                                course_name VARCHAR(50),
                                 location VARCHAR(15),
                                 start_time DATETIME,
                                 end_time DATETIME,
