@@ -4,11 +4,13 @@ import java.time.LocalDate;
 
 public class Course {
     private final String courseName;
+    private String instructor;
     private LocalDate startDate;
     private LocalDate endDate;
 
-    public Course(String courseName, LocalDate startDate, LocalDate endDate) {
+    public Course(String courseName, String instructor, LocalDate startDate, LocalDate endDate) {
         this.courseName = courseName;
+        this.instructor = instructor;
         this.startDate = startDate;
         this.endDate = endDate;
     }
