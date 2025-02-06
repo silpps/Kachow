@@ -1,10 +1,17 @@
 package controllers;
 
+import dao.CourseDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import models.Course;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -16,17 +23,7 @@ public class AddTaskController implements Initializable {
     private String[] tasks = {"Assignment", "Course", "Exam", "Study Session"};
 
     @FXML
-    private ChoiceBox<String> startTimeChoiceBox;
-
-    @FXML
-    private ChoiceBox<String> endTimeChoiceBox;
-
-    private String[] startTimes = {"6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"};
-
-    private String[] endTimes = {"7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00"};
-
-    @FXML
-    private Button saveButton;
+    private Button continueButton;
 
     @FXML
     private Button backButton;
@@ -36,20 +33,34 @@ public class AddTaskController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         taskChoiceBox.getItems().addAll(tasks);
         taskChoiceBox.setOnAction(this::getTask);
-        startTimeChoiceBox.getItems().addAll(startTimes);
-        endTimeChoiceBox.getItems().addAll(endTimes);
+        backButton.setOnAction(event -> backButtonClicked());
+        continueButton.setOnAction(event -> continueButtonClicked());
     }
 
     public void getTask(ActionEvent event){
         String task = taskChoiceBox.getValue();
     }
 
-    public void getStartTime(ActionEvent event){
-        String startTime = startTimeChoiceBox.getValue();
+
+    @FXML
+    private void backButtonClicked(){
+        backButton.getScene().getWindow().hide();
     }
 
-    public void getEndTime(ActionEvent event){
-        String endTime = endTimeChoiceBox.getValue();
+    @FXML
+    private void continueButtonClicked(){
+        String taskChoice = taskChoiceBox.getValue();
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/add" + taskChoice + ".fxml"));
+                Scene scene = new Scene(loader.load());
+                Stage stage = new Stage();
+                stage.setScene(scene);
+                stage.show();
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
     }
 
 }

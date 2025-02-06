@@ -20,6 +20,7 @@ public class MariaDbConnection {
             try {
                 conn = DriverManager.getConnection(
                         "jdbc:mariadb://localhost:3306/study_planner?user=student_test&password=schedule");
+                System.out.println("Connection successful");
             } catch (SQLException e) {
                 System.out.println("Connection failed");
             }
