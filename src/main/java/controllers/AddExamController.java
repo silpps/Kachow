@@ -12,6 +12,8 @@ import java.util.List;
 
 public class AddExamController {
 
+    private ExamDAO examDAO;
+
     @FXML
     private ChoiceBox<String> courseNameChoiceBox;
 
@@ -32,6 +34,8 @@ public class AddExamController {
         List<String> courseNames = CourseService.getInstance().getCourses();
         courseNameChoiceBox.getItems().addAll(courseNames);
 
+        examDAO = new ExamDAO();
+
         backButton.setOnAction(e -> backButtonClicked());
         examSaveButton.setOnAction(e -> examSaveButtonClicked());
     }
@@ -51,7 +55,6 @@ public class AddExamController {
 
 
         Exam exam = new Exam(courseName, examDate, examTitle, description, location);
-        ExamDAO examDAO = new ExamDAO();
         examDAO.add(exam);
 
     }

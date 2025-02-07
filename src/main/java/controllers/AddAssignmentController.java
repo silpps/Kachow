@@ -11,6 +11,8 @@ import java.util.List;
 
 public class AddAssignmentController {
 
+    private AssignmentDAO assignmentDAO;
+
     @FXML
     private ChoiceBox<String> courseNameChoiceBox;
 
@@ -39,6 +41,8 @@ public class AddAssignmentController {
         List<String> courseNames = CourseService.getInstance().getCourses();
         courseNameChoiceBox.getItems().addAll(courseNames);
 
+        assignmentDAO = new AssignmentDAO();
+
         backButton.setOnAction(e -> backButtonClicked());
         assignmentSaveButton.setOnAction(e -> assignmentSaveButtonClicked());
 
@@ -59,7 +63,6 @@ public class AddAssignmentController {
 
 
         Assignment assignment = new Assignment(courseName, assignmentTitle, description, date.atStartOfDay(), status);
-        AssignmentDAO assignmentDAO = new AssignmentDAO();
         assignmentDAO.add(assignment);
 
 

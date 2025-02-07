@@ -14,6 +14,8 @@ import java.util.List;
 
 public class AddStudySessionController {
 
+    private StudySessionDAO studySessionDAO;
+
     @FXML
     private ChoiceBox<String> courseNameChoiceBox;
 
@@ -48,6 +50,8 @@ public class AddStudySessionController {
     private void initialize() {
         List<String> courseNames = CourseService.getInstance().getCourses();
         courseNameChoiceBox.getItems().addAll(courseNames);
+
+        studySessionDAO = new StudySessionDAO();
 
         fromChoiceBox.getItems().addAll(startTimes);
         toChoiceBox.getItems().addAll(endTimes);
@@ -85,9 +89,7 @@ public class AddStudySessionController {
             }
 
                 StudySession studySession = new StudySession(courseName, sessionTitle, description, fromTime, toTime, date);
-
-                StudySessionDAO studySessionDao = new StudySessionDAO();
-                studySessionDao.add(studySession);
+                studySessionDAO.add(studySession);
             }
 
 
