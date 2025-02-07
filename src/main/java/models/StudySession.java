@@ -7,6 +7,7 @@ public class StudySession {
     private String description;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+    private int id;
 
 
     public StudySession(String courseName, String title, String description, LocalDateTime startTime, LocalDateTime endTime) {
@@ -35,6 +36,14 @@ public class StudySession {
 
     public LocalDateTime getEndTime() {
         return endTime;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getDetails() {

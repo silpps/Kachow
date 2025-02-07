@@ -7,6 +7,7 @@ public class Exam {
     private String title;
     private String description;
     private String location;
+    private int id;
 
     public Exam(String courseName, LocalDateTime examDate, String title, String description, String location) {
         this.courseName = courseName;
@@ -34,6 +35,14 @@ public class Exam {
 
     public String getLocation() {
         return location;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getDetails() {

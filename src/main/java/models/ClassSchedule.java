@@ -8,6 +8,7 @@ public class ClassSchedule {
     private String  location;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+    private int id;
 
     public ClassSchedule(String courseName, String daysOfWeek, String location, LocalDateTime startTime, LocalDateTime endTime) {
         this.courseName = courseName;
@@ -35,6 +36,14 @@ public class ClassSchedule {
 
     public LocalDateTime getEndTime() {
         return endTime;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getDetails() {
