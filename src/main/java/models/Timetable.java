@@ -3,10 +3,10 @@ package models;
 import javafx.beans.property.SimpleStringProperty;
 
 //Class to add timestamps to timetable
-public class TimetableTime {
+public class Timetable {
     private final SimpleStringProperty time;
 
-    public TimetableTime(String time) {
+    public Timetable(String time) {
         this.time = new SimpleStringProperty(time);
     }
 

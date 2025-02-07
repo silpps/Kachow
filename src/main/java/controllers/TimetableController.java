@@ -1,5 +1,7 @@
 package controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -7,15 +9,24 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
-import models.TimetableTime;
+import models.Course;
+import models.Timetable;
 
 public class TimetableController {
 
     @FXML
-    private TableView<TimetableTime> timetable;
+    private TableView<Timetable> timetable;
 
     @FXML
-    private TableColumn<TimetableTime, String> timeColumn;
+    private TableView<Course> courseTableView;
+
+    @FXML
+    private TableColumn<Course, String> courseNameColumn;
+
+    private ObservableList<Course> courseList = FXCollections.observableArrayList();
+
+    @FXML
+    private TableColumn<Timetable, String> timeColumn;
 
     @FXML
     private Button addButton;
@@ -42,7 +53,7 @@ public class TimetableController {
     private void fillTimeSlots(){
         for (int i = 6; i < 25; i++){
             String time = i + ":00";
-            TimetableTime timetableTime = new TimetableTime(time);
+            Timetable timetableTime = new Timetable(time);
             timetable.getItems().add(timetableTime);
         }
     }
