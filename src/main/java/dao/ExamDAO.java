@@ -10,30 +10,6 @@ import java.util.List;
 public class ExamDAO implements IDAO<Exam> {
     private Connection conn = null;
 
-   /* @Override
-    public List<Exam> getAll() {
-        conn = MariaDbConnection.getConnection();
-        List<Exam> exams = new ArrayList<>();
-        String sql = "SELECT * FROM exam";
-        try {
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            while (rs.next()) {
-                exams.add(new Exam(
-                        rs.getString("course_name"),
-                        rs.getTimestamp("exam_date").toLocalDateTime(),
-                        rs.getString("title"),
-                        rs.getString("description"),
-                        rs.getString("location")
-                ));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return exams;
-    }*/
-
-
 
     @Override
     public Exam get(String id) {

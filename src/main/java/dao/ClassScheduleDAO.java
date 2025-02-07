@@ -11,28 +11,6 @@ import java.util.List;
 public class ClassScheduleDAO implements IDAO<ClassSchedule> {
     private Connection conn = null;
 
-   /* @Override
-    public List<ClassSchedule> getAll() {
-        conn = MariaDbConnection.getConnection();
-        List<ClassSchedule> classSchedules = new ArrayList<>();
-        String sql = "SELECT * FROM class_schedule";
-        try {
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            while (rs.next()) {
-                classSchedules.add(new ClassSchedule(
-                        rs.getString("course_name"),
-                        rs.getString("days_of_week"),
-                        rs.getString("location"),
-                        rs.getTimestamp("start_time").toLocalDateTime(),
-                        rs.getTimestamp("end_time").toLocalDateTime()
-                ));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return classSchedules;
-    }*/
 
 
     @Override

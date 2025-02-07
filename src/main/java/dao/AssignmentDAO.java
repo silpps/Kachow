@@ -11,29 +11,6 @@ import java.util.List;
 public class AssignmentDAO implements IDAO<Assignment> {
     private Connection conn = null;
 
-    /*@Override
-    public List<Assignment> getAll() {
-        conn = MariaDbConnection.getConnection();
-        List<Assignment> assignments = new ArrayList<>();
-        String sql = "SELECT * FROM study_session";
-        try {
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            while (rs.next()) {
-                assignments.add(new Assignment(
-                        rs.getString("course_name"),
-                        rs.getString("title"),
-                        rs.getString("description"),
-                        rs.getTimestamp("due_date").toLocalDateTime(),
-                        rs.getString("status")
-                ));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return assignments;
-    }*/
-
 
     @Override
     public Assignment get(String id) {

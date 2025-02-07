@@ -11,31 +11,6 @@ import java.util.List;
 public class StudySessionDAO implements IDAO<StudySession> {
     private Connection conn = null;
 
-   /* @Override
-    public List<StudySession> getAll() {
-        conn = MariaDbConnection.getConnection();
-        List<StudySession> studySessions = new ArrayList<>();
-        String sql = "SELECT * FROM study_session";
-        try {
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            while (rs.next()) {
-                studySessions.add(new StudySession(
-                        rs.getString("course_name"),
-                        rs.getString("title"),
-                        rs.getString("description"),
-                        rs.getTimestamp("start_time").toLocalDateTime(),
-                        rs.getTimestamp("end_time").toLocalDateTime(),
-                        rs.getDate("date").toLocalDate()
-                ));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return studySessions;
-    }*/
-
-
 
     @Override
     public StudySession get(String id) {

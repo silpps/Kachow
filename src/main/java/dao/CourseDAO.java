@@ -13,30 +13,6 @@ public class CourseDAO implements IDAO<Course> {
 
 
 
-   /* @Override
-    public List<Course> getAll() {
-        conn = MariaDbConnection.getConnection();
-        List<Course> courses = new ArrayList<>();
-        String sql = "SELECT * FROM course";
-        try {
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            while (rs.next()) {
-                courses.add(new Course(
-                        rs.getString("course_name"),
-                        rs.getString("instructor"),
-                        rs.getDate("start_date").toLocalDate(),
-                        rs.getDate("end_date").toLocalDate()
-                ));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return courses;
-    }*/
-
-
-
     public Course get(String id) {
         conn = MariaDbConnection.getConnection();
         String sql = "SELECT * FROM course WHERE course_name = ?";

@@ -11,7 +11,7 @@ import java.util.List;
 public class TimeTableDAO {
     Connection conn = null;
 
-    public List<String> getCourse() {
+    public List<String> getCourseNames() {
         conn = MariaDbConnection.getConnection();
         List<String> courseNames = new ArrayList<>();
         String sql = "SELECT DISTINCT course_name FROM course";
@@ -38,12 +38,14 @@ public class TimeTableDAO {
 
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                courses.add(new Course(
+                Course course = new Course(
                         rs.getString("course_name"),
                         rs.getString("instructor"),
                         rs.getDate("start_date").toLocalDate(),
                         rs.getDate("end_date").toLocalDate()
-                ));
+                );
+                courses.add(course);
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -61,13 +63,15 @@ public class TimeTableDAO {
             st.setTimestamp(2, Timestamp.valueOf(endDate.atTime(23, 59, 59)));
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                classSchedules.add(new ClassSchedule(
+                ClassSchedule classSchedule = new ClassSchedule(
                         rs.getString("course_name"),
                         rs.getString("title"),
                         rs.getString("location"),
                         rs.getTimestamp("start_time").toLocalDateTime(),
                         rs.getTimestamp("end_time").toLocalDateTime()
-                ));
+                );
+                classSchedule.setId(rs.getInt("id"));
+                classSchedules.add(classSchedule);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -85,13 +89,15 @@ public class TimeTableDAO {
             st.setTimestamp(2, Timestamp.valueOf(endDate.atTime(23, 59, 59)));
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                assignments.add(new Assignment(
+                Assignment assignment = new Assignment(
                         rs.getString("course_name"),
                         rs.getString("title"),
                         rs.getString("description"),
                         rs.getTimestamp("due_date").toLocalDateTime(),
                         rs.getString("status")
-                ));
+                );
+                assignment.setId(rs.getInt("id"));
+                assignments.add(assignment);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -109,14 +115,16 @@ public class TimeTableDAO {
             st.setTimestamp(2, Timestamp.valueOf(endDate.atTime(23, 59, 59)));
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                studySessions.add(new StudySession(
+                StudySession studySession = new StudySession(
                         rs.getString("course_name"),
                         rs.getString("title"),
                         rs.getString("description"),
                         rs.getTimestamp("start_time").toLocalDateTime(),
                         rs.getTimestamp("end_time").toLocalDateTime(),
                         rs.getDate("date").toLocalDate()
-                ));
+                );
+                studySession.setId(rs.getInt("id"));
+                studySessions.add(studySession);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -134,13 +142,15 @@ public class TimeTableDAO {
             st.setTimestamp(2, Timestamp.valueOf(endDate.atTime(23, 59, 59)));
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                exams.add(new Exam(
+                Exam exam = new Exam(
                         rs.getString("course_name"),
                         rs.getTimestamp("exam_date").toLocalDateTime(),
                         rs.getString("title"),
                         rs.getString("description"),
                         rs.getString("location")
-                ));
+                );
+                exam.setId(rs.getInt("id"));
+                exams.add(exam);
             }
         } catch (SQLException e) {
             e.printStackTrace();
