@@ -1,19 +1,17 @@
 package models;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 public class StudySession {
     private final String courseName;
     private String title;
     private String description;
-    //Voiskohan nää vaihtaa LocalTimeks ja päivä erikseen LocalDate?
-    private LocalTime startTime;
-    private LocalTime endTime;
-    private LocalDate date;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+    private int id;
 
 
-    public StudySession(String courseName, String title, String description, LocalDate date, LocalTime fromTime, LocalTime toTime) {
+    public StudySession(String courseName, String title, String description, LocalDateTime startTime, LocalDateTime endTime) {
         this.courseName = courseName;
         this.title = title;
         this.description = description;
@@ -22,7 +20,6 @@ public class StudySession {
         //tarviskohan lisätä päivä?
         this.date = date;
     }
-
 
     public String getCourseName() {
         return courseName;
@@ -36,12 +33,20 @@ public class StudySession {
         return description;
     }
 
-    public LocalTime getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public LocalTime getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public LocalDate getDate() {

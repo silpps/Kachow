@@ -19,6 +19,18 @@ public class Course {
         return courseName;
     }
 
+    public String getInstructor() {
+        return instructor;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
     public String getDetails() {
         return "Course: " + courseName;
     }
