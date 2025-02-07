@@ -70,8 +70,11 @@ public class AddStudySessionController {
 
         if (date != null && fromTimeString != null && toTimeString != null) {
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-            LocalDateTime fromTime = LocalDateTime.parse(fromTimeString, timeFormatter);
-            LocalDateTime toTime = LocalDateTime.parse(toTimeString, timeFormatter);
+            LocalDateTime fromTime = LocalDateTime.of(date, LocalTime.parse(fromTimeString, timeFormatter));
+            LocalDateTime toTime = LocalDateTime.of(date, LocalTime.parse(toTimeString, timeFormatter));
+            System.out.println(fromTime);
+            System.out.println(toTime);
+            System.out.println(date);
             if (fromTime.isAfter(toTime)) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
