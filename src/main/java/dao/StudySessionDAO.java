@@ -4,43 +4,22 @@ import config.MariaDbConnection;
 import models.StudySession;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class StudySessionDAO implements IDAO<StudySession> {
-    private static Connection conn = null;
-    @Override
-    public List<StudySession> getAll() {
-        conn = MariaDbConnection.getConnection();
-        List<StudySession> studySessions = new ArrayList<>();
-        String sql = "SELECT * FROM study_session";
-        try {
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                studySessions.add(new StudySession(
-                        rs.getString("course_name"),
-                        rs.getString("title"),
-                        rs.getString("description"),
-                        rs.getTimestamp("start_time").toLocalDateTime(),
-                        rs.getTimestamp("end_time").toLocalDateTime(),
-                        rs.getDate("date").toLocalDate()
-                ));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return studySessions;
-    }
+    private Connection conn = null;
+
 
     @Override
     public StudySession get(String id) {
         conn = MariaDbConnection.getConnection();
         String sql = "SELECT * FROM study_session WHERE id = ?";
         try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1,  Integer.parseInt(id));
-            ResultSet rs = stmt.executeQuery();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1,  Integer.parseInt(id));
+            ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 return new StudySession(
                         rs.getString("course_name"),

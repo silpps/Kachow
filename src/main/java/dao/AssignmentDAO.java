@@ -4,43 +4,22 @@ import config.MariaDbConnection;
 import models.Assignment;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AssignmentDAO implements IDAO<Assignment> {
-    private static Connection conn = null;
+    private Connection conn = null;
 
-    @Override
-    public List<Assignment> getAll() {
-        conn = MariaDbConnection.getConnection();
-        List<Assignment> assignments = new ArrayList<>();
-        String sql = "SELECT * FROM study_session";
-        try {
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                assignments.add(new Assignment(
-                        rs.getString("course_name"),
-                        rs.getString("title"),
-                        rs.getString("description"),
-                        rs.getTimestamp("due_date").toLocalDateTime(),
-                        rs.getString("status")
-                ));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return assignments;
-    }
 
     @Override
     public Assignment get(String id) {
         conn = MariaDbConnection.getConnection();
         String sql = "SELECT * FROM assigment WHERE id = ?";
         try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1,  Integer.parseInt(id));
-            ResultSet rs = stmt.executeQuery();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1,  Integer.parseInt(id));
+            ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 return new Assignment(
                         rs.getString("course_name"),

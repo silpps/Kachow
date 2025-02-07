@@ -3,42 +3,22 @@ package dao;
 import config.MariaDbConnection;
 import models.Exam;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ExamDAO implements IDAO<Exam> {
-    private static Connection conn = null;
-    @Override
-    public List<Exam> getAll() {
-        conn = MariaDbConnection.getConnection();
-        List<Exam> exams = new ArrayList<>();
-        String sql = "SELECT * FROM exam";
-        try {
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                exams.add(new Exam(
-                        rs.getString("course_name"),
-                        rs.getTimestamp("exam_date").toLocalDateTime(),
-                        rs.getString("title"),
-                        rs.getString("description"),
-                        rs.getString("location")
-                ));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return exams;
-    }
+    private Connection conn = null;
+
 
     @Override
     public Exam get(String id) {
         conn = MariaDbConnection.getConnection();
         String sql = "SELECT * FROM exam WHERE id = ?";
         try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1,  Integer.parseInt(id));
-            ResultSet rs = stmt.executeQuery();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1,  Integer.parseInt(id));
+            ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 return new Exam(
                         rs.getString("course_name"),
