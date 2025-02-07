@@ -2,10 +2,7 @@ package controllers;
 
 import dao.CourseDAO;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import models.Course;
 
 import java.time.LocalDate;
@@ -43,6 +40,14 @@ public class AddCourseController {
         String instructor = instructorTextField.getText();
         LocalDate startDate = startDatePicker.getValue();
         LocalDate endDate = endDatePicker.getValue();
+        if (startDate.isAfter(endDate)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Invalid date");
+            alert.setContentText("Start date must be before end date");
+            alert.showAndWait();
+            return;
+        }
         Course course = new Course(courseName, instructor, startDate, endDate);
         courses.add(courseName);
         CourseDAO courseDAO = new CourseDAO();

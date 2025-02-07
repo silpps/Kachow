@@ -5,7 +5,6 @@ import javafx.scene.control.*;
 import models.StudySession;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
@@ -65,9 +64,11 @@ public class AddStudySessionController {
             if (fromTime.isAfter(toTime)) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
-                alert.setHeaderText("Invalid time selection");
-                alert.setContentText("Start time must be before end time");
+                alert.setHeaderText("Invalid time");
+                alert.setContentText("From time must be before to time");
                 alert.showAndWait();
+                return;
+            }
 
                 StudySession studySession = new StudySession(courseName, sessionTitle, description, date, fromTime, toTime);
 
@@ -78,4 +79,5 @@ public class AddStudySessionController {
 
         }
     }
-}
+
+
