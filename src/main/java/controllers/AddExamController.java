@@ -1,8 +1,10 @@
 package controllers;
 
+import dao.ExamDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import models.CourseService;
+import models.Exam;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -47,10 +49,10 @@ public class AddExamController {
         String location = locationTextField.getText();
         LocalDateTime examDate = examDatePicker.getValue().atStartOfDay();
 
-        /*
-        Exam exam = new Exam(courseName, examTitle, description, location, date);
+
+        Exam exam = new Exam(courseName, examDate, examTitle, description, location);
         ExamDAO examDAO = new ExamDAO();
-        examDAO.addExam(exam);
-        */
+        examDAO.add(exam);
+
     }
 }

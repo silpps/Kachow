@@ -8,10 +8,11 @@ public class StudySession {
     private String description;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+    private LocalDate date;
     private int id;
 
 
-    public StudySession(String courseName, String title, String description, LocalDateTime startTime, LocalDateTime endTime) {
+    public StudySession(String courseName, String title, String description, LocalDateTime startTime, LocalDateTime endTime, LocalDate date) {
         this.courseName = courseName;
         this.title = title;
         this.description = description;
