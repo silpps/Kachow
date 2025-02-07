@@ -1,12 +1,16 @@
 package controllers;
 
+import dao.StudySessionDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import models.CourseService;
 import models.StudySession;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class AddStudySessionController {
 
@@ -42,11 +46,18 @@ public class AddStudySessionController {
 
     @FXML
     private void initialize() {
+        List<String> courseNames = CourseService.getInstance().getCourses();
+        courseNameChoiceBox.getItems().addAll(courseNames);
+
         fromChoiceBox.getItems().addAll(startTimes);
         toChoiceBox.getItems().addAll(endTimes);
         sessionSaveButton.setOnAction(e -> sessionSaveButtonClicked());
+        sessionBackButton.setOnAction(e -> sessionBackButtonClicked());
     }
 
+    public void sessionBackButtonClicked() {
+        sessionBackButton.getScene().getWindow().hide();
+    }
 
     public void sessionSaveButtonClicked() {
         String courseName = courseNameChoiceBox.getValue();
@@ -59,8 +70,11 @@ public class AddStudySessionController {
 
         if (date != null && fromTimeString != null && toTimeString != null) {
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-            LocalTime fromTime = LocalTime.parse(fromTimeString, timeFormatter);
-            LocalTime toTime = LocalTime.parse(toTimeString, timeFormatter);
+            LocalDateTime fromTime = LocalDateTime.of(date, LocalTime.parse(fromTimeString, timeFormatter));
+            LocalDateTime toTime = LocalDateTime.of(date, LocalTime.parse(toTimeString, timeFormatter));
+            System.out.println(fromTime);
+            System.out.println(toTime);
+            System.out.println(date);
             if (fromTime.isAfter(toTime)) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
@@ -70,10 +84,10 @@ public class AddStudySessionController {
                 return;
             }
 
-                StudySession studySession = new StudySession(courseName, sessionTitle, description, date, fromTime, toTime);
+                StudySession studySession = new StudySession(courseName, sessionTitle, description, fromTime, toTime, date);
 
-                /*StudySessionDao studySessionDao = new StudySessionDao();
-                studySessionDao.addStudySession(studySession);*/
+                StudySessionDAO studySessionDao = new StudySessionDAO();
+                studySessionDao.add(studySession);
             }
 
 

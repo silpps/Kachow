@@ -23,7 +23,8 @@ public class StudySessionDAO implements IDAO<StudySession> {
                         rs.getString("title"),
                         rs.getString("description"),
                         rs.getTimestamp("start_time").toLocalDateTime(),
-                        rs.getTimestamp("end_time").toLocalDateTime()
+                        rs.getTimestamp("end_time").toLocalDateTime(),
+                        rs.getDate("date").toLocalDate()
                 ));
             }
         } catch (SQLException e) {
@@ -46,7 +47,8 @@ public class StudySessionDAO implements IDAO<StudySession> {
                         rs.getString("title"),
                         rs.getString("description"),
                         rs.getTimestamp("start_time").toLocalDateTime(),
-                        rs.getTimestamp("end_time").toLocalDateTime()
+                        rs.getTimestamp("end_time").toLocalDateTime(),
+                        rs.getDate("date").toLocalDate()
                 );
             }
         } catch (SQLException e) {

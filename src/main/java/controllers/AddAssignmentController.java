@@ -1,9 +1,13 @@
 package controllers;
 
+import dao.AssignmentDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import models.Assignment;
+import models.CourseService;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class AddAssignmentController {
 
@@ -32,8 +36,12 @@ public class AddAssignmentController {
 
     @FXML
     public void initialize(){
+        List<String> courseNames = CourseService.getInstance().getCourses();
+        courseNameChoiceBox.getItems().addAll(courseNames);
+
         backButton.setOnAction(e -> backButtonClicked());
         assignmentSaveButton.setOnAction(e -> assignmentSaveButtonClicked());
+
     }
 
     @FXML
@@ -42,14 +50,19 @@ public class AddAssignmentController {
         String assignmentTitle = assignmentTitleTextField.getText();
         String description = descriptionTextArea.getText();
         LocalDate date = assignmentDatePicker.getValue();
-        boolean notStarted = notStartedCheckBox.isSelected();
-        boolean ongoing = ongoingCheckBox.isSelected();
+        String status = "";
+        if (notStartedCheckBox.isSelected()) {
+            status = "Not started";
+        } else if (ongoingCheckBox.isSelected()) {
+            status = "Ongoing";
+        }
 
-        /*
-        Assignment assignment = new Assignment(courseName, assignmentTitle, description, date, notStarted, ongoing);
+
+        Assignment assignment = new Assignment(courseName, assignmentTitle, description, date.atStartOfDay(), status);
         AssignmentDAO assignmentDAO = new AssignmentDAO();
-        assignmentDAO.addAssignment(assignment);
+        assignmentDAO.add(assignment);
 
-         */
+
     }
+
 }

@@ -1,10 +1,14 @@
 package controllers;
 
+import dao.ExamDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import models.CourseService;
+import models.Exam;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class AddExamController {
 
@@ -25,6 +29,9 @@ public class AddExamController {
 
     @FXML
     public void initialize(){
+        List<String> courseNames = CourseService.getInstance().getCourses();
+        courseNameChoiceBox.getItems().addAll(courseNames);
+
         backButton.setOnAction(e -> backButtonClicked());
         examSaveButton.setOnAction(e -> examSaveButtonClicked());
     }
@@ -42,10 +49,10 @@ public class AddExamController {
         String location = locationTextField.getText();
         LocalDateTime examDate = examDatePicker.getValue().atStartOfDay();
 
-        /*
-        Exam exam = new Exam(courseName, examTitle, description, location, date);
+
+        Exam exam = new Exam(courseName, examDate, examTitle, description, location);
         ExamDAO examDAO = new ExamDAO();
-        examDAO.addExam(exam);
-        */
+        examDAO.add(exam);
+
     }
 }

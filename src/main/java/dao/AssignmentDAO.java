@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AssingmentDAO implements IDAO<Assignment> {
+public class AssignmentDAO implements IDAO<Assignment> {
     private static Connection conn = null;
 
     @Override

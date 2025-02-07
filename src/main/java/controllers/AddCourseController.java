@@ -4,6 +4,7 @@ import dao.CourseDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import models.Course;
+import models.CourseService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class AddCourseController {
             return;
         }
         Course course = new Course(courseName, instructor, startDate, endDate);
-        courses.add(courseName);
+        CourseService.getInstance().addCourse(courseName);
         CourseDAO courseDAO = new CourseDAO();
         courseDAO.add(course);
     }
@@ -65,7 +66,7 @@ public class AddCourseController {
          addCourseBackButton.setOnAction(event -> addCourseBackButtonClicked());
      }
 
-     //toimiiko tää booleanina?
+     //toimiiko tää booleanina? ehkä tähän joku muu
     private void chosenDaysOfTheWeek(){
         if (mondayCheckBox.isSelected()){
             //maanantai
