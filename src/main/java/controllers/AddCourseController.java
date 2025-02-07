@@ -66,7 +66,7 @@ public class AddCourseController {
          addCourseBackButton.setOnAction(event -> addCourseBackButtonClicked());
      }
 
-     //toimiiko tää booleanina?
+     //toimiiko tää booleanina? ehkä tähän joku muu
     private void chosenDaysOfTheWeek(){
         if (mondayCheckBox.isSelected()){
             //maanantai
