@@ -4,19 +4,21 @@ import config.MariaDbConnection;
 import models.ClassSchedule;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ClassScheduleDAO implements IDAO<ClassSchedule> {
-    private static Connection conn = null;
-    @Override
+    private Connection conn = null;
+
+   /* @Override
     public List<ClassSchedule> getAll() {
         conn = MariaDbConnection.getConnection();
         List<ClassSchedule> classSchedules = new ArrayList<>();
         String sql = "SELECT * FROM class_schedule";
         try {
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
                 classSchedules.add(new ClassSchedule(
                         rs.getString("course_name"),
@@ -30,16 +32,17 @@ public class ClassScheduleDAO implements IDAO<ClassSchedule> {
             e.printStackTrace();
         }
         return classSchedules;
-    }
+    }*/
+
 
     @Override
     public ClassSchedule get(String id) {
         conn = MariaDbConnection.getConnection();
         String sql = "SELECT * FROM class_schedule WHERE id = ?";
         try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1,  Integer.parseInt(id));
-            ResultSet rs = stmt.executeQuery();
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1,  Integer.parseInt(id));
+            ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 return new ClassSchedule(
                         rs.getString("course_name"),
