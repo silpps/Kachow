@@ -53,13 +53,14 @@ public class CourseDAO implements IDAO<Course> {
     @Override
     public void update(Course course) {
         conn = MariaDbConnection.getConnection();
-        String sql = "UPDATE course SET (course_name, instructor, start_date, end_date) VALUES (?, ?, ?, ?) WHERE id = ?";
+        String sql = "UPDATE course SET (course_name, instructor, start_date, end_date) VALUES (?, ?, ?, ?) WHERE course_name = ?";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, course.getCourseName());
             st.setString(2, course.getInstructor());
             st.setDate(3, Date.valueOf(course.getStartDate()));
             st.setDate(4, Date.valueOf(course.getEndDate()));
+            st.setString(5, course.getCourseName());
         } catch (SQLException e) {
             e.printStackTrace();
         }

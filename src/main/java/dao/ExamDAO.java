@@ -59,7 +59,7 @@ public class ExamDAO implements IDAO<Exam> {
     @Override
     public void update(Exam exam) {
         conn = MariaDbConnection.getConnection();
-        String sql = "UPDATE exam SET (course_name, exam_date, title, description, location) VALUES (?, ?, ?, ?, ?) WHERE id = ?";
+        String sql = "UPDATE exam SET (course_name, exam_date, title, description, location) VALUES (?, ?, ?, ?, ?) WHERE exam_id = ?";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, exam.getCourseName());
@@ -77,7 +77,7 @@ public class ExamDAO implements IDAO<Exam> {
     @Override
     public void delete(String id) {
         conn = MariaDbConnection.getConnection();
-        String sql = "DELETE FROM exam WHERE id = ?";
+        String sql = "DELETE FROM exam WHERE exam_id = ?";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, Integer.parseInt(id));

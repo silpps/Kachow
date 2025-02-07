@@ -61,7 +61,7 @@ public class StudySessionDAO implements IDAO<StudySession> {
     @Override
     public void update(StudySession studySession) {
         conn = MariaDbConnection.getConnection();
-        String sql = "UPDATE study_session SET (course_name, title, description, start_time, end_time) VALUES (?, ?, ?, ?, ?) WHERE id = ?";
+        String sql = "UPDATE study_session SET (course_name, title, description, start_time, end_time) VALUES (?, ?, ?, ?, ?) WHERE session_id = ?";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, studySession.getCourseName());
@@ -79,7 +79,7 @@ public class StudySessionDAO implements IDAO<StudySession> {
     @Override
     public void delete(String id) {
         conn = MariaDbConnection.getConnection();
-        String sql = "DELETE FROM study_session WHERE id = ?";
+        String sql = "DELETE FROM study_session WHERE session_id = ?";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, Integer.parseInt(id));

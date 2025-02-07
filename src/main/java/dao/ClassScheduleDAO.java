@@ -61,7 +61,7 @@ public class ClassScheduleDAO implements IDAO<ClassSchedule> {
     @Override
     public void update(ClassSchedule classSchedule) {
         conn = MariaDbConnection.getConnection();
-        String sql = "UPDATE assignment SET (course_name, days_of_week, location, start_time, end_time) VALUES (?, ?, ?, ?, ?) WHERE id = ?";
+        String sql = "UPDATE assignment SET (course_name, days_of_week, location, start_time, end_time) VALUES (?, ?, ?, ?, ?) WHERE class_id = ?";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, classSchedule.getCourseName());
@@ -78,7 +78,7 @@ public class ClassScheduleDAO implements IDAO<ClassSchedule> {
     @Override
     public void delete(String id) {
         conn = MariaDbConnection.getConnection();
-        String sql = "DELETE FROM class_schedule WHERE id = ?";
+        String sql = "DELETE FROM class_schedule WHERE class_id = ?";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1, Integer.parseInt(id));
