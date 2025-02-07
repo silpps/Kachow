@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CourseDAO implements IDAO<Course> {
-    private static Connection conn = null;
+    Connection conn = null;
 
     @Override
     public List<Course> getAll() {
         conn = MariaDbConnection.getConnection();
         List<Course> courses = new ArrayList<>();
-        String sql = "SELECT * FROM courses";
+        String sql = "SELECT * FROM course";
         try {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
@@ -56,14 +56,14 @@ public class CourseDAO implements IDAO<Course> {
 
     @Override
     public void add(Course course) {
-        String sql = "INSERT INTO courses (course_name, instructor, start_date, end_date) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO course (course_name, instructor, start_date, end_date) VALUES (?, ?, ?, ?)";
         Connection conn = MariaDbConnection.getConnection();
         try {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, course.getCourseName());
             st.setString(2, course.getInstructor());
-            st.setDate(2, Date.valueOf(course.getStartDate()));
-            st.setDate(3, Date.valueOf(course.getEndDate()));
+            st.setDate(3, Date.valueOf(course.getStartDate()));
+            st.setDate(4, Date.valueOf(course.getEndDate()));
             st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

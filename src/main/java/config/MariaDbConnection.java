@@ -22,8 +22,8 @@ public class MariaDbConnection {
                         "jdbc:mariadb://localhost:3306/study_planner?user=student_test&password=schedule");
                 System.out.println("Connection successful");
             } catch (SQLException e) {
-                e.printStackTrace();
                 System.out.println("Connection failed");
+                e.printStackTrace();
             }
         }
         return conn;

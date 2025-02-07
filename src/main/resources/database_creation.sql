@@ -1,18 +1,14 @@
-IF
-EXISTS DROP
-DATABASE study_planner;
-CREATE
-DATABASE study_planner;
-USE
-study_planner;
+DROP DATABASE IF EXISTS study_planner;
+CREATE DATABASE study_planner;
+USE study_planner;
 
 
 CREATE TABLE course
 (
     course_name VARCHAR(50) PRIMARY KEY,
+    instructor  VARCHAR(50),
     start_date  DATE,
-    end_date    DATE,
-    instructor  VARCHAR(50)
+    end_date    DATE
 );
 
 CREATE TABLE study_session
@@ -59,16 +55,7 @@ CREATE TABLE class_schedule
     FOREIGN KEY (course_name) REFERENCES course (course_name)
 );
 
-IF
-EXISTS DROP
-USER 'student_test'@'localhost';
-CREATE
-USER 'student_test'@'localhost' IDENTIFIED BY 'schedule';
-GRANT
-SELECT,
-INSERT
-,
-DELETE,
-UPDATE
-ON study_planner.* TO 'student_test'@'localhost';
+DROP USER IF EXISTS 'student_test'@'localhost';
+CREATE USER 'student_test'@'localhost' IDENTIFIED BY 'schedule';
+GRANT SELECT, INSERT, DELETE, UPDATE ON study_planner.* TO 'student_test'@'localhost';
 

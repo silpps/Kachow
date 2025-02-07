@@ -12,6 +12,8 @@ import java.util.List;
 
 public class AddCourseController {
 
+    private CourseDAO courseDAO;
+
     @FXML
     private TextField courseNameTextField;
 
@@ -51,7 +53,6 @@ public class AddCourseController {
         }
         Course course = new Course(courseName, instructor, startDate, endDate);
         CourseService.getInstance().addCourse(courseName);
-        CourseDAO courseDAO = new CourseDAO();
         courseDAO.add(course);
     }
 
@@ -64,6 +65,8 @@ public class AddCourseController {
      private void initialize() {
          addCourseSaveButton.setOnAction(event -> addCourseSaveButtonClicked());
          addCourseBackButton.setOnAction(event -> addCourseBackButtonClicked());
+         courseDAO = new CourseDAO();
+
      }
 
      //toimiiko tää booleanina? ehkä tähän joku muu
