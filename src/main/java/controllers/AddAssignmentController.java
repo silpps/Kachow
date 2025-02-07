@@ -2,8 +2,10 @@ package controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import models.CourseService;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class AddAssignmentController {
 
@@ -32,8 +34,12 @@ public class AddAssignmentController {
 
     @FXML
     public void initialize(){
+        List<String> courseNames = CourseService.getInstance().getCourses();
+        courseNameChoiceBox.getItems().addAll(courseNames);
+
         backButton.setOnAction(e -> backButtonClicked());
         assignmentSaveButton.setOnAction(e -> assignmentSaveButtonClicked());
+
     }
 
     @FXML

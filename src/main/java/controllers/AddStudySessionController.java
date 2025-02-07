@@ -2,11 +2,13 @@ package controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import models.CourseService;
 import models.StudySession;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class AddStudySessionController {
 
@@ -42,6 +44,9 @@ public class AddStudySessionController {
 
     @FXML
     private void initialize() {
+        List<String> courseNames = CourseService.getInstance().getCourses();
+        courseNameChoiceBox.getItems().addAll(courseNames);
+
         fromChoiceBox.getItems().addAll(startTimes);
         toChoiceBox.getItems().addAll(endTimes);
         sessionSaveButton.setOnAction(e -> sessionSaveButtonClicked());

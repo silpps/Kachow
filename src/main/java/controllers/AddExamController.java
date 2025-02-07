@@ -2,9 +2,11 @@ package controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import models.CourseService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class AddExamController {
 
@@ -25,6 +27,9 @@ public class AddExamController {
 
     @FXML
     public void initialize(){
+        List<String> courseNames = CourseService.getInstance().getCourses();
+        courseNameChoiceBox.getItems().addAll(courseNames);
+
         backButton.setOnAction(e -> backButtonClicked());
         examSaveButton.setOnAction(e -> examSaveButtonClicked());
     }
