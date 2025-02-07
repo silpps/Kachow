@@ -70,7 +70,7 @@ public class TimeTableDAO {
                         rs.getTimestamp("start_time").toLocalDateTime(),
                         rs.getTimestamp("end_time").toLocalDateTime()
                 );
-                classSchedule.setId(rs.getInt("id"));
+                classSchedule.setId(rs.getInt("class_id"));
                 classSchedules.add(classSchedule);
             }
         } catch (SQLException e) {
@@ -96,7 +96,7 @@ public class TimeTableDAO {
                         rs.getTimestamp("due_date").toLocalDateTime(),
                         rs.getString("status")
                 );
-                assignment.setId(rs.getInt("id"));
+                assignment.setId(rs.getInt("assignment_id"));
                 assignments.add(assignment);
             }
         } catch (SQLException e) {
@@ -123,7 +123,7 @@ public class TimeTableDAO {
                         rs.getTimestamp("end_time").toLocalDateTime(),
                         rs.getDate("date").toLocalDate()
                 );
-                studySession.setId(rs.getInt("id"));
+                studySession.setId(rs.getInt("session_id"));
                 studySessions.add(studySession);
             }
         } catch (SQLException e) {
@@ -149,7 +149,7 @@ public class TimeTableDAO {
                         rs.getString("description"),
                         rs.getString("location")
                 );
-                exam.setId(rs.getInt("id"));
+                exam.setId(rs.getInt("exam_id"));
                 exams.add(exam);
             }
         } catch (SQLException e) {
