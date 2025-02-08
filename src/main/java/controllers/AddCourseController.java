@@ -54,6 +54,8 @@ public class AddCourseController {
         Course course = new Course(courseName, instructor, startDate, endDate);
         CourseService.getInstance().addCourse(courseName);
         courseDAO.add(course);
+
+        addCourseSaveButton.getScene().getWindow().hide();
     }
 
     @FXML

@@ -1,6 +1,7 @@
 package controllers;
 
 import dao.ExamDAO;
+import dao.TimeTableDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import models.CourseService;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class AddExamController {
+    private TimeTableDAO timeTableDAO;
 
     @FXML
     private ChoiceBox<String> courseNameChoiceBox;
@@ -29,7 +31,8 @@ public class AddExamController {
 
     @FXML
     public void initialize(){
-        List<String> courseNames = CourseService.getInstance().getCourses();
+        timeTableDAO = new TimeTableDAO();
+        List<String> courseNames = timeTableDAO.getCourseNames();
         courseNameChoiceBox.getItems().addAll(courseNames);
 
         backButton.setOnAction(e -> backButtonClicked());
@@ -54,5 +57,6 @@ public class AddExamController {
         ExamDAO examDAO = new ExamDAO();
         examDAO.add(exam);
 
+        backButtonClicked();
     }
 }
