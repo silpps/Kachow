@@ -65,7 +65,7 @@ public class TimeTableDAO {
             while (rs.next()) {
                 ClassSchedule classSchedule = new ClassSchedule(
                         rs.getString("course_name"),
-                        rs.getString("title"),
+                        rs.getString("day_of_week"),
                         rs.getString("location"),
                         rs.getTimestamp("start_time").toLocalDateTime(),
                         rs.getTimestamp("end_time").toLocalDateTime()
