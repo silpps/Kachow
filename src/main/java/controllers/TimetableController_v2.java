@@ -66,10 +66,11 @@ public class TimetableController_v2 implements Initializable {
         setupTableViewColumns();
 
         // Fill the timetable with time slots
-        fillTimeSlots();
+        ObservableList<Timetable_v2> timeSlots = createTimeSlots();
+        timetable.setItems(timeSlots);
 
         // Fetch and display the current week's data
-        fetchAndDisplayCurrentWeekData();
+        fetchAndDisplayCurrentWeekData(timeSlots);
     }
 
     private void setupTableViewColumns() {
@@ -84,16 +85,16 @@ public class TimetableController_v2 implements Initializable {
         sundayColumn.setCellValueFactory(new PropertyValueFactory<>("sunday"));
     }
 
-    private void fillTimeSlots() {
+    private ObservableList<Timetable_v2> createTimeSlots() {
         ObservableList<Timetable_v2> timeSlots = FXCollections.observableArrayList();
         for (int i = 6; i < 25; i++) {
             String time = i + ":00";
             timeSlots.add(new Timetable_v2(time));
         }
-        timetable.setItems(timeSlots);
+        return timeSlots;
     }
 
-    private void fetchAndDisplayCurrentWeekData() {
+    private void fetchAndDisplayCurrentWeekData(ObservableList<Timetable_v2> timeSlots) {
         // Get the current week's start and end dates
         LocalDate today = LocalDate.now();
         LocalDate startOfWeek = today.with(java.time.DayOfWeek.MONDAY);
@@ -106,30 +107,30 @@ public class TimetableController_v2 implements Initializable {
         List<Exam> exams = timeTableDAO.getExamSchedule(startOfWeek, endOfWeek);
 
         // Map tasks to time slots
-        Map<String, Timetable_v2> timeSlotMap = createTimeSlotMap();
-        mapTasksToTimeSlots(timeSlotMap, classSchedules, assignments, studySessions, exams);
+        mapTasksToTimeSlots(timeSlots, classSchedules, assignments, studySessions, exams);
 
         // Update the timetable
-        ObservableList<Timetable_v2> updatedTimeSlots = FXCollections.observableArrayList(timeSlotMap.values());
-        timetable.setItems(updatedTimeSlots);
+        timetable.setItems(timeSlots);
     }
 
-    private Map<String, Timetable_v2> createTimeSlotMap() {
-        Map<String, Timetable_v2> timeSlotMap = new HashMap<>();
-        for (int i = 6; i < 25; i++) {
-            String time = i + ":00";
-            timeSlotMap.put(time, new Timetable_v2(time));
+    private void mapTasksToTimeSlots(ObservableList<Timetable_v2> timeSlots, List<ClassSchedule> classSchedules, List<Assignment> assignments, List<StudySession> studySessions, List<Exam> exams) {
+        // Clear existing tasks
+        for (Timetable_v2 timeSlot : timeSlots) {
+            timeSlot.setMonday("");
+            timeSlot.setTuesday("");
+            timeSlot.setWednesday("");
+            timeSlot.setThursday("");
+            timeSlot.setFriday("");
+            timeSlot.setSaturday("");
+            timeSlot.setSunday("");
         }
-        return timeSlotMap;
-    }
 
-    private void mapTasksToTimeSlots(Map<String, Timetable_v2> timeSlotMap, List<ClassSchedule> classSchedules, List<Assignment> assignments, List<StudySession> studySessions, List<Exam> exams) {
         // Map class schedules
         for (ClassSchedule schedule : classSchedules) {
             String time = schedule.getStartTime().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm"));
             String day = schedule.getStartTime().getDayOfWeek().toString();
             String task = schedule.getCourseName();
-            updateTimeSlot(timeSlotMap, time, day, task);
+            updateTimeSlot(timeSlots, time, day, task);
         }
 
         // Map assignments
@@ -137,7 +138,7 @@ public class TimetableController_v2 implements Initializable {
             String time = assignment.getDueDate().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm"));
             String day = assignment.getDueDate().getDayOfWeek().toString();
             String task = assignment.getTitle() + " (" + assignment.getCourseName() + ")";
-            updateTimeSlot(timeSlotMap, time, day, task);
+            updateTimeSlot(timeSlots, time, day, task);
         }
 
         // Map study sessions
@@ -145,7 +146,7 @@ public class TimetableController_v2 implements Initializable {
             String time = session.getStartTime().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm"));
             String day = session.getStartTime().getDayOfWeek().toString();
             String task = session.getTitle() + " (" + session.getCourseName() + ")";
-            updateTimeSlot(timeSlotMap, time, day, task);
+            updateTimeSlot(timeSlots, time, day, task);
         }
 
         // Map exams
@@ -153,35 +154,37 @@ public class TimetableController_v2 implements Initializable {
             String time = exam.getExamDate().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm"));
             String day = exam.getExamDate().getDayOfWeek().toString();
             String task = exam.getTitle() + " (" + exam.getCourseName() + ")";
-            updateTimeSlot(timeSlotMap, time, day, task);
+            updateTimeSlot(timeSlots, time, day, task);
         }
     }
 
-    private void updateTimeSlot(Map<String, Timetable_v2> timeSlotMap, String time, String day, String task) {
-        Timetable_v2 timeSlot = timeSlotMap.get(time);
-        if (timeSlot != null) {
-            switch (day) {
-                case "MONDAY":
-                    timeSlot.setMonday(task);
-                    break;
-                case "TUESDAY":
-                    timeSlot.setTuesday(task);
-                    break;
-                case "WEDNESDAY":
-                    timeSlot.setWednesday(task);
-                    break;
-                case "THURSDAY":
-                    timeSlot.setThursday(task);
-                    break;
-                case "FRIDAY":
-                    timeSlot.setFriday(task);
-                    break;
-                case "SATURDAY":
-                    timeSlot.setSaturday(task);
-                    break;
-                case "SUNDAY":
-                    timeSlot.setSunday(task);
-                    break;
+    private void updateTimeSlot(ObservableList<Timetable_v2> timeSlots, String time, String day, String task) {
+        for (Timetable_v2 timeSlot : timeSlots) {
+            if (timeSlot.getTime().equals(time)) {
+                switch (day) {
+                    case "MONDAY":
+                        timeSlot.setMonday(task);
+                        break;
+                    case "TUESDAY":
+                        timeSlot.setTuesday(task);
+                        break;
+                    case "WEDNESDAY":
+                        timeSlot.setWednesday(task);
+                        break;
+                    case "THURSDAY":
+                        timeSlot.setThursday(task);
+                        break;
+                    case "FRIDAY":
+                        timeSlot.setFriday(task);
+                        break;
+                    case "SATURDAY":
+                        timeSlot.setSaturday(task);
+                        break;
+                    case "SUNDAY":
+                        timeSlot.setSunday(task);
+                        break;
+                }
+                break;
             }
         }
     }
