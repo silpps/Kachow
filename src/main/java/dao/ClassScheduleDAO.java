@@ -39,11 +39,12 @@ public class ClassScheduleDAO implements IDAO<ClassSchedule> {
     @Override
     public void add(ClassSchedule classSchedule) {
         conn = MariaDbConnection.getConnection();
-        String sql = "INSERT INTO class_schedule (course_name, days_of_week, location, start_time, end_time) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO class_schedule (course_name, day_of_week, location, start_time, end_time) VALUES (?, ?, ?, ?, ?)";
         try {
             PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, classSchedule.getCourseName());
-            st.setString(2, classSchedule.getDaysOfWeek());
+            System.out.println(classSchedule.getDayOfWeek());
+            st.setString(2, classSchedule.getDayOfWeek());
             st.setString(3, classSchedule.getLocation());
             st.setTimestamp(4, Timestamp.valueOf(classSchedule.getStartTime()));
             st.setTimestamp(5, Timestamp.valueOf(classSchedule.getEndTime()));
@@ -65,7 +66,7 @@ public class ClassScheduleDAO implements IDAO<ClassSchedule> {
         try {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, classSchedule.getCourseName());
-            st.setString(2, classSchedule.getDaysOfWeek());
+            st.setString(2, classSchedule.getDayOfWeek());
             st.setString(3, classSchedule.getLocation());
             st.setTimestamp(4, Timestamp.valueOf(classSchedule.getStartTime()));
             st.setTimestamp(5, Timestamp.valueOf(classSchedule.getEndTime()));

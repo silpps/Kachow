@@ -51,7 +51,7 @@ CREATE TABLE class_schedule
     location    VARCHAR(15),
     start_time  DATETIME,
     end_time    DATETIME,
-    day_of_week ENUM('MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'),
+    day_of_week VARCHAR(10),
     FOREIGN KEY (course_name) REFERENCES course (course_name)
 );
 

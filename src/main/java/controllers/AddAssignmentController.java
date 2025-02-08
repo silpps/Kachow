@@ -1,6 +1,7 @@
 package controllers;
 
 import dao.AssignmentDAO;
+import dao.TimeTableDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import models.Assignment;
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class AddAssignmentController {
+    TimeTableDAO timeTableDAO;
 
     private AssignmentDAO assignmentDAO;
 
@@ -38,7 +40,8 @@ public class AddAssignmentController {
 
     @FXML
     public void initialize(){
-        List<String> courseNames = CourseService.getInstance().getCourses();
+        timeTableDAO = new TimeTableDAO();
+        List<String> courseNames = timeTableDAO.getCourseNames();
         courseNameChoiceBox.getItems().addAll(courseNames);
 
         assignmentDAO = new AssignmentDAO();
@@ -64,6 +67,8 @@ public class AddAssignmentController {
 
         Assignment assignment = new Assignment(courseName, assignmentTitle, description, date.atStartOfDay(), status);
         assignmentDAO.add(assignment);
+
+        backButtonClicked();
 
 
     }
