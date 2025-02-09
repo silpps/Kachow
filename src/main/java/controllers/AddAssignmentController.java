@@ -48,7 +48,6 @@ public class AddAssignmentController {
 
         backButton.setOnAction(e -> backButtonClicked());
         assignmentSaveButton.setOnAction(e -> assignmentSaveButtonClicked());
-
     }
 
     @FXML
@@ -64,12 +63,10 @@ public class AddAssignmentController {
             status = "Ongoing";
         }
 
-
         Assignment assignment = new Assignment(courseName, assignmentTitle, description, date.atStartOfDay(), status);
         assignmentDAO.add(assignment);
 
         backButtonClicked();
-
 
     }
 

@@ -1,6 +1,7 @@
 package controllers;
 
 import dao.StudySessionDAO;
+import dao.TimeTableDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import models.CourseService;
@@ -13,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class AddStudySessionController {
+    private TimeTableDAO timeTableDAO;
 
     private StudySessionDAO studySessionDAO;
 
@@ -48,7 +50,8 @@ public class AddStudySessionController {
 
     @FXML
     private void initialize() {
-        List<String> courseNames = CourseService.getInstance().getCourses();
+        timeTableDAO = new TimeTableDAO();
+        List<String> courseNames = timeTableDAO.getCourseNames();
         courseNameChoiceBox.getItems().addAll(courseNames);
 
         studySessionDAO = new StudySessionDAO();
@@ -93,6 +96,7 @@ public class AddStudySessionController {
             }
 
 
+        sessionBackButtonClicked();
         }
     }
 
