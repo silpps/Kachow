@@ -21,6 +21,11 @@ public class AddTaskController{
     @FXML
     private Button backButton;
 
+    private TimetableController_v2 timetableController;
+
+    public void setTimetableController(TimetableController_v2 timetableController) {
+        this.timetableController = timetableController;
+    }
 
 
     @FXML
@@ -44,9 +49,24 @@ public class AddTaskController{
     @FXML
     private void continueButtonClicked(){
         String taskChoice = taskChoiceBox.getValue();
+        if (taskChoice == null) {
+            System.out.println("Please select a task before proceeding.");
+            return;
+        }
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/add" + taskChoice + ".fxml"));
                 Scene scene = new Scene(loader.load());
+                Object controller = loader.getController();
+
+                if (controller instanceof AddAssignmentController) {
+                    ((AddAssignmentController) controller).setTimetableController(timetableController);
+                } else if (controller instanceof AddExamController) {
+                    ((AddExamController) controller).setTimetableController(timetableController);
+                } else if (controller instanceof AddStudySessionController) {
+                    ((AddStudySessionController) controller).setTimetableController(timetableController);
+                } else if (controller instanceof AddCourseController) {
+                    ((AddCourseController) controller).setTimetableController(timetableController);
+                }
                 Stage stage = new Stage();
                 stage.setScene(scene);
                 stage.show();

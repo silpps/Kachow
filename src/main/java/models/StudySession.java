@@ -8,18 +8,15 @@ public class StudySession {
     private String description;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private LocalDate date;
     private int id;
 
 
-    public StudySession(String courseName, String title, String description, LocalDateTime startTime, LocalDateTime endTime, LocalDate date) {
+    public StudySession(String courseName, String title, String description, LocalDateTime startTime, LocalDateTime endTime) {
         this.courseName = courseName;
         this.title = title;
         this.description = description;
         this.startTime = startTime;
         this.endTime = endTime;
-        //tarviskohan lisätä päivä?
-        this.date = date;
     }
 
     public String getCourseName() {
@@ -48,10 +45,6 @@ public class StudySession {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public LocalDate getDate() {
-        return date;
     }
 
     public String getDetails() {

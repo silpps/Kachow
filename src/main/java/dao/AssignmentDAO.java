@@ -15,7 +15,7 @@ public class AssignmentDAO implements IDAO<Assignment> {
     @Override
     public Assignment get(String id) {
         conn = MariaDbConnection.getConnection();
-        String sql = "SELECT * FROM assigment WHERE id = ?";
+        String sql = "SELECT * FROM assignment WHERE id = ?";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1,  Integer.parseInt(id));

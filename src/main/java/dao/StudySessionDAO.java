@@ -26,8 +26,7 @@ public class StudySessionDAO implements IDAO<StudySession> {
                         rs.getString("title"),
                         rs.getString("description"),
                         rs.getTimestamp("start_time").toLocalDateTime(),
-                        rs.getTimestamp("end_time").toLocalDateTime(),
-                        rs.getDate("date").toLocalDate()
+                        rs.getTimestamp("end_time").toLocalDateTime()
                 );
             }
         } catch (SQLException e) {
@@ -53,6 +52,7 @@ public class StudySessionDAO implements IDAO<StudySession> {
             if (rs.next()) {
                 session.setId(rs.getInt(1));
             }
+            System.out.println("Added new study session with id: " + session.getId());
         } catch (SQLException e) {
             e.printStackTrace();
         }

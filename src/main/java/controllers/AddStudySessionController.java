@@ -2,6 +2,7 @@ package controllers;
 
 import dao.StudySessionDAO;
 import dao.TimeTableDAO;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import models.CourseService;
@@ -42,11 +43,12 @@ public class AddStudySessionController {
     @FXML
     private Button sessionBackButton;
 
-    private String[] startTimes = {"06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00",
+    private String[] startTimes = {"6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00",
             "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"};
 
-    private String[] endTimes = {"07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00",
+    private String[] endTimes = {"7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00",
             "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00"};
+    private TimetableController_v2 timetableController;
 
     @FXML
     private void initialize() {
@@ -91,13 +93,33 @@ public class AddStudySessionController {
                 return;
             }
 
-                StudySession studySession = new StudySession(courseName, sessionTitle, description, fromTime, toTime, date);
+                StudySession studySession = new StudySession(courseName, sessionTitle, description, fromTime, toTime);
                 studySessionDAO.add(studySession);
+            System.out.println("Study session added" + studySession.getCourseName() + " " + studySession.getTitle() + " " + studySession.getDescription());
             }
+        new Thread(() -> {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            Platform.runLater(() -> {
+                System.out.println("Updating UI...");
+                timetableController.fetchAndDisplayCurrentWeekData(timetableController.timetable.getItems());
+                timetableController.timetable.refresh();
+                System.out.println("UI updated.");
+            });
+        }).start();
+
 
 
         sessionBackButtonClicked();
         }
+
+    public void setTimetableController(TimetableController_v2 timetableController) {
+        this.timetableController = timetableController;
     }
+}
 
 

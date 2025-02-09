@@ -45,9 +45,11 @@ public class AddCourseController {
     private Button addCourseBackButton;
 
     private List<String> courses = new ArrayList<>();
+    private TimetableController_v2 timetableController;
 
     @FXML
     private void addCourseSaveButtonClicked(){
+        System.out.println("Course save button clicked");
         String courseName = courseNameTextField.getText();
         String instructor = instructorTextField.getText();
         LocalDate startDate = startDatePicker.getValue();
@@ -85,10 +87,10 @@ public class AddCourseController {
          addCourseSaveButton.setOnAction(event -> addCourseSaveButtonClicked());
          addCourseBackButton.setOnAction(event -> addCourseBackButtonClicked());
          startComboBox.getItems().addAll(
-                 "06:00",
-                    "07:00",
-                    "08:00",
-                    "09:00",
+                 "6:00",
+                    "7:00",
+                    "8:00",
+                    "9:00",
                     "10:00",
                     "11:00",
                     "12:00",
@@ -106,9 +108,9 @@ public class AddCourseController {
          );
             endComboBox.getItems().addAll(
 
-                    "07:00",
-                    "08:00",
-                    "09:00",
+                    "7:00",
+                    "8:00",
+                    "9:00",
                     "10:00",
                     "11:00",
                     "12:00",
@@ -148,4 +150,7 @@ public class AddCourseController {
         }
     }
 
+    public void setTimetableController(TimetableController_v2 timetableController) {
+        this.timetableController = timetableController;
+    }
 }

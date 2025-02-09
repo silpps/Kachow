@@ -2,6 +2,7 @@ package controllers;
 
 import dao.ExamDAO;
 import dao.TimeTableDAO;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import models.CourseService;
@@ -30,6 +31,8 @@ public class AddExamController {
 
     @FXML
     private Button backButton, examSaveButton;
+
+    private TimetableController_v2 timetableController;
 
     @FXML
     public void initialize(){
@@ -60,6 +63,25 @@ public class AddExamController {
         Exam exam = new Exam(courseName, examDate, examTitle, description, location);
         examDAO.add(exam);
 
+        new Thread(() -> {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            Platform.runLater(() -> {
+                System.out.println("Updating UI...");
+                timetableController.fetchAndDisplayCurrentWeekData(timetableController.timetable.getItems());
+                timetableController.timetable.refresh();
+                System.out.println("UI updated.");
+            });
+        }).start();
+
         backButtonClicked();
+    }
+
+    public void setTimetableController(TimetableController_v2 timetableController) {
+        this.timetableController = timetableController;
     }
 }

@@ -120,8 +120,7 @@ public class TimeTableDAO {
                         rs.getString("title"),
                         rs.getString("description"),
                         rs.getTimestamp("start_time").toLocalDateTime(),
-                        rs.getTimestamp("end_time").toLocalDateTime(),
-                        rs.getDate("date").toLocalDate()
+                        rs.getTimestamp("end_time").toLocalDateTime()
                 );
                 studySession.setId(rs.getInt("session_id"));
                 studySessions.add(studySession);
