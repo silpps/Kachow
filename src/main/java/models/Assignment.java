@@ -46,6 +46,26 @@ public class Assignment {
         this.id = id;
     }
 
+    public void setCourseName(String courseName) {
+        this.title = courseName;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setDueDate(LocalDateTime dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public String getDetails() {
         return "Title: " + title + "\nCourse: " + courseName + "\nDescription: " + description + "\nDue Date: " + dueDate + "\nStatus: " + status;
     }
