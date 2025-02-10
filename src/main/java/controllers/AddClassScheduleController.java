@@ -2,6 +2,7 @@ package controllers;
 
 import dao.ClassScheduleDAO;
 import dao.IDAO;
+import dao.TimeTableDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import models.ClassSchedule;
@@ -14,7 +15,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class AddClassScheduleController {
-    private IDAO classScheduleDAO;
+    private IDAO<ClassSchedule> classScheduleDAO;
+    private TimeTableDAO timeTableDAO;
 
     private DatePicker datePicker;
     @FXML
@@ -44,8 +46,8 @@ public class AddClassScheduleController {
     @FXML
     private void initialize() {
         classScheduleDAO = new ClassScheduleDAO();
-        // Populate the course name choice box
-        List<String> courseNames = CourseService.getInstance().getCourses();
+        timeTableDAO = new TimeTableDAO();
+        List<String> courseNames = timeTableDAO.getCourseNames();
         courseNameChoiceBox.getItems().addAll(courseNames);
 
         dayOfWeekChoiceBox.getItems().addAll("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
