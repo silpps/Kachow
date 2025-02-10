@@ -46,6 +46,23 @@ public class Exam {
         this.id = id;
     }
 
+    public void setExamDate(LocalDateTime examDate) {
+        this.examDate = examDate;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+
     public String getDetails() {
         return "Title: " + title + "\nCourse: " + courseName + "\nExam date: " + examDate + "\nDescription: " + description + "\nLocation: " + location;
     }

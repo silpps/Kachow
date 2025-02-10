@@ -46,6 +46,24 @@ public class ClassSchedule {
         this.id = id;
     }
 
+    public void setDayOfWeek(String dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+
+
     public String getDetails() {
         return "Course: " + courseName + "\nDays of the Week: " + dayOfWeek + "\nLocation: " + location + "\nStart Time: " + startTime + "\nEnd Time: " + endTime;
     }

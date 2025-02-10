@@ -31,6 +31,18 @@ public class Course {
         return endDate;
     }
 
+    public void setInstructor(String instructor) {
+        this.instructor = instructor;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
     public String getDetails() {
         return "Course: " + courseName;
     }
