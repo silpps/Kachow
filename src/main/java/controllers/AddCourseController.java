@@ -59,8 +59,9 @@ public class AddCourseController {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
-        LocalDateTime startTime = LocalDateTime.of(startDate, LocalTime.parse(startTimeString, formatter));
-        LocalDateTime endTime = LocalDateTime.of(endDate, LocalTime.parse(endTimeString, formatter));
+        // kurssissa ei aikaa, ainoastaan päivämäärät
+        // LocalDateTime startTime = LocalDateTime.of(startDate, LocalTime.parse(startTimeString, formatter));
+        // LocalDateTime endTime = LocalDateTime.of(endDate, LocalTime.parse(endTimeString, formatter));
 
         if (startDate.isAfter(endDate)) {
             Alert alert = new Alert(Alert.AlertType.ERROR);

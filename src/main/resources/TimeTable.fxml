@@ -13,17 +13,20 @@
             <children>
                 <Label fx:id="label" alignment="CENTER" layoutX="1.0" layoutY="1.0" prefHeight="55.0" prefWidth="137.0" text="StudyFlow" />
                 <Button fx:id="addButton" layoutX="29.0" layoutY="77.0" mnemonicParsing="false" onAction="#addButtonClicked" prefHeight="25.0" prefWidth="81.0" text="Add" />
-                <TableView fx:id="timetable" fixedCellSize="-0.1" layoutX="129.0" layoutY="29.0" prefHeight="523.0" prefWidth="953.0">
+                <TableView fx:id="timetable" fixedCellSize="0.0" layoutX="129.0" layoutY="29.0" prefHeight="485.0" prefWidth="950.0">
                     <columns>
-                        <TableColumn fx:id="timeColumn" editable="false" resizable="false" text="Time" />
-                        <TableColumn fx:id="mondayColumn" prefWidth="124.0" resizable="false" text="Monday" />
-                        <TableColumn fx:id="tuesdayColumn" prefWidth="124.0" resizable="false" text="Tuesday" />
-                        <TableColumn fx:id="wednesdayColumn" prefWidth="124.0" resizable="false" text="Wednesday" />
-                        <TableColumn fx:id="thursdayColumn" prefWidth="124.0" resizable="false" text="Thursday" />
-                        <TableColumn fx:id="fridayColumn" prefWidth="124.0" resizable="false" text="Friday" />
-                        <TableColumn fx:id="saturdayColumn" prefWidth="124.0" resizable="false" text="Saturday" />
-                        <TableColumn fx:id="sundayColumn" prefWidth="124.0" resizable="false" text="Sunday" />
+                        <TableColumn fx:id="timeColumn" editable="false" resizable="false" sortable="false" text="Time" />
+                        <TableColumn fx:id="mondayColumn" prefWidth="124.0" resizable="false" sortable="false" text="Monday" />
+                        <TableColumn fx:id="tuesdayColumn" prefWidth="124.0" resizable="false" sortable="false" text="Tuesday" />
+                        <TableColumn fx:id="wednesdayColumn" prefWidth="124.0" resizable="false" sortable="false" text="Wednesday" />
+                        <TableColumn fx:id="thursdayColumn" prefWidth="124.0" resizable="false" sortable="false" text="Thursday" />
+                        <TableColumn fx:id="fridayColumn" prefWidth="124.0" resizable="false" sortable="false" text="Friday" />
+                        <TableColumn fx:id="saturdayColumn" prefWidth="124.0" resizable="false" sortable="false" text="Saturday" />
+                        <TableColumn fx:id="sundayColumn" prefWidth="124.0" resizable="false" sortable="false" text="Sunday" />
                     </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
                 </TableView>
             </children>
         </AnchorPane>

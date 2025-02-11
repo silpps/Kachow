@@ -13,7 +13,7 @@ public class AddTaskController{
     @FXML
     private ChoiceBox<String> taskChoiceBox;
 
-    private String[] tasks = {"Class Schedule", "Assignment", "Course", "Exam", "Study Session"};
+    private String[] tasks = {"Course", "Class Schedule", "Assignment", "Exam", "Study Session"};
 
     @FXML
     private Button continueButton;
