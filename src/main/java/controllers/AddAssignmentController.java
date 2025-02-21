@@ -14,7 +14,7 @@ import java.util.List;
 
 public class AddAssignmentController {
     TimeTableDAO timeTableDAO;
-    TimetableController_v2 timetableController;
+    TimetableController_v3 timetableController;
 
     private AssignmentDAO assignmentDAO;
 
@@ -81,8 +81,7 @@ public class AddAssignmentController {
 
             Platform.runLater(() -> {
                 System.out.println("Updating UI...");
-                timetableController.fetchAndDisplayCurrentWeekData(timetableController.timetable.getItems());
-                timetableController.timetable.refresh();
+                timetableController.fetchAndDisplayCurrentWeeksData();
                 System.out.println("UI updated.");
             });
         }).start();
@@ -90,7 +89,7 @@ public class AddAssignmentController {
         backButtonClicked();
     }
 
-    public void setTimetableController(TimetableController_v2 timetableController) {
+    public void setTimetableController(TimetableController_v3 timetableController) {
         this.timetableController = timetableController;
     }
 }

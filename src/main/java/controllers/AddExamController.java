@@ -32,7 +32,7 @@ public class AddExamController {
     @FXML
     private Button backButton, examSaveButton;
 
-    private TimetableController_v2 timetableController;
+    private TimetableController_v3 timetableController;
 
     @FXML
     public void initialize(){
@@ -72,8 +72,7 @@ public class AddExamController {
 
             Platform.runLater(() -> {
                 System.out.println("Updating UI...");
-                timetableController.fetchAndDisplayCurrentWeekData(timetableController.timetable.getItems());
-                timetableController.timetable.refresh();
+                timetableController.fetchAndDisplayCurrentWeeksData();
                 System.out.println("UI updated.");
             });
         }).start();
@@ -81,7 +80,7 @@ public class AddExamController {
         backButtonClicked();
     }
 
-    public void setTimetableController(TimetableController_v2 timetableController) {
+    public void setTimetableController(TimetableController_v3 timetableController) {
         this.timetableController = timetableController;
     }
 }

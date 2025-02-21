@@ -21,9 +21,9 @@ public class AddTaskController{
     @FXML
     private Button backButton;
 
-    private TimetableController_v2 timetableController;
+    private TimetableController_v3 timetableController;
 
-    public void setTimetableController(TimetableController_v2 timetableController) {
+    public void setTimetableController(TimetableController_v3 timetableController) {
         this.timetableController = timetableController;
     }
 
@@ -64,6 +64,8 @@ public class AddTaskController{
                     ((AddExamController) controller).setTimetableController(timetableController);
                 } else if (controller instanceof AddStudySessionController) {
                     ((AddStudySessionController) controller).setTimetableController(timetableController);
+                } else if (controller instanceof AddClassScheduleController) {
+                    ((AddClassScheduleController) controller).setTimetableController(timetableController);
                 } else if (controller instanceof AddCourseController) {
                     ((AddCourseController) controller).setTimetableController(timetableController);
                 }

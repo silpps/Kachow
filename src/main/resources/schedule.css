@@ -1,0 +1,75 @@
+.button {
+    -fx-border-width: 2px;
+    -fx-border-color: #9a5454;
+    -fx-border-radius: 20;
+    -fx-background-color: #d6a8a8;
+    -fx-background-radius: 20;
+
+}
+
+.root {
+    -fx-background-color: #f6ebe9;
+    -fx-font-family: Verdana;
+}
+
+#weekElement {
+    -fx-background-color: #9dd19d;
+    -fx-border-width: 1px;
+    -fx-border-color: #476e47;
+}
+
+#monday {
+    -fx-background-color: #aacfaa;
+    -fx-background-insets: 0 0 1 0px;
+    -fx-alignment: center;
+}
+
+#tuesday {
+    -fx-background-color: #9dd19d;
+    -fx-background-insets: 0 0 1 0px;
+    -fx-alignment: center;
+}
+
+#wednesday {
+    -fx-background-color: #aacfaa;
+    -fx-background-insets: 0 0 1 0px;
+    -fx-alignment: center;
+}
+
+#thursday {
+    -fx-background-color: #9dd19d;
+    -fx-background-insets: 0 0 1 0px;
+    -fx-alignment: center;
+}
+
+#friday {
+    -fx-background-color: #aacfaa;
+    -fx-background-insets: 0 0 1 0px;
+    -fx-alignment: center;
+}
+
+#saturday {
+    -fx-background-color: #9dd19d;
+    -fx-background-insets: 0 0 1 0px;
+    -fx-alignment: center;
+}
+
+#sunday {
+    -fx-background-color: #aacfaa;
+    -fx-background-insets: 0 0 1 0px;
+    -fx-alignment: center;
+}
+
+.dayHeader {
+    -fx-border-color: #476e47;
+}
+
+.taskColumn {
+    -fx-border-color: #476e47;
+}
+
+.event-box {
+    -fx-border-color: black;
+    -fx-padding: 5;
+    -fx-spacing: 5;
+}

@@ -215,7 +215,7 @@ public class TimetableController_v2 implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/addTask.fxml"));
             Scene scene = new Scene(loader.load());
             AddTaskController controller = loader.getController();
-            controller.setTimetableController(this);
+           //controller.setTimetableController(this);
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.show();

@@ -10,10 +10,10 @@ import javafx.fxml.FXMLLoader;
 
         @Override
         public void start(Stage stage) throws Exception {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/TimeTable.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/TimeTable_hbox_version.fxml"));
             Parent root = fxmlLoader.load();
             Scene scene = new Scene(root);
-            scene.getStylesheets().add("/time_table.css");
+            scene.getStylesheets().add("/schedule.css");
             stage.setScene(scene);
             stage.show();
         }

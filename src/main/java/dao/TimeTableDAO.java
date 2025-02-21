@@ -56,7 +56,7 @@ public class TimeTableDAO {
     public List<ClassSchedule> getClassSchedule(LocalDate startDate, LocalDate endDate) {
         conn = MariaDbConnection.getConnection();
         List<ClassSchedule> classSchedules = new ArrayList<>();
-        String sql = "SELECT * FROM class_schedule WHERE start_time >= ? AND end_time<= ?";
+        String sql = "SELECT * FROM class_schedule WHERE start_time >= ? AND end_time<= ? ORDER BY start_time ASC";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setTimestamp(1, Timestamp.valueOf(startDate.atStartOfDay()));
@@ -108,7 +108,7 @@ public class TimeTableDAO {
     public List<StudySession> getStudySessionSchedule(LocalDate startDate, LocalDate endDate) {
         conn = MariaDbConnection.getConnection();
         List<StudySession> studySessions = new ArrayList<>();
-        String sql = "SELECT * FROM study_session WHERE start_time >= ? AND end_time<= ?";
+        String sql = "SELECT * FROM study_session WHERE start_time >= ? AND end_time<= ? ORDER BY start_time ASC";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setTimestamp(1, Timestamp.valueOf(startDate.atStartOfDay()));

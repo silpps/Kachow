@@ -45,7 +45,7 @@ public class AddCourseController {
     private Button addCourseBackButton;
 
     private List<String> courses = new ArrayList<>();
-    private TimetableController_v2 timetableController;
+    private TimetableController_v3 timetableController;
 
     @FXML
     private void addCourseSaveButtonClicked(){
@@ -151,7 +151,7 @@ public class AddCourseController {
         }
     }
 
-    public void setTimetableController(TimetableController_v2 timetableController) {
+    public void setTimetableController(TimetableController_v3 timetableController) {
         this.timetableController = timetableController;
     }
 }

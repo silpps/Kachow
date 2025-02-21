@@ -18,6 +18,8 @@ public class AddClassScheduleController {
     private IDAO<ClassSchedule> classScheduleDAO;
     private TimeTableDAO timeTableDAO;
 
+    private TimetableController_v3 timetableController;
+
     private DatePicker datePicker;
     @FXML
     private ChoiceBox<String> courseNameChoiceBox;
@@ -95,5 +97,9 @@ public class AddClassScheduleController {
 
         // Close the window
         backButtonClicked();
+    }
+
+    public void setTimetableController(TimetableController_v3 timetableController) {
+        this.timetableController = timetableController;
     }
 }
