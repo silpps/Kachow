@@ -8,14 +8,13 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AddExamController">
    <children>
       <Label fx:id="addExamTitleLabel" layoutX="435.0" layoutY="81.0" text="Add new Exam" />
       <Label fx:id="courseNameLabel" layoutX="292.0" layoutY="142.0" text="Course Name:" />
       <ChoiceBox fx:id="courseNameChoiceBox" layoutX="430.0" layoutY="142.0" prefWidth="150.0" />
-      <Label fx:id="titleLabel" layoutX="292.0" layoutY="279.0" text="Title:" />
-      <TextField fx:id="examTitleTextField" layoutX="430.0" layoutY="279.0" />
+      <Label fx:id="titleLabel" layoutX="292.0" layoutY="280.0" text="Title:" />
+      <TextField fx:id="examTitleTextField" layoutX="426.0" layoutY="278.0" />
       <Label fx:id="descriptionLabel" layoutX="292.0" layoutY="350.0" text="Description:" />
       <TextArea fx:id="descriptionTextArea" layoutX="430.0" layoutY="350.0" prefHeight="37.0" prefWidth="235.0" />
       <Label fx:id="locationLabel" layoutX="292.0" layoutY="411.0" text="Location:" />

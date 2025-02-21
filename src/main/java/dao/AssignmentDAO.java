@@ -15,7 +15,7 @@ public class AssignmentDAO implements IDAO<Assignment> {
     @Override
     public Assignment get(String id) {
         conn = MariaDbConnection.getConnection();
-        String sql = "SELECT * FROM assignment WHERE id = ?";
+        String sql = "SELECT * FROM assignment WHERE assignment_id = ?";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setInt(1,  Integer.parseInt(id));
@@ -60,7 +60,8 @@ public class AssignmentDAO implements IDAO<Assignment> {
     @Override
     public void update(Assignment assignment) {
         conn = MariaDbConnection.getConnection();
-        String sql = "UPDATE assignment SET (course_name, title, description, due_date, status) VALUES (?, ?, ?, ?, ?) WHERE assignment_id = ?";
+        String sql = "UPDATE assignment SET course_name = ?, title = ?, description = ?, due_date = ?, status = ? WHERE assignment_id = ?";
+
         try {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, assignment.getCourseName());

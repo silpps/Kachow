@@ -15,10 +15,10 @@
       <Label fx:id="addAssignmentTitleLabel" layoutX="388.0" layoutY="64.0" text="Add new Assignment" />
       <Label fx:id="assignmentCourseNameLabel" layoutX="257.0" layoutY="130.0" text="Course Name:" />
       <ChoiceBox fx:id="courseNameChoiceBox" layoutX="371.0" layoutY="130.0" prefWidth="150.0" />
-      <Label fx:id="assignmentTitleLabel" layoutX="257.0" layoutY="199.0" text="Title:" />
-      <TextField fx:id="assignmentTitleTextField" layoutX="371.0" layoutY="199.0" />
-      <Label fx:id="assignmentDescriptionLabel" layoutX="257.0" layoutY="268.0" text="Description:" />
-      <TextArea fx:id="descriptionTextArea" layoutX="371.0" layoutY="268.0" prefHeight="57.0" prefWidth="272.0" />
+      <Label fx:id="assignmentTitleLabel" layoutX="264.0" layoutY="183.0" text="Title:" />
+      <TextField fx:id="assignmentTitleTextField" layoutX="368.0" layoutY="181.0" />
+      <Label fx:id="assignmentDescriptionLabel" layoutX="254.0" layoutY="262.0" text="Description:" />
+      <TextArea fx:id="descriptionTextArea" layoutX="368.0" layoutY="257.0" prefHeight="57.0" prefWidth="272.0" />
       <Label fx:id="dueDateLabel" layoutX="257.0" layoutY="372.0" text="Due date:" />
       <DatePicker fx:id="assignmentDatePicker" layoutX="371.0" layoutY="372.0" />
       <Label fx:id="assignmentProgressLabel" layoutX="257.0" layoutY="453.0" text="Progress:" />
