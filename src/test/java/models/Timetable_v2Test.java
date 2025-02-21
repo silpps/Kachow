@@ -153,7 +153,7 @@ class Timetable_v2Test {
     @Test
     void setSunday() {
         timetable.setSunday("Sleep");
-        assertEquals("", timetable.getSunday());
+        assertEquals("Sleep", timetable.getSunday());
     }
 
     @Test
