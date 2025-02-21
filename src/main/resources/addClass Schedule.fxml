@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ComboBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AddClassScheduleController">
+    <children>
+        <!-- Course Name -->
+        <Label fx:id="courseNameLabel" layoutX="50.0" layoutY="30.0" text="Course Name:" />
+        <ChoiceBox fx:id="courseNameChoiceBox" layoutX="150.0" layoutY="30.0" prefWidth="200.0" />
+
+        <!-- Days of the Week -->
+        <Label layoutX="50.0" layoutY="75.0" text="Day of the Week:" />
+        <ChoiceBox fx:id="dayOfWeekChoiceBox" layoutX="150.0" layoutY="75.0" prefWidth="200.0" />
+
+        <!-- Location -->
+        <Label fx:id="locationLabel" layoutX="50.0" layoutY="250.0" text="Location:" />
+        <TextField fx:id="locationTextField" layoutX="150.0" layoutY="250.0" prefWidth="200.0" />
+
+        <!-- Start Time -->
+        <Label fx:id="startTimeLabel" layoutX="50.0" layoutY="300.0" text="Start Time:" />
+        <TextField fx:id="startTimeTextField" layoutX="150.0" layoutY="300.0" prefWidth="200.0" promptText="HH:mm" />
+
+        <!-- End Time -->
+        <Label fx:id="endTimeLabel" layoutX="50.0" layoutY="350.0" text="End Time:" />
+        <TextField fx:id="endTimeTextField" layoutX="150.0" layoutY="350.0" prefWidth="200.0" promptText="HH:mm" />
+
+        <!-- Buttons -->
+        <Button fx:id="backButton" layoutX="50.0" layoutY="500.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Back" />
+        <Button fx:id="saveButton" layoutX="200.0" layoutY="500.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Save" />
+    </children>
+</AnchorPane>

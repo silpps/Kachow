@@ -2,19 +2,18 @@ package models;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class StudySession {
+public class ClassSchedule {
     private final String courseName;
-    private String title;
-    private String description;
+    private String dayOfWeek;
+    private String  location;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private int id;
 
-
-    public StudySession(String courseName, String title, String description, LocalDateTime startTime, LocalDateTime endTime) {
+    public ClassSchedule(String courseName, String dayOfWeek, String location, LocalDateTime startTime, LocalDateTime endTime) {
         this.courseName = courseName;
-        this.title = title;
-        this.description = description;
+        this.dayOfWeek = dayOfWeek;
+        this.location = location;
         this.startTime = startTime;
         this.endTime = endTime;
     }
@@ -23,12 +22,12 @@ public class StudySession {
         return courseName;
     }
 
-    public String getTitle() {
-        return title;
+    public String getDayOfWeek() {
+        return dayOfWeek;
     }
 
-    public String getDescription() {
-        return description;
+    public String getLocation() {
+        return location;
     }
 
     public LocalDateTime getStartTime() {
@@ -47,12 +46,12 @@ public class StudySession {
         this.id = id;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setDayOfWeek(String dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public void setStartTime(LocalDateTime startTime) {
@@ -66,6 +65,6 @@ public class StudySession {
 
 
     public String getDetails() {
-        return  "Title: " + title + "\nCourse: " + courseName + "\nDescription: " + description + "\nStart Time: " + startTime + "\nEnd Time: " + endTime;
+        return "Course: " + courseName + "\nDays of the Week: " + dayOfWeek + "\nLocation: " + location + "\nStart Time: " + startTime + "\nEnd Time: " + endTime;
     }
 }
