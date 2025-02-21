@@ -2,6 +2,8 @@ package models;
 
 import java.time.LocalDate;
 
+
+//TODO: Mieti miten tätä luokkaa vois hyödyntää kalenterinäkymässä. esim filtteri joka näyttää vain tietyn kurssin tapahtumat
 public class Course {
     private final String courseName;
     private String instructor;

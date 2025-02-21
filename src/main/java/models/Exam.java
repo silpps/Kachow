@@ -2,6 +2,7 @@ package models;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+//TODO: Lisää start ja end time
 public class Exam {
     private final String courseName;
     private LocalDateTime examDate;

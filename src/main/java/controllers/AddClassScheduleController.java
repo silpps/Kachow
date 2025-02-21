@@ -3,6 +3,7 @@ package controllers;
 import dao.ClassScheduleDAO;
 import dao.IDAO;
 import dao.TimeTableDAO;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import models.ClassSchedule;
@@ -20,30 +21,36 @@ public class AddClassScheduleController {
 
     private TimetableController_v3 timetableController;
 
-    private DatePicker datePicker;
     @FXML
-    private ChoiceBox<String> courseNameChoiceBox;
+    private DatePicker sessionDatePicker;
 
     @FXML
-    private TextField titleTextField;
+    private ChoiceBox<String> courseNameChoiceBox;
 
     @FXML
     private TextField locationTextField;
 
     @FXML
-    private TextField startTimeTextField;
+    private ChoiceBox<String> fromChoiceBox;
 
     @FXML
-    private TextField endTimeTextField;
+    private ChoiceBox<String> toChoiceBox;
 
     @FXML
     private ChoiceBox<String> dayOfWeekChoiceBox;
 
     @FXML
-    private Button backButton;
+    private Button sessionBackButton;
 
     @FXML
-    private Button saveButton;
+    private Button sessionSaveButton;
+
+    private String[] startTimes = {"6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00",
+            "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"};
+
+    private String[] endTimes = {"7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00",
+            "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00"};
+
 
     @FXML
     private void initialize() {
@@ -55,48 +62,73 @@ public class AddClassScheduleController {
         dayOfWeekChoiceBox.getItems().addAll("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
 
 
-        // Set up button actions
-        backButton.setOnAction(e -> backButtonClicked());
-        saveButton.setOnAction(e -> saveButtonClicked());
+        fromChoiceBox.getItems().addAll(startTimes);
+        toChoiceBox.getItems().addAll(endTimes);
+        sessionSaveButton.setOnAction(e -> sessionSaveButtonClicked());
+        sessionBackButton.setOnAction(e -> sessionBackButtonClicked());
     }
 
     @FXML
-    private void backButtonClicked() {
+    private void sessionBackButtonClicked() {
         // Close the window
-        backButton.getScene().getWindow().hide();
+        sessionBackButton.getScene().getWindow().hide();
     }
 
     @FXML
-    private void saveButtonClicked() {
+    private void sessionSaveButtonClicked() {
         // Get the selected course name
         String courseName = courseNameChoiceBox.getValue();
 
-        // Get the title and location
+        // Get location
         String location = locationTextField.getText();
-
-        LocalDate date = datePicker.getValue();
-
-        // Parse the start and end times
-        LocalTime startTime = LocalTime.parse(startTimeTextField.getText(), DateTimeFormatter.ofPattern("HH:mm"));
-        LocalTime endTime = LocalTime.parse(endTimeTextField.getText(), DateTimeFormatter.ofPattern("HH:mm"));
-
-        // Combine the date with the start and end times to create LocalDateTime objects
-        LocalDateTime startDateTime = LocalDateTime.of(date, startTime);
-        LocalDateTime endDateTime = LocalDateTime.of(date, endTime);
+        LocalDate date = sessionDatePicker.getValue();
+        String fromTimeString = fromChoiceBox.getValue();
+        String toTimeString = toChoiceBox.getValue();
 
         // Get the selected day of the week
+        //TODO: Tarkista onko tarpeellinen
         String dayOfWeek = dayOfWeekChoiceBox.getValue();
-
-
         System.out.println("Days of the week: " + dayOfWeek);
-        // Create a new ClassSchedule object
-        ClassSchedule classSchedule = new ClassSchedule(courseName, dayOfWeek, location, startDateTime, endDateTime);
 
-        // Save the class schedule to the database
-        classScheduleDAO.add(classSchedule);
+        // Parse the start and end times
+        if (date != null && fromTimeString != null && toTimeString != null) {
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+            LocalDateTime fromTime = LocalDateTime.of(date, LocalTime.parse(fromTimeString, timeFormatter));
+            LocalDateTime toTime = LocalDateTime.of(date, LocalTime.parse(toTimeString, timeFormatter));
+            System.out.println(fromTime);
+            System.out.println(toTime);
+            System.out.println(date);
+            if (fromTime.isAfter(toTime)) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Invalid time");
+                alert.setContentText("From time must be before to time");
+                alert.showAndWait();
+                return;
+            }
+            ClassSchedule classSchedule = new ClassSchedule(courseName, dayOfWeek, location, fromTime, toTime);
+            classScheduleDAO.add(classSchedule);
+            System.out.println("Class Schedule added" + classSchedule.getCourseName() + " " + classSchedule.getLocation());
+
+
+        }
+
+        new Thread(() -> {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            Platform.runLater(() -> {
+                System.out.println("Updating UI...");
+                timetableController.fetchAndDisplayCurrentWeeksData();
+                System.out.println("UI updated.");
+            });
+        }).start();
 
         // Close the window
-        backButtonClicked();
+        sessionBackButtonClicked();
     }
 
     public void setTimetableController(TimetableController_v3 timetableController) {

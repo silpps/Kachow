@@ -20,6 +20,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
+//TODO: Järjestele ja siisti koodia
 public class TimetableController_v3 implements Initializable {
 
     @FXML
@@ -43,8 +44,6 @@ public class TimetableController_v3 implements Initializable {
     @FXML
     private VBox sundayColumn;
 
-    @FXML
-    private Button addButton;
 
     @FXML
     private Label mondayDate;

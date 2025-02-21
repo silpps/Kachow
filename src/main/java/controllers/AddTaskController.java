@@ -72,6 +72,7 @@ public class AddTaskController{
                 Stage stage = new Stage();
                 stage.setScene(scene);
                 stage.show();
+                continueButton.getScene().getWindow().hide();
             }
             catch (Exception e){
                 e.printStackTrace();

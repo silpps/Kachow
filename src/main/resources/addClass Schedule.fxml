@@ -13,28 +13,26 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AddClassScheduleController">
     <children>
-        <!-- Course Name -->
-        <Label fx:id="courseNameLabel" layoutX="50.0" layoutY="30.0" text="Course Name:" />
-        <ChoiceBox fx:id="courseNameChoiceBox" layoutX="150.0" layoutY="30.0" prefWidth="200.0" />
+        <Label fx:id="addClassScheduleTitleLabel" layoutX="413.0" layoutY="73.0" text="Add a new Class Schedule" />
+        <Label fx:id="courseNameLabel" layoutX="282.0" layoutY="120.0" text="Course Name:" />
+        <ChoiceBox fx:id="courseNameChoiceBox" layoutX="409.0" layoutY="120.0" prefWidth="150.0" />
 
         <!-- Days of the Week -->
-        <Label layoutX="50.0" layoutY="75.0" text="Day of the Week:" />
-        <ChoiceBox fx:id="dayOfWeekChoiceBox" layoutX="150.0" layoutY="75.0" prefWidth="200.0" />
+        <Label layoutX="282.0" layoutY="176.0" text="Day of the Week:" />
+        <ChoiceBox fx:id="dayOfWeekChoiceBox" layoutX="409.0" layoutY="176.0" prefWidth="200.0" />
 
         <!-- Location -->
-        <Label fx:id="locationLabel" layoutX="50.0" layoutY="250.0" text="Location:" />
-        <TextField fx:id="locationTextField" layoutX="150.0" layoutY="250.0" prefWidth="200.0" />
+        <Label fx:id="locationLabel" layoutX="282.0" layoutY="226.0" text="Location:" />
+        <TextField fx:id="locationTextField" layoutX="409.0" layoutY="226.0" prefWidth="200.0" />
 
-        <!-- Start Time -->
-        <Label fx:id="startTimeLabel" layoutX="50.0" layoutY="300.0" text="Start Time:" />
-        <TextField fx:id="startTimeTextField" layoutX="150.0" layoutY="300.0" prefWidth="200.0" promptText="HH:mm" />
-
-        <!-- End Time -->
-        <Label fx:id="endTimeLabel" layoutX="50.0" layoutY="350.0" text="End Time:" />
-        <TextField fx:id="endTimeTextField" layoutX="150.0" layoutY="350.0" prefWidth="200.0" promptText="HH:mm" />
-
+        <Label fx:id="sessionDateLabel" layoutX="282.0" layoutY="321.0" text="Date:" />
+        <DatePicker fx:id="sessionDatePicker" layoutX="409.0" layoutY="321.0" />
+        <Label fx:id="fromLabel" layoutX="219.0" layoutY="390.0" text="From:" />
+        <ChoiceBox fx:id="fromChoiceBox" layoutX="314.0" layoutY="385.0" prefHeight="25.0" prefWidth="75.0" />
+        <Label fx:id="toLabel" layoutX="483.0" layoutY="390.0" text="To:" />
+        <ChoiceBox fx:id="toChoiceBox" layoutX="553.0" layoutY="385.0" prefHeight="25.0" prefWidth="75.0" />
         <!-- Buttons -->
-        <Button fx:id="backButton" layoutX="50.0" layoutY="500.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Back" />
-        <Button fx:id="saveButton" layoutX="200.0" layoutY="500.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Save" />
+        <Button fx:id="sessionBackButton" layoutX="171.0" layoutY="508.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Back" />
+        <Button fx:id="sessionSaveButton" layoutX="638.0" layoutY="508.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Save" />
     </children>
 </AnchorPane>

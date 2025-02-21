@@ -2,6 +2,7 @@ package models;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+//TODO: Lisää deadline aika
 public class Assignment {
     private final String courseName;
     private String title;

@@ -69,7 +69,6 @@ public class AddAssignmentController {
         Assignment assignment = new Assignment(courseName, assignmentTitle, description, date.atStartOfDay(), status);
         assignmentDAO.add(assignment);
         System.out.println("Assignment added" + assignment.getCourseName() + " " + assignment.getTitle() + " " + assignment.getDescription() + " " + assignment.getDueDate() + " " + assignment.getStatus());
-        assignmentDAO.add(assignment); // Insert assignment into database
 
 // Small delay to ensure DB update before fetching data
         new Thread(() -> {
