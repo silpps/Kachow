@@ -7,7 +7,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import models.ClassSchedule;
-import models.CourseService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,7 +18,7 @@ public class AddClassScheduleController {
     private IDAO<ClassSchedule> classScheduleDAO;
     private TimeTableDAO timeTableDAO;
 
-    private TimetableController_v3 timetableController;
+    private TimetableController timetableController;
 
     @FXML
     private DatePicker sessionDatePicker;
@@ -131,7 +130,7 @@ public class AddClassScheduleController {
         sessionBackButtonClicked();
     }
 
-    public void setTimetableController(TimetableController_v3 timetableController) {
+    public void setTimetableController(TimetableController timetableController) {
         this.timetableController = timetableController;
     }
 }
