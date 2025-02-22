@@ -15,6 +15,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -55,18 +56,21 @@ public class TimetableController implements Initializable {
         saturdayDate.setText(startOfWeek.plusDays(5).format(formatter));
         sundayDate.setText(startOfWeek.plusDays(6).format(formatter));
 
-
         // Fetch current week's data from database
         List<ClassSchedule> classSchedules = timeTableDAO.getClassSchedule(startOfWeek, endOfWeek);
         List<Assignment> assignments = timeTableDAO.getAssignmentSchedule(startOfWeek, endOfWeek);
         List<StudySession> studySessions = timeTableDAO.getStudySessionSchedule(startOfWeek, endOfWeek);
         List<Exam> exams = timeTableDAO.getExamSchedule(startOfWeek, endOfWeek);
 
-        // Add events to the correct day's VBox
-        addEventsToDay(classSchedules);
-        addEventsToDay(assignments);
-        addEventsToDay(studySessions);
-        addEventsToDay(exams);
+        // Combine all tasks into a single list
+        List<Object> allTasks = new ArrayList<>();
+        allTasks.addAll(classSchedules);
+        allTasks.addAll(assignments);
+        allTasks.addAll(studySessions);
+        allTasks.addAll(exams);
+
+        // Add tasks to the correct day's VBox
+        addTasksToDay(allTasks);
     }
 
     private void clearTimetable() {
@@ -79,20 +83,21 @@ public class TimetableController implements Initializable {
         sundayColumn.getChildren().clear();
     }
 
-    private <T> void addEventsToDay(List<T> events) {
-        events.sort(Comparator.comparing(event -> {
-            return switch (event) {
+    private <T> void addTasksToDay(List<T> tasks) {
+        tasks.sort(Comparator.comparing(task -> {
+            return switch (task) {
                 case ClassSchedule classSchedule -> classSchedule.getStartTime();
                 case StudySession studySession -> studySession.getStartTime();
                 case Exam exam -> exam.getExamDate();
+                case Assignment assignment -> assignment.getDeadline();
                 case null, default -> LocalDateTime.MAX;
             };
         }));
 
-        for (T event : events) {
-            VBox dayColumn = getDayColumn(getTaskDayOfWeek(event));
-            VBox eventBox = createEventBox(event);
-            dayColumn.getChildren().add(eventBox);
+        for (T task : tasks) {
+            VBox dayColumn = getDayColumn(getTaskDayOfWeek(task));
+            VBox taskBox = createTaskBox(task);
+            dayColumn.getChildren().add(taskBox);
         }
     }
 
@@ -110,83 +115,71 @@ public class TimetableController implements Initializable {
     }
 
 
-    //TODO: Olisiko parempi käyttää switch-casea missä taskin tyypin mukaan palautetaan tietynlainen taskBox
-    private VBox createEventBox(Object task) {
+    private VBox createTaskBox(Object task) {
+        return switch (task) {
+            case ClassSchedule classSchedule -> createClassScheduleBox(classSchedule);
+            case Assignment assignment -> createAssignmentBox(assignment);
+            case StudySession studySession -> createStudySessionBox(studySession);
+            case Exam exam -> createExamBox(exam);
+            case null, default -> throw new IllegalArgumentException("Unknown task type");
+        };
+    }
+
+    private VBox createClassScheduleBox(ClassSchedule classSchedule) {
         VBox taskBox = new VBox();
-        taskBox.getStyleClass().add("task-box"); // Add the style class
+        taskBox.getStyleClass().add("class-schedule-box");
 
-        Label courseLabel = new Label(getCourseName(task));
-
-        Label taskLabel = new Label(getTaskLabel(task));
+        Label courseLabel = new Label(classSchedule.getCourseName());
+        Label taskLabel = new Label("CLASS: ");
         taskLabel.setStyle("-fx-font-weight: bold;");
+        Label timeLabel = new Label(classSchedule.getStartTime().toLocalTime() + " - " + classSchedule.getEndTime().toLocalTime());
+        Label locationLabel = new Label("Location: " + classSchedule.getLocation());
 
-        Label timeLabel = new Label(getTaskTime(task));
-       // Label descriptionLabel = new Label(getEventDescription(task));
-
-        taskBox.getChildren().addAll(courseLabel, taskLabel, timeLabel);
-        //setTaskHeight(taskBox, task);
-
+        taskBox.getChildren().addAll(courseLabel, taskLabel, timeLabel, locationLabel);
         return taskBox;
     }
 
-    private String getTaskLabel(Object event) {
-        return switch (event) {
-            case ClassSchedule classSchedule -> "CLASS: ";
-            case Assignment assignment -> "ASSIGNMENT: ";
-            case StudySession studySession -> "STUDY SESSION: ";
-            case Exam exam -> "EXAM: ";
-            case null, default -> "Unknown Task";
-        };
+    private VBox createAssignmentBox(Assignment assignment) {
+        VBox taskBox = new VBox();
+        taskBox.getStyleClass().add("assignment-box");
+
+        Label courseLabel = new Label(assignment.getCourseName());
+        Label taskLabel = new Label("ASSIGNMENT: ");
+        taskLabel.setStyle("-fx-font-weight: bold;");
+        Label timeLabel = new Label("Deadline: " + assignment.getDeadline().toLocalTime().toString());
+        Label statusLabel = new Label("Status: " + (assignment.getStatus()));
+
+        taskBox.getChildren().addAll(courseLabel, taskLabel, timeLabel, statusLabel);
+        return taskBox;
     }
 
-    private String getCourseName(Object event) {
-        return switch (event) {
-            case ClassSchedule classSchedule -> classSchedule.getCourseName();
-            case Assignment assignment -> assignment.getCourseName();
-            case StudySession studySession -> studySession.getCourseName();
-            case Exam exam -> exam.getCourseName();
-            case null, default -> "Unknown Course";
-        };
+    private VBox createStudySessionBox(StudySession studySession) {
+        VBox taskBox = new VBox();
+        taskBox.getStyleClass().add("study-session-box");
+
+        Label courseLabel = new Label(studySession.getCourseName());
+        Label taskLabel = new Label("STUDY SESSION: ");
+        taskLabel.setStyle("-fx-font-weight: bold;");
+        Label timeLabel = new Label(studySession.getStartTime().toLocalTime() + " - " + studySession.getEndTime().toLocalTime());
+
+        taskBox.getChildren().addAll(courseLabel, taskLabel, timeLabel);
+        return taskBox;
     }
 
-    private String getTaskTime(Object task) {
-        return switch (task) {
-            case ClassSchedule classSchedule ->
-                    classSchedule.getStartTime().toLocalTime() + " - " + classSchedule.getEndTime().toLocalTime();
-            case StudySession studySession ->
-                    studySession.getStartTime().toLocalTime() + " - " + studySession.getEndTime().toLocalTime();
-            case Exam exam -> exam.getExamDate().toLocalTime().toString();
-            case Assignment assignment -> "Deadline: " + assignment.getDeadline().toLocalTime().toString();
-            case null, default -> "";
-        };
+    private VBox createExamBox(Exam exam) {
+        VBox taskBox = new VBox();
+        taskBox.getStyleClass().add("exam-box");
+
+        Label courseLabel = new Label(exam.getCourseName());
+        Label taskLabel = new Label("EXAM: ");
+        taskLabel.setStyle("-fx-font-weight: bold;");
+        Label timeLabel = new Label(exam.getExamDate().toLocalTime().toString());
+        Label locationLabel = new Label("Location: " + exam.getLocation());
+
+        taskBox.getChildren().addAll(courseLabel, taskLabel, timeLabel, locationLabel);
+        return taskBox;
     }
 
-    /*
-    private String getEventDescription(Object task) {
-        if (task instanceof ClassSchedule) {
-            return ((ClassSchedule) task).getLocation();
-        } else if (task instanceof Assignment) {
-            return ((Assignment) task).getDescription();
-        } else if (task instanceof StudySession) {
-            return ((StudySession) task).getDescription();
-        } else if (task instanceof Exam) {
-            return ((Exam) task).getDescription();
-        } else {
-            return "";
-        }
-    }*/
-    //TODO: Mieti onko tarpeellinen
-    /*private void setTaskHeight(VBox eventBox, Object task) {
-        double height;
-        if (task instanceof ClassSchedule classSchedule) {
-            height = calculateHeight(classSchedule.getStartTime(), classSchedule.getEndTime());
-        } else if (task instanceof StudySession studySession) {
-            height = calculateHeight(studySession.getStartTime(), studySession.getEndTime());
-        } else {
-            height = 30; // Minimum height for events without a specific time
-        }
-        eventBox.setPrefHeight(height);
-    }*/
 
     //ei tällä hetkellä käytössä
     private double calculateHeight(LocalDateTime startTime, LocalDateTime endTime) {

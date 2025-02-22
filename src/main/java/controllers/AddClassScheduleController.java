@@ -76,6 +76,7 @@ public class AddClassScheduleController {
 
         // Get location
         String location = locationTextField.getText();
+        System.out.println("Location: " + location);
         String description = scheduleDescriptionArea.getText();
         LocalDate date = sessionDatePicker.getValue();
         String fromTimeString = fromChoiceBox.getValue();
