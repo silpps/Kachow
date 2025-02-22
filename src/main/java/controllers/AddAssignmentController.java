@@ -19,25 +19,29 @@ public class AddAssignmentController {
     private AssignmentDAO assignmentDAO;
 
     @FXML
-    private ChoiceBox<String> courseNameChoiceBox;
+    ChoiceBox<String> courseNameChoiceBox;
 
     @FXML
-    private TextField assignmentTitleTextField;
+    TextField assignmentTitleTextField;
 
     @FXML
-    private TextArea descriptionTextArea;
+    TextArea descriptionTextArea;
 
     @FXML
-    private DatePicker assignmentDatePicker;
+    DatePicker assignmentDatePicker;
 
     @FXML
-    private CheckBox notStartedCheckBox, ongoingCheckBox;
+    CheckBox notStartedCheckBox;
+    @FXML
+    CheckBox ongoingCheckBox;
 
     @FXML
-    private Button backButton, assignmentSaveButton;
+    Button backButton;
+    @FXML
+    Button assignmentSaveButton;
 
     @FXML
-    private void backButtonClicked() {
+    void backButtonClicked() {
         backButton.getScene().getWindow().hide();
     }
 
@@ -54,7 +58,7 @@ public class AddAssignmentController {
     }
 
     @FXML
-    private void assignmentSaveButtonClicked() {
+    void assignmentSaveButtonClicked() {
         String courseName = courseNameChoiceBox.getValue();
         String assignmentTitle = assignmentTitleTextField.getText();
         String description = descriptionTextArea.getText();

@@ -132,8 +132,56 @@ public class TimetableController_v3 implements Initializable {
         for (T event : events) {
             VBox dayColumn = getDayColumn(getEventDayOfWeek(event));
             VBox eventBox = createEventBox(event);
+            eventBox.setOnMouseClicked(e -> detailsPopup(event));
             dayColumn.getChildren().add(eventBox);
         }
+    }
+
+    private <T> void detailsPopup(T event) {
+        try {
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Event Details");
+
+            VBox popupVBox = new VBox(10);
+            popupVBox.setStyle("-fx-padding: 20;");
+
+            Label titleLabel = new Label("Title: " + getEventTitle(event));
+            Label timeLabel = new Label("Time: " + getEventTime(event));
+            Label descriptionLabel = new Label("Description: " + getEventDescription(event));
+
+            Button deleteButton = new Button("Delete");
+
+            deleteButton.setOnAction(e -> handleDeleteEvent(event, popupStage));
+
+            popupVBox.getChildren().addAll(titleLabel, timeLabel, descriptionLabel, deleteButton);
+
+            Scene popupScene = new Scene(popupVBox, 300, 200);
+            popupStage.setScene(popupScene);
+            popupStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleDeleteEvent(Object event, Stage popupStage) {
+        System.out.println("Delete event: " + getEventTitle(event));
+
+        deleteEvent(event);
+        popupStage.close();
+    }
+
+    private void deleteEvent(Object event) {
+        if (event instanceof ClassSchedule) {
+            timeTableDAO.deleteClassSchedule((ClassSchedule) event);
+        } else if (event instanceof StudySession) {
+            timeTableDAO.deleteStudySession((StudySession) event);
+        } else if (event instanceof Exam) {
+            timeTableDAO.deleteExam((Exam) event);
+        } else if (event instanceof Assignment) {
+            timeTableDAO.deleteAssignment((Assignment) event);
+        }
+
+        fetchAndDisplayCurrentWeeksData();
     }
 
     private VBox getDayColumn(int dayOfWeek) {

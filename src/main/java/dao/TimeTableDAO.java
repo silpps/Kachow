@@ -158,4 +158,51 @@ public class TimeTableDAO {
     }
 
 
+    public void deleteClassSchedule(ClassSchedule event) {
+        conn = MariaDbConnection.getConnection();
+        String sql = "DELETE FROM class_schedule WHERE class_id = ?";
+        try {
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, event.getId());
+            st.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteStudySession(StudySession event) {
+        conn = MariaDbConnection.getConnection();
+        String sql = "DELETE FROM study_session WHERE session_id = ?";
+        try {
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, event.getId());
+            st.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteExam(Exam event) {
+        conn = MariaDbConnection.getConnection();
+        String sql = "DELETE FROM exam WHERE exam_id = ?";
+        try {
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, event.getId());
+            st.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteAssignment(Assignment event) {
+        conn = MariaDbConnection.getConnection();
+        String sql = "DELETE FROM assignment WHERE assignment_id = ?";
+        try {
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, event.getId());
+            st.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
