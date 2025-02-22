@@ -21,9 +21,9 @@ public class AddTaskController{
     @FXML
     private Button backButton;
 
-    private TimetableController_v3 timetableController;
+    private TimetableController timetableController;
 
-    public void setTimetableController(TimetableController_v3 timetableController) {
+    public void setTimetableController(TimetableController timetableController) {
         this.timetableController = timetableController;
     }
 

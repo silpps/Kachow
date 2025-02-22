@@ -7,8 +7,6 @@ import models.Course;
 import models.CourseService;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +43,7 @@ public class AddCourseController {
     private Button addCourseBackButton;
 
     private List<String> courses = new ArrayList<>();
-    private TimetableController_v3 timetableController;
+    private TimetableController timetableController;
 
     @FXML
     private void addCourseSaveButtonClicked(){
@@ -151,7 +149,7 @@ public class AddCourseController {
         }
     }
 
-    public void setTimetableController(TimetableController_v3 timetableController) {
+    public void setTimetableController(TimetableController timetableController) {
         this.timetableController = timetableController;
     }
 }

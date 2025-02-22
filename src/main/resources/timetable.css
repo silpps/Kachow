@@ -68,7 +68,7 @@
     -fx-border-color: #476e47;
 }
 
-.event-box {
+.task-box {
     -fx-border-color: black;
     -fx-padding: 5;
     -fx-spacing: 5;

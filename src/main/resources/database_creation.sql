@@ -28,7 +28,7 @@ CREATE TABLE assignment
     course_name   VARCHAR(50),
     title         VARCHAR(50),
     description   VARCHAR(100),
-    due_date      DATETIME,
+    deadline      DATETIME,
     status        VARCHAR(20),
     FOREIGN KEY (course_name) REFERENCES course (course_name)
 );
