@@ -3,9 +3,7 @@ package dao;
 import config.MariaDbConnection;
 import models.Exam;
 import java.sql.*;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class ExamDAO implements IDAO<Exam> {
     private Connection conn = null;
