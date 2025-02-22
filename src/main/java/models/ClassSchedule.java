@@ -1,5 +1,4 @@
 package models;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 //TODO: Pitäiskö tähän kanssa lisätä jonkinlainen description? se vois vaik sisältää tietyn tunnin aiheet tms

@@ -14,7 +14,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class AddExamController {
-    private TimeTableDAO timeTableDAO;
 
     private ExamDAO examDAO;
 
@@ -43,7 +42,7 @@ public class AddExamController {
 
     @FXML
     public void initialize(){
-        timeTableDAO = new TimeTableDAO();
+        TimeTableDAO timeTableDAO = new TimeTableDAO();
         List<String> courseNames = timeTableDAO.getCourseNames();
         courseNameChoiceBox.getItems().addAll(courseNames);
 

@@ -1,5 +1,4 @@
 package models;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 //TODO: Lisää start ja end time

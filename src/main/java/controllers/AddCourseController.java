@@ -8,8 +8,6 @@ import models.CourseService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AddCourseController {
 
@@ -42,7 +40,6 @@ public class AddCourseController {
     @FXML
     private Button addCourseBackButton;
 
-    private List<String> courses = new ArrayList<>();
     private TimetableController timetableController;
 
     @FXML

@@ -5,7 +5,7 @@ import java.util.List;
 
 public class CourseService {
     private static CourseService instance;
-    private List<String> courses = new ArrayList<>();
+    private final List<String> courses = new ArrayList<>();
 
     private CourseService() {}
 
