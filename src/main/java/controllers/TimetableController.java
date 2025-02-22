@@ -264,7 +264,7 @@ public class TimetableController implements Initializable {
 
             popupVBox.getChildren().addAll(titleLabel, titleField, dateLabel, datePicker, fromTimeLabel, fromTimeChoiceBox, toTimeLabel, toTimeChoiceBox, descriptionLabel, descriptionField, buttonHBox);
 
-            Scene popupScene = new Scene(popupVBox, 300, 300);
+            Scene popupScene = new Scene(popupVBox, 300, 600);
             popupStage.setScene(popupScene);
             popupStage.show();
         } catch (Exception e) {
