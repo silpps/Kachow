@@ -59,7 +59,7 @@ public class ExamDAO implements IDAO<Exam> {
     @Override
     public void update(Exam exam) {
         conn = MariaDbConnection.getConnection();
-        String sql = "UPDATE exam SET (course_name, exam_date, title, description, location) VALUES (?, ?, ?, ?, ?) WHERE exam_id = ?";
+        String sql = "UPDATE exam SET course_name = ?, exam_date = ?, title = ?, description = ?, location = ? WHERE exam_id = ?";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, exam.getCourseName());

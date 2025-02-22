@@ -66,4 +66,6 @@ public class Exam {
     public String getDetails() {
         return "Title: " + title + "\nCourse: " + courseName + "\nExam date: " + examDate + "\nDescription: " + description + "\nLocation: " + location;
     }
+
+
 }
