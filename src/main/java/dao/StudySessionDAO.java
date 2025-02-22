@@ -61,7 +61,7 @@ public class StudySessionDAO implements IDAO<StudySession> {
     @Override
     public void update(StudySession studySession) {
         conn = MariaDbConnection.getConnection();
-        String sql = "UPDATE study_session SET (course_name, title, description, start_time, end_time) VALUES (?, ?, ?, ?, ?) WHERE session_id = ?";
+        String sql = "UPDATE study_session SET course_name = ?, title = ?, description = ?, start_time = ?, end_time = ? WHERE session_id = ?";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, studySession.getCourseName());

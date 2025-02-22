@@ -68,4 +68,7 @@ public class ClassSchedule {
     public String getDetails() {
         return "Course: " + courseName + "\nDays of the Week: " + dayOfWeek + "\nLocation: " + location + "\nStart Time: " + startTime + "\nEnd Time: " + endTime;
     }
+
+    public void setCourseName(String newTitle) {
+    }
 }
