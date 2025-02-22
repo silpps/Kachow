@@ -162,6 +162,9 @@ public class TimetableController_v3 implements Initializable {
             Label titleLabel = new Label("Title:");
             TextField titleField = new TextField(getEventTitle(event));
 
+            Label dateLabel = new Label("Date:");
+            DatePicker datePicker = new DatePicker(getEventDate(event).toLocalDate());
+
             Label fromTimeLabel = new Label("From:");
             ChoiceBox<String> fromTimeChoiceBox = new ChoiceBox<>();
             fromTimeChoiceBox.getItems().addAll("06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00");
@@ -181,10 +184,10 @@ public class TimetableController_v3 implements Initializable {
             HBox buttonHBox = new HBox(10, deleteButton, saveButton);
             buttonHBox.setAlignment(Pos.CENTER_RIGHT);
 
-            saveButton.setOnAction(e -> handleSaveEvent(event, titleField, fromTimeChoiceBox, toTimeChoiceBox, descriptionField, popupStage));
+            saveButton.setOnAction(e -> handleSaveEvent(event, titleField, datePicker, fromTimeChoiceBox, toTimeChoiceBox, descriptionField, popupStage));
             deleteButton.setOnAction(e -> handleDeleteEvent(event, popupStage));
 
-            popupVBox.getChildren().addAll(titleLabel, titleField, fromTimeLabel, fromTimeChoiceBox, toTimeLabel, toTimeChoiceBox, descriptionLabel, descriptionField, buttonHBox);
+            popupVBox.getChildren().addAll(titleLabel, titleField, dateLabel, datePicker, fromTimeLabel, fromTimeChoiceBox, toTimeLabel, toTimeChoiceBox, descriptionLabel, descriptionField, buttonHBox);
 
             Scene popupScene = new Scene(popupVBox, 300, 300);
             popupStage.setScene(popupScene);
@@ -195,18 +198,18 @@ public class TimetableController_v3 implements Initializable {
     }
 
 
-    private <T> void handleSaveEvent(T event, TextField titleField, ChoiceBox<String> fromTimeChoiceBox, ChoiceBox<String> toTimeChoiceBox, TextArea descriptionField, Stage popupStage) {
+    private <T> void handleSaveEvent(T event, TextField titleField, DatePicker datePicker, ChoiceBox<String> fromTimeChoiceBox, ChoiceBox<String> toTimeChoiceBox, TextArea descriptionField, Stage popupStage) {
         String newTitle = titleField.getText();
+        LocalDate newDate = datePicker.getValue();
         String newFromTime = fromTimeChoiceBox.getValue();
         String newToTime = toTimeChoiceBox.getValue();
         String newDescription = descriptionField.getText();
 
         LocalTime startTime = LocalTime.parse(newFromTime, DateTimeFormatter.ofPattern("H:mm"));
         LocalTime endTime = LocalTime.parse(newToTime, DateTimeFormatter.ofPattern("H:mm"));
-        LocalDate eventDate = getEventDate(event).toLocalDate();
 
-        LocalDateTime startDateTime = LocalDateTime.of(eventDate, startTime);
-        LocalDateTime endDateTime = LocalDateTime.of(eventDate, endTime);
+        LocalDateTime startDateTime = LocalDateTime.of(newDate, startTime);
+        LocalDateTime endDateTime = LocalDateTime.of(newDate, endTime);
 
         if (event instanceof StudySession studySession) {
             studySession.setTitle(newTitle);
@@ -217,12 +220,12 @@ public class TimetableController_v3 implements Initializable {
         } else if (event instanceof Exam exam) {
             exam.setTitle(newTitle);
             exam.setDescription(newDescription);
-            //exam.setExamDate(startDateTime);
+            exam.setExamDate(newDate.atStartOfDay());
             examDAO.update(exam);
         } else if (event instanceof Assignment assignment) {
             assignment.setTitle(newTitle);
             assignment.setDescription(newDescription);
-            //assignment.setDueDate(startDateTime);
+            assignment.setDueDate(newDate.atStartOfDay());
             assignmentDAO.update(assignment);
         } else if (event instanceof ClassSchedule classSchedule) {
             classSchedule.setCourseName(newTitle);
@@ -320,7 +323,8 @@ public class TimetableController_v3 implements Initializable {
         } else if (event instanceof Exam) {
             return ((Exam) event).getExamDate().toString();
         } else if (event instanceof Assignment) {
-            return "Due: " + ((Assignment) event).getDueDate().toString();
+            String dueDateStr = ((Assignment) event).getDueDate().toString();
+            return dueDateStr.replace("Due" , "");
         } else {
             return "";
         }
