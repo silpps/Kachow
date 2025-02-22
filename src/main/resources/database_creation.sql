@@ -49,6 +49,7 @@ CREATE TABLE class_schedule
     class_id    INT AUTO_INCREMENT PRIMARY KEY,
     course_name VARCHAR(50),
     location    VARCHAR(15),
+    description VARCHAR(100),
     start_time  DATETIME,
     end_time    DATETIME,
     day_of_week VARCHAR(10),

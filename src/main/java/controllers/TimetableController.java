@@ -109,6 +109,8 @@ public class TimetableController implements Initializable {
         };
     }
 
+
+    //TODO: Olisiko parempi käyttää switch-casea missä taskin tyypin mukaan palautetaan tietynlainen taskBox
     private VBox createEventBox(Object task) {
         VBox taskBox = new VBox();
         taskBox.getStyleClass().add("task-box"); // Add the style class
@@ -186,6 +188,7 @@ public class TimetableController implements Initializable {
         eventBox.setPrefHeight(height);
     }*/
 
+    //ei tällä hetkellä käytössä
     private double calculateHeight(LocalDateTime startTime, LocalDateTime endTime) {
         Duration duration = Duration.between(startTime, endTime);
         long minutes = duration.toMinutes();
