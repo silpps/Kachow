@@ -9,22 +9,24 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AddAssignmentController">
    <children>
       <Label fx:id="addAssignmentTitleLabel" layoutX="388.0" layoutY="64.0" text="Add new Assignment" />
-      <Label fx:id="assignmentCourseNameLabel" layoutX="257.0" layoutY="130.0" text="Course Name:" />
-      <ChoiceBox fx:id="courseNameChoiceBox" layoutX="371.0" layoutY="130.0" prefWidth="150.0" />
-      <Label fx:id="assignmentTitleLabel" layoutX="264.0" layoutY="183.0" text="Title:" />
-      <TextField fx:id="assignmentTitleTextField" layoutX="368.0" layoutY="181.0" />
-      <Label fx:id="assignmentDescriptionLabel" layoutX="254.0" layoutY="262.0" text="Description:" />
-      <TextArea fx:id="descriptionTextArea" layoutX="368.0" layoutY="257.0" prefHeight="57.0" prefWidth="272.0" />
-      <Label fx:id="dueDateLabel" layoutX="257.0" layoutY="372.0" text="Due date:" />
-      <DatePicker fx:id="assignmentDatePicker" layoutX="371.0" layoutY="372.0" />
-      <Label fx:id="assignmentProgressLabel" layoutX="257.0" layoutY="453.0" text="Progress:" />
-      <CheckBox fx:id="notStartedCheckBox" layoutX="371.0" layoutY="453.0" mnemonicParsing="false" text="Not Started" />
-      <CheckBox fx:id="ongoingCheckBox" layoutX="507.0" layoutY="453.0" mnemonicParsing="false" text="Ongoing" />
+      <Label fx:id="assignmentCourseNameLabel" layoutX="97.0" layoutY="121.0" text="Course Name:" />
+      <ChoiceBox fx:id="courseNameChoiceBox" layoutX="202.0" layoutY="117.0" prefWidth="150.0" />
+      <Label fx:id="assignmentTitleLabel" layoutX="97.0" layoutY="188.0" text="Title:" />
+      <TextField fx:id="assignmentTitleTextField" layoutX="202.0" layoutY="184.0" />
+      <TextArea fx:id="descriptionTextArea" layoutX="202.0" layoutY="257.0" prefHeight="57.0" prefWidth="272.0" />
+      <Label fx:id="deadlineLabel" layoutX="587.0" layoutY="121.0" text="Deadline" />
+      <DatePicker fx:id="assignmentDatePicker" layoutX="644.0" layoutY="184.0" />
+      <Label fx:id="assignmentProgressLabel" layoutX="98.0" layoutY="372.0" text="Progress:" />
+      <CheckBox fx:id="notStartedCheckBox" layoutX="202.0" layoutY="380.0" mnemonicParsing="false" text="Not Started" />
+      <CheckBox fx:id="ongoingCheckBox" layoutX="202.0" layoutY="438.0" mnemonicParsing="false" text="Ongoing" />
       <Button fx:id="backButton" layoutX="146.0" layoutY="518.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Back" />
       <Button fx:id="assignmentSaveButton" layoutX="669.0" layoutY="518.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Save" />
+      <Label fx:id="assignmentDescriptionLabel" layoutX="96.0" layoutY="257.0" text="Description:" />
+      <Label layoutX="587.0" layoutY="188.0" text="Date:" />
+      <Label layoutX="587.0" layoutY="257.0" text="Time:" />
+      <ChoiceBox fx:id="deadlineChoiceBox" layoutX="644.0" layoutY="253.0" prefHeight="25.0" prefWidth="75.0" />
    </children>
 </AnchorPane>

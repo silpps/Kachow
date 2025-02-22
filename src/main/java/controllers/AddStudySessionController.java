@@ -5,7 +5,6 @@ import dao.TimeTableDAO;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import models.CourseService;
 import models.StudySession;
 
 import java.time.LocalDate;
@@ -15,7 +14,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class AddStudySessionController {
-    private TimeTableDAO timeTableDAO;
 
     private StudySessionDAO studySessionDAO;
 
@@ -43,17 +41,17 @@ public class AddStudySessionController {
     @FXML
     private Button sessionBackButton;
 
-    private String[] startTimes = {"6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00",
+    private final String[] startTimes = {"6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00",
             "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"};
 
-    private String[] endTimes = {"7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00",
+    private final String[] endTimes = {"7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00",
             "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00"};
 
-    private TimetableController_v3 timetableController;
+    private TimetableController timetableController;
 
     @FXML
     private void initialize() {
-        timeTableDAO = new TimeTableDAO();
+        TimeTableDAO timeTableDAO = new TimeTableDAO();
         List<String> courseNames = timeTableDAO.getCourseNames();
         courseNameChoiceBox.getItems().addAll(courseNames);
 
@@ -117,7 +115,7 @@ public class AddStudySessionController {
         sessionBackButtonClicked();
         }
 
-    public void setTimetableController(TimetableController_v3 timetableController) {
+    public void setTimetableController(TimetableController timetableController) {
         this.timetableController = timetableController;
     }
 }

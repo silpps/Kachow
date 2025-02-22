@@ -18,44 +18,14 @@
     -fx-border-color: #476e47;
 }
 
-#monday {
+#monday, #wednesday, #friday, #sunday {
     -fx-background-color: #aacfaa;
     -fx-background-insets: 0 0 1 0px;
     -fx-alignment: center;
 }
 
-#tuesday {
+#tuesday, #thursday, #saturday {
     -fx-background-color: #9dd19d;
-    -fx-background-insets: 0 0 1 0px;
-    -fx-alignment: center;
-}
-
-#wednesday {
-    -fx-background-color: #aacfaa;
-    -fx-background-insets: 0 0 1 0px;
-    -fx-alignment: center;
-}
-
-#thursday {
-    -fx-background-color: #9dd19d;
-    -fx-background-insets: 0 0 1 0px;
-    -fx-alignment: center;
-}
-
-#friday {
-    -fx-background-color: #aacfaa;
-    -fx-background-insets: 0 0 1 0px;
-    -fx-alignment: center;
-}
-
-#saturday {
-    -fx-background-color: #9dd19d;
-    -fx-background-insets: 0 0 1 0px;
-    -fx-alignment: center;
-}
-
-#sunday {
-    -fx-background-color: #aacfaa;
     -fx-background-insets: 0 0 1 0px;
     -fx-alignment: center;
 }
@@ -68,8 +38,24 @@
     -fx-border-color: #476e47;
 }
 
-.event-box {
+.class-schedule-box, .study-session-box, .assignment-box, .exam-box {
     -fx-border-color: black;
     -fx-padding: 5;
     -fx-spacing: 5;
+}
+
+.class-schedule-box {
+    -fx-background-color: #96b4c9;
+}
+
+.study-session-box {
+    -fx-background-color: #dbcca3;
+}
+
+.assignment-box {
+    -fx-background-color: #b8a8d6;
+}
+
+.exam-box {
+    -fx-background-color: #a2e0c8;
 }

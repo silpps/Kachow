@@ -65,8 +65,8 @@ public class TimeTableDAO {
             while (rs.next()) {
                 ClassSchedule classSchedule = new ClassSchedule(
                         rs.getString("course_name"),
-                        rs.getString("day_of_week"),
                         rs.getString("location"),
+                        rs.getString("description"),
                         rs.getTimestamp("start_time").toLocalDateTime(),
                         rs.getTimestamp("end_time").toLocalDateTime()
                 );
@@ -82,7 +82,7 @@ public class TimeTableDAO {
     public List<Assignment> getAssignmentSchedule(LocalDate startDate, LocalDate endDate) {
         conn = MariaDbConnection.getConnection();
         List<Assignment> assignments = new ArrayList<>();
-        String sql = "SELECT * FROM assignment WHERE due_date >= ? AND due_date<= ?";
+        String sql = "SELECT * FROM assignment WHERE deadline >= ? AND deadline<= ?";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setTimestamp(1, Timestamp.valueOf(startDate.atStartOfDay()));
@@ -93,7 +93,7 @@ public class TimeTableDAO {
                         rs.getString("course_name"),
                         rs.getString("title"),
                         rs.getString("description"),
-                        rs.getTimestamp("due_date").toLocalDateTime(),
+                        rs.getTimestamp("deadline").toLocalDateTime(),
                         rs.getString("status")
                 );
                 assignment.setId(rs.getInt("assignment_id"));

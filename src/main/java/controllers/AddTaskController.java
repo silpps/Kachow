@@ -13,7 +13,7 @@ public class AddTaskController{
     @FXML
     private ChoiceBox<String> taskChoiceBox;
 
-    private String[] tasks = {"Course", "Class Schedule", "Assignment", "Exam", "Study Session"};
+    private final String[] tasks = {"Course", "Class Schedule", "Assignment", "Exam", "Study Session"};
 
     @FXML
     private Button continueButton;
@@ -21,9 +21,9 @@ public class AddTaskController{
     @FXML
     private Button backButton;
 
-    private TimetableController_v3 timetableController;
+    private TimetableController timetableController;
 
-    public void setTimetableController(TimetableController_v3 timetableController) {
+    public void setTimetableController(TimetableController timetableController) {
         this.timetableController = timetableController;
     }
 

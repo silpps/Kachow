@@ -1,6 +1,5 @@
 package models;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,8 +13,8 @@ class AssignmentTest {
 
     @BeforeEach
      void setUp() {
-        LocalDateTime dueDate = LocalDateTime.of(2025, 2, 15, 0, 0);
-        assignment = new Assignment("Maths", "Matrix", "Do the matrix assignment", dueDate, "Not Started");
+        LocalDateTime deadline = LocalDateTime.of(2025, 2, 15, 0, 0);
+        assignment = new Assignment("Maths", "Matrix", "Do the matrix assignment", deadline, "Not Started");
     }
 
     @Test
@@ -34,9 +33,9 @@ class AssignmentTest {
     }
 
     @Test
-    void getDueDate() {
-        LocalDateTime dueDate = LocalDateTime.of(2025, 2, 15, 0, 0);
-        assertEquals(dueDate, assignment.getDueDate());
+    void getDeadline() {
+        LocalDateTime deadline = LocalDateTime.of(2025, 2, 15, 0, 0);
+        assertEquals(deadline, assignment.getDeadline());
     }
 
     @Test
