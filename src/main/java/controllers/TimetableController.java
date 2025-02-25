@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -26,23 +27,29 @@ public class TimetableController implements Initializable {
     @FXML
     private VBox mondayColumn, tuesdayColumn, wednesdayColumn, thursdayColumn, fridayColumn, saturdayColumn, sundayColumn;
 
+    @FXML
+    private Label mondayDate, tuesdayDate, wednesdayDate, thursdayDate, fridayDate, saturdayDate, sundayDate, currentWeekLabel;
 
     @FXML
-    private Label mondayDate, tuesdayDate, wednesdayDate, thursdayDate, fridayDate, saturdayDate, sundayDate;
+    private Button nextWeekButton, previousWeekButton;
 
     private TimeTableDAO timeTableDAO;
+    private LocalDate startOfWeek;
+    private LocalDate endOfWeek;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         timeTableDAO = new TimeTableDAO();
+        LocalDate today = LocalDate.now();
+        this.startOfWeek = today.with(java.time.DayOfWeek.MONDAY);
+        this.endOfWeek = today.with(java.time.DayOfWeek.SUNDAY);
+
         fetchAndDisplayCurrentWeeksData();
     }
 
     public void fetchAndDisplayCurrentWeeksData() {
         clearTimetable();
-        LocalDate today = LocalDate.now();
-        LocalDate startOfWeek = today.with(java.time.DayOfWeek.MONDAY);
-        LocalDate endOfWeek = today.with(java.time.DayOfWeek.SUNDAY);
+
 
         // Format to dd/MM
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
@@ -55,6 +62,10 @@ public class TimetableController implements Initializable {
         fridayDate.setText(startOfWeek.plusDays(4).format(formatter));
         saturdayDate.setText(startOfWeek.plusDays(5).format(formatter));
         sundayDate.setText(startOfWeek.plusDays(6).format(formatter));
+
+        //TODO: lisää vuosi?
+        // Set the current week dates label
+        currentWeekLabel.setText(startOfWeek.format(formatter) + " - " + endOfWeek.format(formatter));
 
         // Fetch current week's data from database
         List<ClassSchedule> classSchedules = timeTableDAO.getClassSchedule(startOfWeek, endOfWeek);
@@ -71,6 +82,21 @@ public class TimetableController implements Initializable {
 
         // Add tasks to the correct day's VBox
         addTasksToDay(allTasks);
+    }
+
+    @FXML
+    private void showNextWeek() {
+        this.startOfWeek = this.startOfWeek.plusDays(7);
+        this.endOfWeek = this.endOfWeek.plusDays(7);
+        fetchAndDisplayCurrentWeeksData();
+
+    }
+
+    @FXML
+    private void showPreviousWeek() {
+        this.startOfWeek = this.startOfWeek.minusDays(7);
+        this.endOfWeek = this.endOfWeek.minusDays(7);
+        fetchAndDisplayCurrentWeeksData();
     }
 
     private void clearTimetable() {
