@@ -62,9 +62,6 @@ public class TimetableController implements Initializable {
 
     public void fetchAndDisplayCurrentWeeksData() {
         clearTimetable();
-        LocalDate today = LocalDate.now();
-        LocalDate startOfWeek = today.with(java.time.DayOfWeek.MONDAY);
-        LocalDate endOfWeek = today.with(java.time.DayOfWeek.SUNDAY);
 
         // Format to dd/MM
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
@@ -101,6 +98,7 @@ public class TimetableController implements Initializable {
 
     @FXML
     private void showNextWeek() {
+        System.out.println("Showing next week");
         this.startOfWeek = this.startOfWeek.plusDays(7);
         this.endOfWeek = this.endOfWeek.plusDays(7);
         fetchAndDisplayCurrentWeeksData();
@@ -245,6 +243,7 @@ public class TimetableController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/addTask.fxml"));
             Scene scene = new Scene(loader.load());
+            scene.getStylesheets().add("/timetable.css");
             AddTaskController controller = loader.getController();
             controller.setTimetableController(this);
             Stage stage = new Stage();
@@ -294,6 +293,7 @@ public class TimetableController implements Initializable {
             popupVBox.getChildren().addAll(titleLabel, titleField, dateLabel, datePicker, fromTimeLabel, fromTimeChoiceBox, toTimeLabel, toTimeChoiceBox, descriptionLabel, descriptionField, buttonHBox);
 
             Scene popupScene = new Scene(popupVBox, 300, 600);
+            popupScene.getStylesheets().add("/timetable.css");
             popupStage.setScene(popupScene);
             popupStage.show();
         } catch (Exception e) {
