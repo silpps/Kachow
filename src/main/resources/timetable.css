@@ -1,61 +1,74 @@
 .button {
     -fx-border-width: 2px;
-    -fx-border-color: #9a5454;
+    -fx-border-color: #596e47;
     -fx-border-radius: 20;
-    -fx-background-color: #d6a8a8;
+    -fx-background-color: #c0d19d;
     -fx-background-radius: 20;
 
 }
 
+
+
 .root {
-    -fx-background-color: #f6ebe9;
+    -fx-background-color: #f8ead1;
     -fx-font-family: Verdana;
 }
 
 #weekElement {
-    -fx-background-color: #9dd19d;
+    -fx-background-color: #c0d19d;
     -fx-border-width: 1px;
-    -fx-border-color: #476e47;
+    -fx-border-color: #596e47;
 }
 
 #monday, #wednesday, #friday, #sunday {
-    -fx-background-color: #aacfaa;
+    -fx-background-color: #becfaa;
     -fx-background-insets: 0 0 1 0px;
     -fx-alignment: center;
 }
 
 #tuesday, #thursday, #saturday {
-    -fx-background-color: #9dd19d;
+    -fx-background-color: #bed19d;
     -fx-background-insets: 0 0 1 0px;
     -fx-alignment: center;
 }
 
 .dayHeader {
-    -fx-border-color: #476e47;
+    -fx-border-color: #596e47;
 }
 
 .taskColumn {
-    -fx-border-color: #476e47;
+    -fx-border-color: #596e47;
 }
 
 .class-schedule-box, .study-session-box, .assignment-box, .exam-box {
-    -fx-border-color: black;
-    -fx-padding: 5;
+    -fx-border-width: 1;
     -fx-spacing: 5;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 5;
 }
 
 .class-schedule-box {
+    -fx-border-color: #607c8e;
     -fx-background-color: #96b4c9;
 }
 
 .study-session-box {
+    -fx-border-color: #8e7c60;
     -fx-background-color: #dbcca3;
 }
 
 .assignment-box {
+    -fx-border-color: #8e607c;
     -fx-background-color: #b8a8d6;
 }
 
 .exam-box {
+    -fx-border-color: #7c8e60;
     -fx-background-color: #a2e0c8;
+}
+
+#studyFlowLabel {
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
 }
