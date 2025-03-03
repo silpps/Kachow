@@ -85,7 +85,7 @@ public class AddClassScheduleController {
 
         // Parse the start and end times
         if (date != null && fromTimeString != null && toTimeString != null) {
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
             LocalDateTime fromTime = LocalDateTime.of(date, LocalTime.parse(fromTimeString, timeFormatter));
             LocalDateTime toTime = LocalDateTime.of(date, LocalTime.parse(toTimeString, timeFormatter));
             System.out.println(fromTime);

@@ -4,9 +4,6 @@ import config.MariaDbConnection;
 import models.ClassSchedule;
 
 import java.sql.*;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ClassScheduleDAO implements IDAO<ClassSchedule> {
     private Connection conn = null;
