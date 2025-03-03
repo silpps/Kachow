@@ -13,7 +13,7 @@ public class AddTaskController{
     @FXML
     private ChoiceBox<String> taskChoiceBox;
 
-    private String[] tasks = {"Course", "Class Schedule", "Assignment", "Exam", "Study Session"};
+    private final String[] tasks = {"Course", "Class Schedule", "Assignment", "Exam", "Study Session"};
 
     @FXML
     private Button continueButton;
@@ -21,9 +21,9 @@ public class AddTaskController{
     @FXML
     private Button backButton;
 
-    private TimetableController_v2 timetableController;
+    private TimetableController timetableController;
 
-    public void setTimetableController(TimetableController_v2 timetableController) {
+    public void setTimetableController(TimetableController timetableController) {
         this.timetableController = timetableController;
     }
 
@@ -64,12 +64,15 @@ public class AddTaskController{
                     ((AddExamController) controller).setTimetableController(timetableController);
                 } else if (controller instanceof AddStudySessionController) {
                     ((AddStudySessionController) controller).setTimetableController(timetableController);
+                } else if (controller instanceof AddClassScheduleController) {
+                    ((AddClassScheduleController) controller).setTimetableController(timetableController);
                 } else if (controller instanceof AddCourseController) {
                     ((AddCourseController) controller).setTimetableController(timetableController);
                 }
                 Stage stage = new Stage();
                 stage.setScene(scene);
                 stage.show();
+                continueButton.getScene().getWindow().hide();
             }
             catch (Exception e){
                 e.printStackTrace();

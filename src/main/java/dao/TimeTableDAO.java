@@ -56,7 +56,7 @@ public class TimeTableDAO {
     public List<ClassSchedule> getClassSchedule(LocalDate startDate, LocalDate endDate) {
         conn = MariaDbConnection.getConnection();
         List<ClassSchedule> classSchedules = new ArrayList<>();
-        String sql = "SELECT * FROM class_schedule WHERE start_time >= ? AND end_time<= ?";
+        String sql = "SELECT * FROM class_schedule WHERE start_time >= ? AND end_time<= ? ORDER BY start_time ASC";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setTimestamp(1, Timestamp.valueOf(startDate.atStartOfDay()));
@@ -65,8 +65,8 @@ public class TimeTableDAO {
             while (rs.next()) {
                 ClassSchedule classSchedule = new ClassSchedule(
                         rs.getString("course_name"),
-                        rs.getString("day_of_week"),
                         rs.getString("location"),
+                        rs.getString("description"),
                         rs.getTimestamp("start_time").toLocalDateTime(),
                         rs.getTimestamp("end_time").toLocalDateTime()
                 );
@@ -82,7 +82,7 @@ public class TimeTableDAO {
     public List<Assignment> getAssignmentSchedule(LocalDate startDate, LocalDate endDate) {
         conn = MariaDbConnection.getConnection();
         List<Assignment> assignments = new ArrayList<>();
-        String sql = "SELECT * FROM assignment WHERE due_date >= ? AND due_date<= ?";
+        String sql = "SELECT * FROM assignment WHERE deadline >= ? AND deadline<= ?";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setTimestamp(1, Timestamp.valueOf(startDate.atStartOfDay()));
@@ -93,7 +93,7 @@ public class TimeTableDAO {
                         rs.getString("course_name"),
                         rs.getString("title"),
                         rs.getString("description"),
-                        rs.getTimestamp("due_date").toLocalDateTime(),
+                        rs.getTimestamp("deadline").toLocalDateTime(),
                         rs.getString("status")
                 );
                 assignment.setId(rs.getInt("assignment_id"));
@@ -108,7 +108,7 @@ public class TimeTableDAO {
     public List<StudySession> getStudySessionSchedule(LocalDate startDate, LocalDate endDate) {
         conn = MariaDbConnection.getConnection();
         List<StudySession> studySessions = new ArrayList<>();
-        String sql = "SELECT * FROM study_session WHERE start_time >= ? AND end_time<= ?";
+        String sql = "SELECT * FROM study_session WHERE start_time >= ? AND end_time<= ? ORDER BY start_time ASC";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setTimestamp(1, Timestamp.valueOf(startDate.atStartOfDay()));
@@ -158,4 +158,51 @@ public class TimeTableDAO {
     }
 
 
+    public void deleteClassSchedule(ClassSchedule event) {
+        conn = MariaDbConnection.getConnection();
+        String sql = "DELETE FROM class_schedule WHERE class_id = ?";
+        try {
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, event.getId());
+            st.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteStudySession(StudySession event) {
+        conn = MariaDbConnection.getConnection();
+        String sql = "DELETE FROM study_session WHERE session_id = ?";
+        try {
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, event.getId());
+            st.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteExam(Exam event) {
+        conn = MariaDbConnection.getConnection();
+        String sql = "DELETE FROM exam WHERE exam_id = ?";
+        try {
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, event.getId());
+            st.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteAssignment(Assignment event) {
+        conn = MariaDbConnection.getConnection();
+        String sql = "DELETE FROM assignment WHERE assignment_id = ?";
+        try {
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setInt(1, event.getId());
+            st.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

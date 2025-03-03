@@ -1,20 +1,20 @@
 package models;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+//TODO: Lisää deadline aika
 public class Assignment {
     private final String courseName;
     private String title;
     private String description;
-    private LocalDateTime dueDate;
+    private LocalDateTime deadline;
     private String status;
     private int id;
 
-    public Assignment(String courseName, String title, String description, LocalDateTime dueDate, String status) {
+    public Assignment(String courseName, String title, String description, LocalDateTime deadline, String status) {
         this.courseName = courseName;
         this.title = title;
         this.description = description;
-        this.dueDate = dueDate;
+        this.deadline = deadline;
         this.status = status;
     }
 
@@ -30,8 +30,8 @@ public class Assignment {
         return description;
     }
 
-    public LocalDateTime getDueDate() {
-        return dueDate;
+    public LocalDateTime getDeadline() {
+        return deadline;
     }
 
     public String getStatus() {
@@ -58,8 +58,8 @@ public class Assignment {
         this.description = description;
     }
 
-    public void setDueDate(LocalDateTime dueDate) {
-        this.dueDate = dueDate;
+    public void setDeadline(LocalDateTime deadline) {
+        this.deadline = deadline;
     }
 
     public void setStatus(String status) {
@@ -67,6 +67,6 @@ public class Assignment {
     }
 
     public String getDetails() {
-        return "Title: " + title + "\nCourse: " + courseName + "\nDescription: " + description + "\nDue Date: " + dueDate + "\nStatus: " + status;
+        return "Title: " + title + "\nCourse: " + courseName + "\nDescription: " + description + "\nDeadline: " + deadline + "\nStatus: " + status;
     }
 }

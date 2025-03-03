@@ -16,11 +16,8 @@ import models.*;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 public class TimetableController_v2 implements Initializable {
@@ -145,11 +142,11 @@ public class TimetableController_v2 implements Initializable {
         // Map assignments
         for (Assignment assignment : assignments) {
             System.out.println("Assignment: " + assignment.getTitle());
-            String time = String.format("%02d:00", assignment.getDueDate().getHour());
+            String time = String.format("%02d:00", assignment.getDeadline().getHour());
             if (time.equals("00:00")) {
                 time = "9:00";
             }
-            String day = assignment.getDueDate().getDayOfWeek().toString();
+            String day = assignment.getDeadline().getDayOfWeek().toString();
             String task = "ASSIGNMENT: " + assignment.getTitle() + " (" + assignment.getCourseName() + ")";
             updateTimeSlot(timeSlots, time, day, task);
             System.out.println("Time: " + time + " Day: " + day + " Task: " + task);
@@ -215,7 +212,7 @@ public class TimetableController_v2 implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/addTask.fxml"));
             Scene scene = new Scene(loader.load());
             AddTaskController controller = loader.getController();
-            controller.setTimetableController(this);
+           //controller.setTimetableController(this);
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.show();

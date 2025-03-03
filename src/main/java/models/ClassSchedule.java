@@ -1,19 +1,20 @@
 package models;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+//TODO: Pitäiskö tähän kanssa lisätä jonkinlainen description? se vois vaik sisältää tietyn tunnin aiheet tms
 public class ClassSchedule {
     private final String courseName;
-    private String dayOfWeek;
     private String  location;
+    private String description;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private int id;
 
-    public ClassSchedule(String courseName, String dayOfWeek, String location, LocalDateTime startTime, LocalDateTime endTime) {
+    public ClassSchedule(String courseName, String location,String description , LocalDateTime startTime, LocalDateTime endTime) {
         this.courseName = courseName;
-        this.dayOfWeek = dayOfWeek;
+
         this.location = location;
+        this.description = description;
         this.startTime = startTime;
         this.endTime = endTime;
     }
@@ -22,12 +23,13 @@ public class ClassSchedule {
         return courseName;
     }
 
-    public String getDayOfWeek() {
-        return dayOfWeek;
-    }
 
     public String getLocation() {
         return location;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public LocalDateTime getStartTime() {
@@ -46,12 +48,12 @@ public class ClassSchedule {
         this.id = id;
     }
 
-    public void setDayOfWeek(String dayOfWeek) {
-        this.dayOfWeek = dayOfWeek;
-    }
-
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setStartTime(LocalDateTime startTime) {
@@ -65,6 +67,10 @@ public class ClassSchedule {
 
 
     public String getDetails() {
-        return "Course: " + courseName + "\nDays of the Week: " + dayOfWeek + "\nLocation: " + location + "\nStart Time: " + startTime + "\nEnd Time: " + endTime;
+        return "Course: " + courseName + "\nLocation: " + location + "\nDescription: " + description + "\nStart time: " + startTime + "\nEnd time: " + endTime;
+    }
+
+    public void setCourseName(String newTitle) {
+
     }
 }

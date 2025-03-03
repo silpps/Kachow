@@ -1,7 +1,7 @@
 package models;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+//TODO: Lisää start ja end time
 public class Exam {
     private final String courseName;
     private LocalDateTime examDate;
@@ -66,4 +66,6 @@ public class Exam {
     public String getDetails() {
         return "Title: " + title + "\nCourse: " + courseName + "\nExam date: " + examDate + "\nDescription: " + description + "\nLocation: " + location;
     }
+
+
 }

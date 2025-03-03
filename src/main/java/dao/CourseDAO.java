@@ -4,9 +4,7 @@ import config.MariaDbConnection;
 import models.Course;
 
 import java.sql.*;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class CourseDAO implements IDAO<Course> {
     private Connection conn = null;

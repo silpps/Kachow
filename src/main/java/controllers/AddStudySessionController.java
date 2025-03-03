@@ -5,7 +5,6 @@ import dao.TimeTableDAO;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import models.CourseService;
 import models.StudySession;
 
 import java.time.LocalDate;
@@ -15,7 +14,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class AddStudySessionController {
-    private TimeTableDAO timeTableDAO;
 
     private StudySessionDAO studySessionDAO;
 
@@ -43,16 +41,17 @@ public class AddStudySessionController {
     @FXML
     private Button sessionBackButton;
 
-    private String[] startTimes = {"6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00",
+    private final String[] startTimes = {"6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00",
             "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"};
 
-    private String[] endTimes = {"7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00",
+    private final String[] endTimes = {"7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00",
             "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00"};
-    private TimetableController_v2 timetableController;
+
+    private TimetableController timetableController;
 
     @FXML
     private void initialize() {
-        timeTableDAO = new TimeTableDAO();
+        TimeTableDAO timeTableDAO = new TimeTableDAO();
         List<String> courseNames = timeTableDAO.getCourseNames();
         courseNameChoiceBox.getItems().addAll(courseNames);
 
@@ -78,7 +77,7 @@ public class AddStudySessionController {
 
 
         if (date != null && fromTimeString != null && toTimeString != null) {
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
             LocalDateTime fromTime = LocalDateTime.of(date, LocalTime.parse(fromTimeString, timeFormatter));
             LocalDateTime toTime = LocalDateTime.of(date, LocalTime.parse(toTimeString, timeFormatter));
             System.out.println(fromTime);
@@ -106,8 +105,7 @@ public class AddStudySessionController {
 
             Platform.runLater(() -> {
                 System.out.println("Updating UI...");
-                timetableController.fetchAndDisplayCurrentWeekData(timetableController.timetable.getItems());
-                timetableController.timetable.refresh();
+                timetableController.fetchAndDisplayCurrentWeeksData();
                 System.out.println("UI updated.");
             });
         }).start();
@@ -117,7 +115,7 @@ public class AddStudySessionController {
         sessionBackButtonClicked();
         }
 
-    public void setTimetableController(TimetableController_v2 timetableController) {
+    public void setTimetableController(TimetableController timetableController) {
         this.timetableController = timetableController;
     }
 }

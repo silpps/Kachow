@@ -4,9 +4,6 @@ import config.MariaDbConnection;
 import models.ClassSchedule;
 
 import java.sql.*;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ClassScheduleDAO implements IDAO<ClassSchedule> {
     private Connection conn = null;
@@ -39,13 +36,12 @@ public class ClassScheduleDAO implements IDAO<ClassSchedule> {
     @Override
     public void add(ClassSchedule classSchedule) {
         conn = MariaDbConnection.getConnection();
-        String sql = "INSERT INTO class_schedule (course_name, day_of_week, location, start_time, end_time) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO class_schedule (course_name, location, description, start_time, end_time) VALUES (?, ?, ?, ?, ?)";
         try {
             PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, classSchedule.getCourseName());
-            System.out.println(classSchedule.getDayOfWeek());
-            st.setString(2, classSchedule.getDayOfWeek());
-            st.setString(3, classSchedule.getLocation());
+            st.setString(2, classSchedule.getLocation());
+            st.setString(3, classSchedule.getDescription());
             st.setTimestamp(4, Timestamp.valueOf(classSchedule.getStartTime()));
             st.setTimestamp(5, Timestamp.valueOf(classSchedule.getEndTime()));
             st.executeUpdate();
@@ -62,12 +58,12 @@ public class ClassScheduleDAO implements IDAO<ClassSchedule> {
     @Override
     public void update(ClassSchedule classSchedule) {
         conn = MariaDbConnection.getConnection();
-        String sql = "UPDATE class_schedule SET course_name, days_of_week, location, start_time, end_time VALUES (?, ?, ?, ?, ?) WHERE class_id = ?";
+        String sql = "UPDATE class_schedule SET course_name, location, description, start_time, end_time VALUES (?, ?, ?, ?, ?) WHERE class_id = ?";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, classSchedule.getCourseName());
-            st.setString(2, classSchedule.getDayOfWeek());
-            st.setString(3, classSchedule.getLocation());
+            st.setString(2, classSchedule.getLocation());
+            st.setString(3, classSchedule.getDescription());
             st.setTimestamp(4, Timestamp.valueOf(classSchedule.getStartTime()));
             st.setTimestamp(5, Timestamp.valueOf(classSchedule.getEndTime()));
             st.executeUpdate();
