@@ -229,6 +229,7 @@ public class TimetableController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/addTask.fxml"));
             Scene scene = new Scene(loader.load());
+            scene.getStylesheets().add("/timetable.css");
             AddTaskController controller = loader.getController();
             controller.setTimetableController(this);
             Stage stage = new Stage();
