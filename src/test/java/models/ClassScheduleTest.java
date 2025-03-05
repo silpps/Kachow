@@ -15,7 +15,7 @@ class ClassScheduleTest {
     void setUp() {
         LocalDateTime startTime = LocalDateTime.of(2025, 2, 20, 10, 0);
         LocalDateTime endTime = LocalDateTime.of(2025, 2, 20, 12, 0);
-        classSchedule = new ClassSchedule("Maths", "Monday", "Building A", startTime, endTime);
+        classSchedule = new ClassSchedule("Maths", "Building A", "Math class", startTime, endTime);
     }
 
     @Test
@@ -24,10 +24,6 @@ class ClassScheduleTest {
 
     }
 
-    @Test
-    void getDayOfWeek() {
-        assertEquals("Monday", classSchedule.getDayOfWeek());
-    }
 
     @Test
     void getLocation() {
