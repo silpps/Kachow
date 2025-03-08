@@ -37,4 +37,29 @@ class CourseTest {
         assertEquals("2025-04-10", course.getEndDate().toString());
     }
 
+    @Test
+    void setInstructor() {
+        course.setInstructor("Jane Doe");
+        assertEquals("Jane Doe", course.getInstructor());
+    }
+
+    @Test
+    void setStartDate() {
+        LocalDateTime startDate = LocalDateTime.of(2025, 3, 10, 10, 0);
+        course.setStartDate(startDate.toLocalDate());
+        assertEquals("2025-03-10", course.getStartDate().toString());
+    }
+
+    @Test
+    void setEndDate() {
+        LocalDateTime endDate = LocalDateTime.of(2025, 5, 10, 10, 0);
+        course.setEndDate(endDate.toLocalDate());
+        assertEquals("2025-05-10", course.getEndDate().toString());
+    }
+
+    @Test
+    void getDetails() {
+        assertEquals("Course: Java", course.getDetails());
+    }
+
 }

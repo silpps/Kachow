@@ -56,4 +56,35 @@ class StudySessionTest {
         assertEquals(123, studySession.getId());
     }
 
+    @Test
+    void setTitle() {
+        studySession.setTitle("Algebra");
+        assertEquals("Algebra", studySession.getTitle());
+    }
+
+    @Test
+    void setDescription() {
+        studySession.setDescription("Study for the exam");
+        assertEquals("Study for the exam", studySession.getDescription());
+    }
+
+    @Test
+    void setStartTime() {
+        LocalDateTime startTime = LocalDateTime.of(2025, 2, 20, 12,0);
+        studySession.setStartTime(startTime);
+        assertEquals(startTime, studySession.getStartTime());
+    }
+
+    @Test
+    void setEndTime() {
+        LocalDateTime endTime = LocalDateTime.of(2025, 2, 20, 14,0);
+        studySession.setEndTime(endTime);
+        assertEquals(endTime, studySession.getEndTime());
+    }
+
+    @Test
+    void getDetails(){
+        assertEquals("Title: Matrix\nCourse: Math\nDescription: Study for the test\nStart Time: 2025-03-15T12:00\nEnd Time: 2025-03-15T14:00", studySession.getDetails());
+    }
+
 }

@@ -3,7 +3,7 @@ import java.time.LocalDateTime;
 
 //TODO: Lisää deadline aika
 public class Assignment {
-    private final String courseName;
+    private String courseName;
     private String title;
     private String description;
     private LocalDateTime deadline;
@@ -47,7 +47,7 @@ public class Assignment {
     }
 
     public void setCourseName(String courseName) {
-        this.title = courseName;
+        this.courseName = courseName;
     }
 
     public void setTitle(String title) {
