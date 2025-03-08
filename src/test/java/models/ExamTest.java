@@ -13,7 +13,7 @@ class ExamTest {
 
     @BeforeEach
     void setUp() {
-        LocalDateTime examDate = LocalDateTime.of(2025, 3, 5, 12, 0);
+        LocalDateTime examDate = LocalDateTime.of(2025, 2, 20, 10, 0);
         exam = new Exam("TestCourseName", examDate, "Test Exam", "Test Description", "Test Location");
     }
 
@@ -25,7 +25,7 @@ class ExamTest {
 
     @Test
     void getExamDate() {
-        LocalDateTime examDate = LocalDateTime.of(2025, 3, 5, 12, 0);
+        LocalDateTime examDate = LocalDateTime.of(2025, 2, 20, 10, 0);
         assertEquals(examDate, exam.getExamDate());
     }
 
@@ -53,6 +53,36 @@ class ExamTest {
     void setId() {
         exam.setId(123);
         assertEquals(123, exam.getId());
+    }
+
+    @Test
+    void setExamDate() {
+        LocalDateTime examDate = LocalDateTime.of(2025, 2, 20, 10, 0);
+        exam.setExamDate(examDate);
+        assertEquals(examDate, exam.getExamDate());
+    }
+
+    @Test
+    void setTitle() {
+        exam.setTitle("New Test Exam");
+        assertEquals("New Test Exam", exam.getTitle());
+    }
+
+    @Test
+    void setDescription() {
+        exam.setDescription("New Test Description");
+        assertEquals("New Test Description", exam.getDescription());
+    }
+
+    @Test
+    void setLocation() {
+        exam.setLocation("New Test Location");
+        assertEquals("New Test Location", exam.getLocation());
+    }
+
+    @Test
+    void getDetails() {
+        assertEquals("Title: Test Exam\nCourse: TestCourseName\nExam date: 2025-02-20T10:00\nDescription: Test Description\nLocation: Test Location", exam.getDetails());
     }
 
 }
