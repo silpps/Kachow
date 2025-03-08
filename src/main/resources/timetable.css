@@ -1,61 +1,92 @@
 .button {
     -fx-border-width: 2px;
-    -fx-border-color: #9a5454;
+    -fx-border-color: #4d476e;
     -fx-border-radius: 20;
-    -fx-background-color: #d6a8a8;
+    -fx-background-color: #a99dd1;
     -fx-background-radius: 20;
 
 }
 
 .root {
-    -fx-background-color: #f6ebe9;
+    -fx-background-color: #e6e3ec;
     -fx-font-family: Verdana;
 }
 
-#weekElement {
-    -fx-background-color: #9dd19d;
+.choice-box {
+    -fx-background-color: #a99dd1;
     -fx-border-width: 1px;
-    -fx-border-color: #476e47;
+    -fx-border-color: #4d476e;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+}
+
+.choice-box .context-menu {
+    -fx-background-color: #a99dd1;
+    -fx-border-width: 1px;
+    -fx-border-color: #4d476e;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+}
+
+.choice-box .menu-item:focused {
+    -fx-background-color: #645f88;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+}
+
+#weekElement {
+    -fx-background-color: #c2b7e8;
+    -fx-border-width: 5px;
+    -fx-border-color: #645f88;
 }
 
 #monday, #wednesday, #friday, #sunday {
-    -fx-background-color: #aacfaa;
-    -fx-background-insets: 0 0 1 0px;
+    -fx-background-color: #d2c2ec;
     -fx-alignment: center;
 }
 
 #tuesday, #thursday, #saturday {
-    -fx-background-color: #9dd19d;
-    -fx-background-insets: 0 0 1 0px;
+    -fx-background-color: #dfcff9;
     -fx-alignment: center;
 }
 
 .dayHeader {
-    -fx-border-color: #476e47;
+    -fx-border-color: #645f88;
 }
 
 .taskColumn {
-    -fx-border-color: #476e47;
+    -fx-border-color: #645f88;
 }
 
 .class-schedule-box, .study-session-box, .assignment-box, .exam-box {
-    -fx-border-color: black;
-    -fx-padding: 5;
+    -fx-border-width: 1;
     -fx-spacing: 5;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 5;
 }
 
 .class-schedule-box {
-    -fx-background-color: #96b4c9;
+    -fx-border-color: #729cb6;
+    -fx-background-color: #a2c8e4;
 }
 
 .study-session-box {
+    -fx-border-color: #8e7c60;
     -fx-background-color: #dbcca3;
 }
 
 .assignment-box {
+    -fx-border-color: #8e607c;
     -fx-background-color: #b8a8d6;
 }
 
 .exam-box {
+    -fx-border-color: #618879;
     -fx-background-color: #a2e0c8;
+}
+
+#studyFlowLabel {
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
 }

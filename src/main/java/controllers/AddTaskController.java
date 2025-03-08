@@ -56,6 +56,7 @@ public class AddTaskController{
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/add" + taskChoice + ".fxml"));
                 Scene scene = new Scene(loader.load());
+                scene.getStylesheets().add("/timetable.css");
                 Object controller = loader.getController();
 
                 if (controller instanceof AddAssignmentController) {
