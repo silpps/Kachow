@@ -73,4 +73,5 @@ public class ClassSchedule {
     public void setCourseName(String newTitle) {
 
     }
+
 }
