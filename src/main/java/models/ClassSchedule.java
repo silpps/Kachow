@@ -70,4 +70,8 @@ public class ClassSchedule {
         return "Course: " + courseName + "\nLocation: " + location + "\nDescription: " + description + "\nStart time: " + startTime + "\nEnd time: " + endTime;
     }
 
+    public void setCourseName(String newTitle) {
+
+    }
+
 }
