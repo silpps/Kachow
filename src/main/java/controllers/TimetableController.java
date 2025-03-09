@@ -65,6 +65,7 @@ public class TimetableController implements Initializable {
 
         // Format to dd/MM
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         // Set the dates to the labels
         mondayDate.setText(startOfWeek.format(formatter));
@@ -75,9 +76,7 @@ public class TimetableController implements Initializable {
         saturdayDate.setText(startOfWeek.plusDays(5).format(formatter));
         sundayDate.setText(startOfWeek.plusDays(6).format(formatter));
 
-        //TODO: lisää vuosi?
-        // Set the current week dates label
-        currentWeekLabel.setText(startOfWeek.format(formatter) + " - " + endOfWeek.format(formatter));
+        currentWeekLabel.setText(startOfWeek.format(formatter2) + " - " + endOfWeek.format(formatter2));
 
         // Fetch current week's data from database
         List<ClassSchedule> classSchedules = timeTableDAO.getClassSchedule(startOfWeek, endOfWeek);
