@@ -58,14 +58,14 @@ public class ClassScheduleDAO implements IDAO<ClassSchedule> {
     @Override
     public void update(ClassSchedule classSchedule) {
         conn = MariaDbConnection.getConnection();
-        String sql = "UPDATE class_schedule SET course_name, location, description, start_time, end_time VALUES (?, ?, ?, ?, ?) WHERE class_id = ?";
+        String sql = "UPDATE class_schedule SET location = ?, description = ?, start_time = ?, end_time = ? WHERE class_id = ?";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setString(1, classSchedule.getCourseName());
-            st.setString(2, classSchedule.getLocation());
-            st.setString(3, classSchedule.getDescription());
-            st.setTimestamp(4, Timestamp.valueOf(classSchedule.getStartTime()));
-            st.setTimestamp(5, Timestamp.valueOf(classSchedule.getEndTime()));
+            st.setString(1, classSchedule.getLocation());
+            st.setString(2, classSchedule.getDescription());
+            st.setTimestamp(3, Timestamp.valueOf(classSchedule.getStartTime()));
+            st.setTimestamp(4, Timestamp.valueOf(classSchedule.getEndTime()));
+            st.setString(5, String.valueOf(classSchedule.getId()));
             st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

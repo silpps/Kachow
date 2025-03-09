@@ -76,7 +76,7 @@ public class AddAssignmentController {
         }
 
         if (date != null && deadlineTimeString != null) {
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
             LocalDateTime assignmentDeadline = LocalDateTime.of(date, LocalTime.parse(deadlineTimeString, timeFormatter));
             System.out.println(assignmentDeadline);
             System.out.println(date);

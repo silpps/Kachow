@@ -68,7 +68,7 @@ public class AddExamController {
         String fromTimeString = fromChoiceBox.getValue();
 
         if (examDate != null && fromTimeString != null) {
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
             LocalDateTime examDateTime = LocalDateTime.of(examDate, LocalTime.parse(fromTimeString, timeFormatter));
             System.out.println(examDateTime);
             System.out.println(examDate);
