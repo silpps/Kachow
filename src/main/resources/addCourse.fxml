@@ -17,9 +17,9 @@
       <Button fx:id="addCourseSaveButton" layoutX="684.0" layoutY="510.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Save" />
       <Label layoutX="127.0" layoutY="327.0" text="Location:" />
       <TextField layoutX="256.0" layoutY="323.0" />
-      <Label layoutX="510.0" layoutY="151.0" prefHeight="17.0" prefWidth="57.0" text="Start Date:" />
+      <Label layoutX="490.0" layoutY="150.0" prefHeight="17.0" prefWidth="75.0" text="Start Date:" />
       <DatePicker fx:id="startDatePicker" layoutX="596.0" layoutY="138.0" />
-      <Label layoutX="513.0" layoutY="237.0" prefHeight="17.0" prefWidth="52.0" text="End Date:" />
+      <Label layoutX="490.0" layoutY="236.0" prefHeight="17.0" prefWidth="75.0" text="End Date:" />
       <DatePicker fx:id="endDatePicker" layoutX="596.0" layoutY="229.0" />
    </children>
 </AnchorPane>

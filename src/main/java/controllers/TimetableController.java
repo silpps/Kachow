@@ -221,13 +221,6 @@ public class TimetableController implements Initializable {
     }
 
 
-    //ei tällä hetkellä käytössä
-    private double calculateHeight(LocalDateTime startTime, LocalDateTime endTime) {
-        Duration duration = Duration.between(startTime, endTime);
-        long minutes = duration.toMinutes();
-        return Math.max(30, minutes); // Ensure a minimum height of 30
-    }
-
     private int getTaskDayOfWeek(Object task) {
         return switch (task) {
             case ClassSchedule classSchedule -> classSchedule.getStartTime().getDayOfWeek().getValue();
@@ -315,6 +308,7 @@ public class TimetableController implements Initializable {
         LocalDateTime startDateTime = LocalDateTime.of(newDate, startTime);
         LocalDateTime endDateTime = LocalDateTime.of(newDate, endTime);
 
+        //TODO: Description assignmentis väärin? Tarvittais status johonkin?
         if (event instanceof StudySession studySession) {
             studySession.setDescription(newDescription);
             studySession.setStartTime(startDateTime);
