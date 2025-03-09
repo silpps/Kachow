@@ -11,6 +11,7 @@ import java.util.List;
 public class TimeTableDAO {
     Connection conn = null;
 
+    // get all course names from the database
     public List<String> getCourseNames() {
         conn = MariaDbConnection.getConnection();
         List<String> courseNames = new ArrayList<>();
@@ -27,7 +28,8 @@ public class TimeTableDAO {
         return courseNames;
     }
 
-    public List<Course> getCourseSchedule(LocalDate startDate, LocalDate endDate) {
+    //get current week's courses from the database
+    public List<Course> getCourses(LocalDate startDate, LocalDate endDate) {
         conn = MariaDbConnection.getConnection();
         List<Course> courses = new ArrayList<>();
         String sql = "SELECT * FROM course WHERE start_date >= ? AND end_date<= ?";
@@ -53,6 +55,7 @@ public class TimeTableDAO {
         return courses;
     }
 
+    // get current week's class schedule from the database
     public List<ClassSchedule> getClassSchedule(LocalDate startDate, LocalDate endDate) {
         conn = MariaDbConnection.getConnection();
         List<ClassSchedule> classSchedules = new ArrayList<>();
@@ -79,6 +82,7 @@ public class TimeTableDAO {
         return classSchedules;
     }
 
+    // get current week's assignments from the database
     public List<Assignment> getAssignmentSchedule(LocalDate startDate, LocalDate endDate) {
         conn = MariaDbConnection.getConnection();
         List<Assignment> assignments = new ArrayList<>();
@@ -105,6 +109,7 @@ public class TimeTableDAO {
         return assignments;
     }
 
+    // get current week's study sessions from the database
     public List<StudySession> getStudySessionSchedule(LocalDate startDate, LocalDate endDate) {
         conn = MariaDbConnection.getConnection();
         List<StudySession> studySessions = new ArrayList<>();
@@ -131,6 +136,7 @@ public class TimeTableDAO {
         return studySessions;
     }
 
+    // get current week's exam schedule from the database
     public List<Exam> getExamSchedule(LocalDate startDate, LocalDate endDate) {
         conn = MariaDbConnection.getConnection();
         List<Exam> exams = new ArrayList<>();
@@ -157,52 +163,4 @@ public class TimeTableDAO {
         return exams;
     }
 
-
-    public void deleteClassSchedule(ClassSchedule event) {
-        conn = MariaDbConnection.getConnection();
-        String sql = "DELETE FROM class_schedule WHERE class_id = ?";
-        try {
-            PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, event.getId());
-            st.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void deleteStudySession(StudySession event) {
-        conn = MariaDbConnection.getConnection();
-        String sql = "DELETE FROM study_session WHERE session_id = ?";
-        try {
-            PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, event.getId());
-            st.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void deleteExam(Exam event) {
-        conn = MariaDbConnection.getConnection();
-        String sql = "DELETE FROM exam WHERE exam_id = ?";
-        try {
-            PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, event.getId());
-            st.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void deleteAssignment(Assignment event) {
-        conn = MariaDbConnection.getConnection();
-        String sql = "DELETE FROM assignment WHERE assignment_id = ?";
-        try {
-            PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, event.getId());
-            st.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 }

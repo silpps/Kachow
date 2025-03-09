@@ -55,11 +55,13 @@ public class AddExamController {
 
     @FXML
     private void backButtonClicked() {
+        // Close the current window
         backButton.getScene().getWindow().hide();
     }
 
     @FXML
     private void examSaveButtonClicked() {
+        // Save the exam details
         String courseName = courseNameChoiceBox.getValue();
         String examTitle = examTitleTextField.getText();
         String description = descriptionTextArea.getText();
@@ -78,6 +80,7 @@ public class AddExamController {
             examDAO.add(exam);
         }
 
+        // Update the UI after saving the exam
         new Thread(() -> {
             try {
                 Thread.sleep(500);

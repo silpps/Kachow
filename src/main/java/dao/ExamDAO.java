@@ -9,6 +9,7 @@ public class ExamDAO implements IDAO<Exam> {
     private Connection conn = null;
 
 
+    // Get an Exam from the database
     @Override
     public Exam get(String id) {
         conn = MariaDbConnection.getConnection();
@@ -32,6 +33,7 @@ public class ExamDAO implements IDAO<Exam> {
         return null;
     }
 
+    // Add a new Exam to the database
     @Override
     public void add(Exam exam) {
         conn = MariaDbConnection.getConnection();
@@ -54,6 +56,7 @@ public class ExamDAO implements IDAO<Exam> {
         }
     }
 
+    // Update an Exam in the database
     @Override
     public void update(Exam exam) {
         conn = MariaDbConnection.getConnection();
@@ -72,6 +75,7 @@ public class ExamDAO implements IDAO<Exam> {
         }
     }
 
+    // Delete an Exam from the database
     @Override
     public void delete(String id) {
         conn = MariaDbConnection.getConnection();

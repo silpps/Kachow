@@ -25,7 +25,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
-//TODO: Järjestele ja siisti koodia
+
 public class TimetableController implements Initializable {
 
     @FXML
@@ -33,9 +33,6 @@ public class TimetableController implements Initializable {
 
     @FXML
     private Label mondayDate, tuesdayDate, wednesdayDate, thursdayDate, fridayDate, saturdayDate, sundayDate, currentWeekLabel;
-
-    @FXML
-    private Button nextWeekButton, previousWeekButton;
 
     private TimeTableDAO timeTableDAO;
     private LocalDate startOfWeek;
@@ -409,13 +406,17 @@ public class TimetableController implements Initializable {
 
     private void deleteEvent(Object event) {
         if (event instanceof ClassSchedule) {
-            timeTableDAO.deleteClassSchedule((ClassSchedule) event);
+            String id = String.valueOf(((ClassSchedule) event).getId());
+            classScheduleDAO.delete(id);
         } else if (event instanceof StudySession) {
-            timeTableDAO.deleteStudySession((StudySession) event);
+            String id = String.valueOf(((StudySession) event).getId());
+            studySessionDAO.delete(id);
         } else if (event instanceof Exam) {
-            timeTableDAO.deleteExam((Exam) event);
+            String id = String.valueOf(((Exam) event).getId());
+            examDAO.delete(id);
         } else if (event instanceof Assignment) {
-            timeTableDAO.deleteAssignment((Assignment) event);
+            String id = String.valueOf(((Assignment) event).getId());
+            assignmentDAO.delete(id);
         }
 
         fetchAndDisplayCurrentWeeksData();

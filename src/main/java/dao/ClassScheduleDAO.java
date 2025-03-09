@@ -9,7 +9,7 @@ public class ClassScheduleDAO implements IDAO<ClassSchedule> {
     private Connection conn = null;
 
 
-
+    // Get a ClassSchedule from the database
     @Override
     public ClassSchedule get(String id) {
         conn = MariaDbConnection.getConnection();
@@ -33,6 +33,7 @@ public class ClassScheduleDAO implements IDAO<ClassSchedule> {
         return null;
     }
 
+    // Add a new ClassSchedule to the database
     @Override
     public void add(ClassSchedule classSchedule) {
         conn = MariaDbConnection.getConnection();
@@ -55,6 +56,7 @@ public class ClassScheduleDAO implements IDAO<ClassSchedule> {
         }
     }
 
+    // Update a ClassSchedule in the database
     @Override
     public void update(ClassSchedule classSchedule) {
         conn = MariaDbConnection.getConnection();
@@ -72,6 +74,7 @@ public class ClassScheduleDAO implements IDAO<ClassSchedule> {
         }
     }
 
+    // Delete a ClassSchedule from the database
     @Override
     public void delete(String id) {
         conn = MariaDbConnection.getConnection();

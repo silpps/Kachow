@@ -10,7 +10,8 @@ public class CourseDAO implements IDAO<Course> {
     private Connection conn = null;
 
 
-
+    // Get a Course from the database
+    @Override
     public Course get(String id) {
         conn = MariaDbConnection.getConnection();
         String sql = "SELECT * FROM course WHERE course_name = ?";
@@ -32,6 +33,7 @@ public class CourseDAO implements IDAO<Course> {
         return null;
     }
 
+    // Add a new Course to the database
     @Override
     public void add(Course course) {
         String sql = "INSERT INTO course (course_name, instructor, start_date, end_date) VALUES (?, ?, ?, ?)";
@@ -48,6 +50,7 @@ public class CourseDAO implements IDAO<Course> {
         }
     }
 
+    // Update a Course in the database
     @Override
     public void update(Course course) {
         conn = MariaDbConnection.getConnection();
@@ -65,6 +68,7 @@ public class CourseDAO implements IDAO<Course> {
     }
 
 
+    // Delete a Course from the database
     public void delete(String id) {
         String sql = "DELETE FROM course WHERE course_name = ?";
         try (Connection conn = MariaDbConnection.getConnection();
