@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
     stages {
@@ -8,13 +9,30 @@ pipeline {
         }
         stage('Build') {
             steps {
-                bat 'mvn clean package'
+                sh 'mvn clean package'
             }
         }
-        stage('Test') {
+        stage('Test & Coverage') {
             steps {
-                bat 'mvn test'
+                sh 'mvn test'
+                sh 'mvn jacoco:report'
             }
+        }
+        stage('JaCoCo Report') {
+            steps {
+                jacoco(
+                    execPattern: '**/jacoco.exec',
+                    classPattern: '**/classes',
+                    sourcePattern: '**/src/main/java',
+                    classDirectories: [[pattern: '**/classes']],
+                    sourceDirectories: [[pattern: '**/src/main/java']]
+                )
+            }
+        }
+    }
+    post {
+        always {
+            jacoco()
         }
     }
 }
