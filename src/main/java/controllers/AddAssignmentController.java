@@ -63,6 +63,7 @@ public class AddAssignmentController {
 
     @FXML
     private void assignmentSaveButtonClicked() {
+        // Save the assignment details
         String courseName = courseNameChoiceBox.getValue();
         String assignmentTitle = assignmentTitleTextField.getText();
         String description = descriptionTextArea.getText();
@@ -76,7 +77,7 @@ public class AddAssignmentController {
         }
 
         if (date != null && deadlineTimeString != null) {
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
             LocalDateTime assignmentDeadline = LocalDateTime.of(date, LocalTime.parse(deadlineTimeString, timeFormatter));
             System.out.println(assignmentDeadline);
             System.out.println(date);
@@ -85,7 +86,9 @@ public class AddAssignmentController {
             assignmentDAO.add(assignment);
             System.out.println("Assignment added" + assignment.getCourseName() + " " + assignment.getTitle() + " " + assignment.getDescription() + " " + assignment.getDeadline() + " " + assignment.getStatus());
         }
-// Small delay to ensure DB update before fetching data
+
+        // Small delay to ensure DB update before fetching data
+        // Update the UI after saving the assignment
         new Thread(() -> {
             try {
                 Thread.sleep(500); // Ensure database update completes

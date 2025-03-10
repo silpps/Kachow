@@ -25,7 +25,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
-//TODO: Järjestele ja siisti koodia
+
 public class TimetableController implements Initializable {
 
     @FXML
@@ -33,9 +33,6 @@ public class TimetableController implements Initializable {
 
     @FXML
     private Label mondayDate, tuesdayDate, wednesdayDate, thursdayDate, fridayDate, saturdayDate, sundayDate, currentWeekLabel;
-
-    @FXML
-    private Button nextWeekButton, previousWeekButton;
 
     private TimeTableDAO timeTableDAO;
     private LocalDate startOfWeek;
@@ -65,6 +62,7 @@ public class TimetableController implements Initializable {
 
         // Format to dd/MM
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         // Set the dates to the labels
         mondayDate.setText(startOfWeek.format(formatter));
@@ -75,9 +73,7 @@ public class TimetableController implements Initializable {
         saturdayDate.setText(startOfWeek.plusDays(5).format(formatter));
         sundayDate.setText(startOfWeek.plusDays(6).format(formatter));
 
-        //TODO: lisää vuosi?
-        // Set the current week dates label
-        currentWeekLabel.setText(startOfWeek.format(formatter) + " - " + endOfWeek.format(formatter));
+        currentWeekLabel.setText(startOfWeek.format(formatter2) + " - " + endOfWeek.format(formatter2));
 
         // Fetch current week's data from database
         List<ClassSchedule> classSchedules = timeTableDAO.getClassSchedule(startOfWeek, endOfWeek);
@@ -98,7 +94,6 @@ public class TimetableController implements Initializable {
 
     @FXML
     private void showNextWeek() {
-        System.out.println("Showing next week");
         this.startOfWeek = this.startOfWeek.plusDays(7);
         this.endOfWeek = this.endOfWeek.plusDays(7);
         fetchAndDisplayCurrentWeeksData();
@@ -123,14 +118,12 @@ public class TimetableController implements Initializable {
     }
 
     private <T> void addTasksToDay(List<T> tasks) {
-        tasks.sort(Comparator.comparing(task -> {
-            return switch (task) {
-                case ClassSchedule classSchedule -> classSchedule.getStartTime();
-                case StudySession studySession -> studySession.getStartTime();
-                case Exam exam -> exam.getExamDate();
-                case Assignment assignment -> assignment.getDeadline();
-                case null, default -> LocalDateTime.MAX;
-            };
+        tasks.sort(Comparator.comparing(task -> switch (task) {
+            case ClassSchedule classSchedule -> classSchedule.getStartTime();
+            case StudySession studySession -> studySession.getStartTime();
+            case Exam exam -> exam.getExamDate();
+            case Assignment assignment -> assignment.getDeadline();
+            case null, default -> LocalDateTime.MAX;
         }));
 
         for (T task : tasks) {
@@ -258,6 +251,11 @@ public class TimetableController implements Initializable {
             Label titleLabel = new Label("Title:");
             TextField titleField = new TextField(getEventTitle(event));
 
+            if (!(event instanceof ClassSchedule)) {
+                popupVBox.getChildren().addAll(titleLabel, titleField);
+            }
+
+
             Label dateLabel = new Label("Date:");
             DatePicker datePicker = new DatePicker(getEventDate(event).toLocalDate());
 
@@ -274,16 +272,54 @@ public class TimetableController implements Initializable {
             Label descriptionLabel = new Label("Description:");
             TextArea descriptionField = new TextArea(getEventDescription(event));
 
+            TextField locationField = null;
+            if (event instanceof ClassSchedule classSchedule || event instanceof Exam exam) {
+                Label locationLabel = new Label("Location:");
+                locationField = new TextField(getEventLocation(event));
+                popupVBox.getChildren().addAll(locationLabel, locationField);
+            }
+            final TextField finalLocationField = locationField;
+
+            if (event instanceof Assignment assignment) {
+                Label statusLabel = new Label("Status:");
+                ToggleGroup statusGroup = new ToggleGroup();
+
+                RadioButton notStartedButton = new RadioButton("Not Started");
+                notStartedButton.setToggleGroup(statusGroup);
+                RadioButton ongoingButton = new RadioButton("Ongoing");
+                ongoingButton.setToggleGroup(statusGroup);
+                RadioButton completedButton = new RadioButton("Completed");
+                completedButton.setToggleGroup(statusGroup);
+
+                switch (assignment.getStatus()) {
+                    case "Not Started" -> notStartedButton.setSelected(true);
+                    case "Ongoing" -> ongoingButton.setSelected(true);
+                    case "Completed" -> completedButton.setSelected(true);
+                }
+
+                popupVBox.getChildren().addAll(statusLabel, notStartedButton, ongoingButton, completedButton);
+            }
+            VBox timeBox = new VBox(10, fromTimeLabel, fromTimeChoiceBox);
+
+            if (!(event instanceof Assignment || event instanceof Exam)) {
+                timeBox.getChildren().add(toTimeLabel);
+                timeBox.getChildren().add(toTimeChoiceBox);
+            }
+
+
             Button saveButton = new Button("Save");
             Button deleteButton = new Button("Delete");
 
             HBox buttonHBox = new HBox(30, deleteButton, saveButton);
             buttonHBox.setAlignment(Pos.CENTER);
 
-            saveButton.setOnAction(e -> handleSaveEvent(event, titleField, datePicker, fromTimeChoiceBox, toTimeChoiceBox, descriptionField, popupStage));
+            saveButton.setOnAction(e -> handleSaveEvent(event, titleField, datePicker, fromTimeChoiceBox, toTimeChoiceBox, descriptionField, finalLocationField, popupStage));
             deleteButton.setOnAction(e -> handleDeleteEvent(event, popupStage));
 
-            popupVBox.getChildren().addAll(titleLabel, titleField, dateLabel, datePicker, fromTimeLabel, fromTimeChoiceBox, toTimeLabel, toTimeChoiceBox, descriptionLabel, descriptionField, buttonHBox);
+            popupVBox.getChildren().addAll(dateLabel, datePicker, timeBox, descriptionLabel, descriptionField, buttonHBox);
+
+
+
 
             Scene popupScene = new Scene(popupVBox, 300, 600);
             popupScene.getStylesheets().add("/timetable.css");
@@ -295,7 +331,7 @@ public class TimetableController implements Initializable {
     }
 
 
-    private <T> void handleSaveEvent(T event, TextField titleField, DatePicker datePicker, ChoiceBox<String> fromTimeChoiceBox, ChoiceBox<String> toTimeChoiceBox, TextArea descriptionField, Stage popupStage) {
+    private <T> void handleSaveEvent(T event, TextField titleField, DatePicker datePicker, ChoiceBox<String> fromTimeChoiceBox, ChoiceBox<String> toTimeChoiceBox, TextArea descriptionField, TextField locationField, Stage popupStage) {
         String newTitle = titleField.getText();
         LocalDate newDate = datePicker.getValue();
         String newFromTime = fromTimeChoiceBox.getValue();
@@ -305,29 +341,53 @@ public class TimetableController implements Initializable {
         LocalTime startTime = LocalTime.parse(newFromTime, DateTimeFormatter.ofPattern("H:mm"));
         LocalTime endTime = LocalTime.parse(newToTime, DateTimeFormatter.ofPattern("H:mm"));
 
+
+        // Automatically set end time to one hour after start time if end time is not after start time
+        if (!endTime.isAfter(startTime)) {
+            endTime = startTime.plusHours(1);
+            toTimeChoiceBox.setValue(endTime.toString());
+        }
+
         LocalDateTime startDateTime = LocalDateTime.of(newDate, startTime);
         LocalDateTime endDateTime = LocalDateTime.of(newDate, endTime);
 
-        //TODO: Description assignmentis väärin? Tarvittais status johonkin?
         if (event instanceof StudySession studySession) {
+            studySession.setTitle(newTitle);
             studySession.setDescription(newDescription);
             studySession.setStartTime(startDateTime);
             studySession.setEndTime(endDateTime);
             studySessionDAO.update(studySession);
         } else if (event instanceof Exam exam) {
+            exam.setTitle(newTitle);
             exam.setDescription(newDescription);
             LocalDateTime updatedExamDate = LocalDateTime.of(newDate, startTime);
             exam.setExamDate(updatedExamDate);
+            if (locationField != null) {
+                exam.setLocation(locationField.getText());
+            }
             examDAO.update(exam);
         } else if (event instanceof Assignment assignment) {
+            assignment.setTitle(newTitle);
             assignment.setDescription(newDescription);
             assignment.setDeadline(startDateTime);
+            ToggleGroup statusGroup = (ToggleGroup) ((VBox) popupStage.getScene().getRoot()).getChildren().stream()
+                    .filter(node -> node instanceof RadioButton)
+                    .map(node -> ((RadioButton) node).getToggleGroup())
+                    .findFirst()
+                    .orElse(null);
+
+            if (statusGroup != null) {
+                RadioButton selectedStatus = (RadioButton) statusGroup.getSelectedToggle();
+                assignment.setStatus(selectedStatus.getText());
+            }
             assignmentDAO.update(assignment);
         } else if (event instanceof ClassSchedule classSchedule) {
-            classSchedule.setCourseName(newTitle);
-            classSchedule.setLocation(newDescription);
+            classSchedule.setDescription(newDescription);
             classSchedule.setStartTime(startDateTime);
             classSchedule.setEndTime(endDateTime);
+            if (locationField != null) {
+                classSchedule.setLocation(locationField.getText());
+            }
             classScheduleDAO.update(classSchedule);
         }
 
@@ -346,13 +406,17 @@ public class TimetableController implements Initializable {
 
     private void deleteEvent(Object event) {
         if (event instanceof ClassSchedule) {
-            timeTableDAO.deleteClassSchedule((ClassSchedule) event);
+            String id = String.valueOf(((ClassSchedule) event).getId());
+            classScheduleDAO.delete(id);
         } else if (event instanceof StudySession) {
-            timeTableDAO.deleteStudySession((StudySession) event);
+            String id = String.valueOf(((StudySession) event).getId());
+            studySessionDAO.delete(id);
         } else if (event instanceof Exam) {
-            timeTableDAO.deleteExam((Exam) event);
+            String id = String.valueOf(((Exam) event).getId());
+            examDAO.delete(id);
         } else if (event instanceof Assignment) {
-            timeTableDAO.deleteAssignment((Assignment) event);
+            String id = String.valueOf(((Assignment) event).getId());
+            assignmentDAO.delete(id);
         }
 
         fetchAndDisplayCurrentWeeksData();
@@ -360,13 +424,13 @@ public class TimetableController implements Initializable {
 
     private <T> String getEventTitle(T event) {
         if (event instanceof ClassSchedule classSchedule) {
-            return classSchedule.getCourseName();
+            return "";
         } else if (event instanceof Assignment assignment) {
-            return assignment.getCourseName();
+            return assignment.getTitle();
         } else if (event instanceof StudySession studySession) {
-            return studySession.getCourseName();
+            return studySession.getTitle();
         } else if (event instanceof Exam exam) {
-            return exam.getCourseName();
+            return exam.getTitle();
         }
         return "Unknown Event";
     }
@@ -410,15 +474,24 @@ public class TimetableController implements Initializable {
         return "01:00"; // Default
     }
 
+    private <T> String getEventLocation(T event) {
+        if (event instanceof ClassSchedule classSchedule) {
+            return classSchedule.getLocation();
+        } else if (event instanceof Exam exam) {
+            return exam.getLocation();
+        }
+        return "";
+    }
+
     private <T> String getEventDescription(T event) {
         if (event instanceof ClassSchedule classSchedule) {
-            return "Location: " + classSchedule.getLocation();
+            return classSchedule.getDescription();
         } else if (event instanceof Assignment assignment) {
-            return "Status: " + assignment.getStatus();
+            return assignment.getDescription();
         } else if (event instanceof StudySession studySession) {
-            return "Study session for " + studySession.getCourseName();
+            return studySession.getDescription();
         } else if (event instanceof Exam exam) {
-            return "Location: " + exam.getLocation();
+            return exam.getDescription();
         }
         return "";
     }

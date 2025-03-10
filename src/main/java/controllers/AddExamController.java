@@ -55,11 +55,13 @@ public class AddExamController {
 
     @FXML
     private void backButtonClicked() {
+        // Close the current window
         backButton.getScene().getWindow().hide();
     }
 
     @FXML
     private void examSaveButtonClicked() {
+        // Save the exam details
         String courseName = courseNameChoiceBox.getValue();
         String examTitle = examTitleTextField.getText();
         String description = descriptionTextArea.getText();
@@ -68,7 +70,7 @@ public class AddExamController {
         String fromTimeString = fromChoiceBox.getValue();
 
         if (examDate != null && fromTimeString != null) {
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
             LocalDateTime examDateTime = LocalDateTime.of(examDate, LocalTime.parse(fromTimeString, timeFormatter));
             System.out.println(examDateTime);
             System.out.println(examDate);
@@ -78,6 +80,7 @@ public class AddExamController {
             examDAO.add(exam);
         }
 
+        // Update the UI after saving the exam
         new Thread(() -> {
             try {
                 Thread.sleep(500);

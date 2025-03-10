@@ -8,7 +8,7 @@ import java.sql.*;
 public class StudySessionDAO implements IDAO<StudySession> {
     private Connection conn = null;
 
-
+    // Get a StudySession from the database
     @Override
     public StudySession get(String id) {
         conn = MariaDbConnection.getConnection();
@@ -32,6 +32,7 @@ public class StudySessionDAO implements IDAO<StudySession> {
         return null;
     }
 
+    // Add a new StudySession to the database
     @Override
     public void add(StudySession session) {
         conn = MariaDbConnection.getConnection();
@@ -55,6 +56,7 @@ public class StudySessionDAO implements IDAO<StudySession> {
         }
     }
 
+    // Update a StudySession in the database
     @Override
     public void update(StudySession studySession) {
         conn = MariaDbConnection.getConnection();
@@ -73,6 +75,7 @@ public class StudySessionDAO implements IDAO<StudySession> {
         }
     }
 
+    // Delete a StudySession from the database
     @Override
     public void delete(String id) {
         conn = MariaDbConnection.getConnection();

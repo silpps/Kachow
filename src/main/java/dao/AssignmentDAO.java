@@ -8,7 +8,7 @@ import java.sql.*;
 public class AssignmentDAO implements IDAO<Assignment> {
     private Connection conn = null;
 
-
+    // Get an Assignment from the database
     @Override
     public Assignment get(String id) {
         conn = MariaDbConnection.getConnection();
@@ -32,6 +32,7 @@ public class AssignmentDAO implements IDAO<Assignment> {
         return null;
     }
 
+    // Add a new Assignment to the database
     @Override
     public void add(Assignment assignment) {
         conn = MariaDbConnection.getConnection();
@@ -54,6 +55,7 @@ public class AssignmentDAO implements IDAO<Assignment> {
         }
     }
 
+    // Update an Assignment in the database
     @Override
     public void update(Assignment assignment) {
         conn = MariaDbConnection.getConnection();
@@ -73,6 +75,7 @@ public class AssignmentDAO implements IDAO<Assignment> {
         }
     }
 
+    // Delete an Assignment from the database
     @Override
     public void delete(String id) {
         conn = MariaDbConnection.getConnection();
