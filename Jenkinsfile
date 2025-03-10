@@ -18,15 +18,12 @@ pipeline {
                 bat 'mvn jacoco:report'
             }
         }
-        stage('JaCoCo Report') {
+        stage('Jacoco Coverage Report') {
             steps {
-                jacoco(
-                    execPattern: '**/jacoco.exec',
-                    classPattern: '**/classes',
-                    sourcePattern: '**/src/main/java',
-                    classDirectories: [[pattern: '**/classes']],
-                    sourceDirectories: [[pattern: '**/src/main/java']]
-                )
+                jacoco execPattern: '**/target/jacoco.exec',
+                       classPattern: '**/target/classes',
+                       sourcePattern: '**/src/main/java',
+                       changeBuildStatus: true
             }
         }
     }
