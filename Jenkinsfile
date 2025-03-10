@@ -17,24 +17,21 @@ pipeline {
                 sh 'mvn jacoco:report'
             }
         }
-        stage('Publish Coverage Report') {
+        stage('JaCoCo Report') {
             steps {
-                jacoco execPattern: '**/target/jacoco.exec',
-                       classPattern: '**/target/classes',
-                       sourcePattern: '**/src/main/java',
-                       changeBuildStatus: true
+                jacoco(
+                    execPattern: '**/jacoco.exec',
+                    classPattern: '**/classes',
+                    sourcePattern: '**/src/main/java',
+                    classDirectories: [[pattern: '**/classes']],
+                    sourceDirectories: [[pattern: '**/src/main/java']]
+                )
             }
         }
     }
     post {
         always {
-            junit '**/target/surefire-reports/*.xml'
-        }
-        success {
-            echo 'Build successful! JaCoCo report generated.'
-        }
-        failure {
-            echo 'Build failed. Check errors!'
+            jacoco()
         }
     }
 }
