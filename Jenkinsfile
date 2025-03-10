@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/silpps/Kachow.git'
+                git branch: 'main', url: 'https://github.com/silpps/Kachow.git'
             }
         }
         stage('Run Tests') {
