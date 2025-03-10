@@ -1,35 +1,59 @@
-
 pipeline {
     agent any
+
+    environment {
+        DOCKERHUB_CREDENTIALS_ID = 'dockerhub-credentials'
+        DOCKERHUB_REPO = 'hildd/studyflow'
+        DOCKER_IMAGE_TAG = 'ver1'
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/silpps/Kachow.git'
+                git 'https://github.com/silpps/Kachow.git'
             }
         }
-        stage('Build') {
+        stage('Run Tests') {
             steps {
-                bat 'mvn clean package'
+                // Run the tests first to generate data for Jacoco and JUnit
+                bat 'mvn clean test' // For Windows agents
+                // sh 'mvn clean test' // Uncomment if on a Linux agent
             }
         }
-        stage('Test & Coverage') {
+        stage('Code Coverage') {
             steps {
-                bat 'mvn test'
+                // Generate Jacoco report after the tests have run
                 bat 'mvn jacoco:report'
             }
         }
-        stage('Jacoco Coverage Report') {
+        stage('Publish Test Results') {
             steps {
-                jacoco execPattern: '**/target/jacoco.exec',
-                       classPattern: '**/target/classes',
-                       sourcePattern: '**/src/main/java',
-                       changeBuildStatus: true
+                // Publish JUnit test results
+                junit '**/target/surefire-reports/*.xml'
+            }
+        }
+        stage('Publish Coverage Report') {
+            steps {
+                // Publish Jacoco coverage report
+                jacoco()
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.build("${env.DOCKERHUB_REPO}:${env.DOCKER_IMAGE_TAG}")
+                }
+            }
+        }
+        stage('Push Docker Image to Docker Hub') {
+            steps {
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', env.DOCKERHUB_CREDENTIALS_ID) {
+                        docker.image("${env.DOCKERHUB_REPO}:${env.DOCKER_IMAGE_TAG}").push()
+                    }
+                }
             }
         }
     }
-    post {
-        always {
-            jacoco()
-        }
-    }
 }
+
