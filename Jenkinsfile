@@ -41,6 +41,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
+                    bat 'docker context use default'
                     docker.build("${env.DOCKERHUB_REPO}:${env.DOCKER_IMAGE_TAG}")
                 }
             }
