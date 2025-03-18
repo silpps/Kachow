@@ -3,15 +3,15 @@ import java.time.LocalDateTime;
 
 //TODO: Pitäiskö tähän kanssa lisätä jonkinlainen description? se vois vaik sisältää tietyn tunnin aiheet tms
 public class ClassSchedule {
-    private final String courseName;
+    private final int courseId;
     private String  location;
     private String description;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private int id;
 
-    public ClassSchedule(String courseName, String location,String description , LocalDateTime startTime, LocalDateTime endTime) {
-        this.courseName = courseName;
+    public ClassSchedule(int courseId, String location,String description , LocalDateTime startTime, LocalDateTime endTime) {
+        this.courseId = courseId;
 
         this.location = location;
         this.description = description;
@@ -19,8 +19,8 @@ public class ClassSchedule {
         this.endTime = endTime;
     }
 
-    public String getCourseName() {
-        return courseName;
+    public int getCourseId() {
+        return courseId;
     }
 
 
@@ -67,7 +67,7 @@ public class ClassSchedule {
 
 
     public String getDetails() {
-        return "Course: " + courseName + "\nLocation: " + location + "\nDescription: " + description + "\nStart time: " + startTime + "\nEnd time: " + endTime;
+        return "Course: " + courseId + "\nLocation: " + location + "\nDescription: " + description + "\nStart time: " + startTime + "\nEnd time: " + endTime;
     }
 
     public void setCourseName(String newTitle) {

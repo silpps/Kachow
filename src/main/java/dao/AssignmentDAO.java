@@ -10,16 +10,16 @@ public class AssignmentDAO implements IDAO<Assignment> {
 
     // Get an Assignment from the database
     @Override
-    public Assignment get(String id) {
+    public Assignment get(int id) {
         conn = MariaDbConnection.getConnection();
         String sql = "SELECT * FROM assignment WHERE assignment_id = ?";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1,  Integer.parseInt(id));
+            st.setInt(1,  id);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 return new Assignment(
-                        rs.getString("course_name"),
+                        rs.getInt("course_id"),
                         rs.getString("title"),
                         rs.getString("description"),
                         rs.getTimestamp("deadline").toLocalDateTime(),
@@ -36,10 +36,10 @@ public class AssignmentDAO implements IDAO<Assignment> {
     @Override
     public void add(Assignment assignment) {
         conn = MariaDbConnection.getConnection();
-        String sql = "INSERT INTO assignment (course_name, title, description, deadline, status) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO assignment (course_id, title, description, deadline, status) VALUES (?, ?, ?, ?, ?)";
         try {
             PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            st.setString(1, assignment.getCourseName());
+            st.setInt(1, assignment.getCourseId());
             st.setString(2, assignment.getTitle());
             st.setString(3, assignment.getDescription());
             st.setTimestamp(4, Timestamp.valueOf(assignment.getDeadline()));
@@ -59,11 +59,11 @@ public class AssignmentDAO implements IDAO<Assignment> {
     @Override
     public void update(Assignment assignment) {
         conn = MariaDbConnection.getConnection();
-        String sql = "UPDATE assignment SET course_name = ?, title = ?, description = ?, deadline = ?, status = ? WHERE assignment_id = ?";
+        String sql = "UPDATE assignment SET course_id = ?, title = ?, description = ?, deadline = ?, status = ? WHERE assignment_id = ?";
 
         try {
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setString(1, assignment.getCourseName());
+            st.setInt(1, assignment.getCourseId());
             st.setString(2, assignment.getTitle());
             st.setString(3, assignment.getDescription());
             st.setTimestamp(4, Timestamp.valueOf(assignment.getDeadline()));
@@ -77,12 +77,12 @@ public class AssignmentDAO implements IDAO<Assignment> {
 
     // Delete an Assignment from the database
     @Override
-    public void delete(String id) {
+    public void delete(int id) {
         conn = MariaDbConnection.getConnection();
         String sql = "DELETE FROM assignment WHERE assignment_id = ?";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, Integer.parseInt(id));
+            st.setInt(1, id);
             st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

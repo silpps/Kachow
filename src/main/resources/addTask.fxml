@@ -5,7 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="320.0" stylesheets="@timetable.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AddTaskController">
+<AnchorPane fx:id="taskPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="320.0" stylesheets="@timetable.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AddTaskController">
    <children>
       <Label fx:id="addPageTitleLabel" layoutX="65.0" layoutY="33.0" prefHeight="18.0" prefWidth="190.0" text="Choose new task to timetable" />
       <Label fx:id="taskLabel" layoutX="59.0" layoutY="91.0" prefHeight="18.0" prefWidth="46.0" text="Task:" />

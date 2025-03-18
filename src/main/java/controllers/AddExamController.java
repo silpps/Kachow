@@ -1,21 +1,26 @@
 package controllers;
 
 import dao.ExamDAO;
+import dao.IDAO;
 import dao.TimeTableDAO;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import models.Course;
 import models.Exam;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AddExamController {
 
-    private ExamDAO examDAO;
+    private IDAO<Exam> examDAO;
+    private Map<Integer, String> courses;
 
     @FXML
     private ChoiceBox<String> courseNameChoiceBox;
@@ -43,8 +48,10 @@ public class AddExamController {
     @FXML
     public void initialize(){
         TimeTableDAO timeTableDAO = new TimeTableDAO();
-        List<String> courseNames = timeTableDAO.getCourseNames();
-        courseNameChoiceBox.getItems().addAll(courseNames);
+        courses = timeTableDAO.getCourses();
+        for (Map.Entry<Integer, String> entry : courses.entrySet()) {
+            courseNameChoiceBox.getItems().add(entry.getValue() + " (ID: " + entry.getKey() + ")");
+        }
 
         examDAO = new ExamDAO();
 
@@ -62,40 +69,43 @@ public class AddExamController {
     @FXML
     private void examSaveButtonClicked() {
         // Save the exam details
-        String courseName = courseNameChoiceBox.getValue();
-        String examTitle = examTitleTextField.getText();
-        String description = descriptionTextArea.getText();
-        String location = locationTextField.getText();
-        LocalDate examDate = examDatePicker.getValue();
-        String fromTimeString = fromChoiceBox.getValue();
+        String selectedItem = courseNameChoiceBox.getValue();
+        if (selectedItem != null) {
+            int courseId = Integer.parseInt(selectedItem.replaceAll("[^0-9]", ""));
+            String examTitle = examTitleTextField.getText();
+            String description = descriptionTextArea.getText();
+            String location = locationTextField.getText();
+            LocalDate examDate = examDatePicker.getValue();
+            String fromTimeString = fromChoiceBox.getValue();
 
-        if (examDate != null && fromTimeString != null) {
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
-            LocalDateTime examDateTime = LocalDateTime.of(examDate, LocalTime.parse(fromTimeString, timeFormatter));
-            System.out.println(examDateTime);
-            System.out.println(examDate);
+            if (examDate != null && fromTimeString != null) {
+                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
+                LocalDateTime examDateTime = LocalDateTime.of(examDate, LocalTime.parse(fromTimeString, timeFormatter));
+                System.out.println(examDateTime);
+                System.out.println(examDate);
 
 
-            Exam exam = new Exam(courseName, examDateTime, examTitle, description, location);
-            examDAO.add(exam);
-        }
-
-        // Update the UI after saving the exam
-        new Thread(() -> {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                Exam exam = new Exam(courseId, examDateTime, examTitle, description, location);
+                examDAO.add(exam);
             }
 
-            Platform.runLater(() -> {
-                System.out.println("Updating UI...");
-                timetableController.fetchAndDisplayCurrentWeeksData();
-                System.out.println("UI updated.");
-            });
-        }).start();
+            // Update the UI after saving the exam
+            new Thread(() -> {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
-        backButtonClicked();
+                Platform.runLater(() -> {
+                    System.out.println("Updating UI...");
+                    timetableController.fetchAndDisplayCurrentWeeksData();
+                    System.out.println("UI updated.");
+                });
+            }).start();
+
+            backButtonClicked();
+        }
     }
 
     public void setTimetableController(TimetableController timetableController) {

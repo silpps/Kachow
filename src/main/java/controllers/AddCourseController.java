@@ -1,15 +1,15 @@
 package controllers;
 
 import dao.CourseDAO;
+import dao.IDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import models.Course;
-import models.CourseService;
 
 import java.time.LocalDate;
 public class AddCourseController {
 
-    private CourseDAO courseDAO;
+    private IDAO<Course> courseDAO;
 
     @FXML
     private DatePicker startDatePicker;
@@ -49,8 +49,10 @@ public class AddCourseController {
             return;
         }
         Course course = new Course(courseName, instructor, startDate, endDate);
-        CourseService.getInstance().addCourse(courseName);
         courseDAO.add(course);
+
+        //Update the course list in the timetable controller
+        timetableController.updateCourseMap();
 
         addCourseSaveButton.getScene().getWindow().hide();
     }

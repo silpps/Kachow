@@ -5,7 +5,8 @@ import java.time.LocalDate;
 
 //TODO: Mieti miten tätä luokkaa vois hyödyntää kalenterinäkymässä. esim filtteri joka näyttää vain tietyn kurssin tapahtumat
 public class Course {
-    private final String courseName;
+    private int courseID;
+    private String courseName;
     private String instructor;
     private LocalDate startDate;
     private LocalDate endDate;
@@ -15,6 +16,11 @@ public class Course {
         this.instructor = instructor;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    //Getters
+    public int getCourseID() {
+        return courseID;
     }
 
     public String getCourseName() {
@@ -31,6 +37,16 @@ public class Course {
 
     public LocalDate getEndDate() {
         return endDate;
+    }
+
+
+    //Setters
+    public void setCourseID(int courseID) {
+        this.courseID = courseID;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
 
     public void setInstructor(String instructor) {

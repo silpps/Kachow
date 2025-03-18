@@ -1,6 +1,7 @@
 package controllers;
 
 import dao.AssignmentDAO;
+import dao.IDAO;
 import dao.TimeTableDAO;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -11,13 +12,16 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AddAssignmentController {
-    TimeTableDAO timeTableDAO;
-    TimetableController timetableController;
+    private TimeTableDAO timeTableDAO;
+    private TimetableController timetableController;
+    private Map<Integer, String> courses;
 
-    private AssignmentDAO assignmentDAO;
+    private IDAO<Assignment> assignmentDAO;
 
     @FXML
     private ChoiceBox<String> courseNameChoiceBox;
@@ -51,8 +55,10 @@ public class AddAssignmentController {
     @FXML
     public void initialize(){
         timeTableDAO = new TimeTableDAO();
-        List<String> courseNames = timeTableDAO.getCourseNames();
-        courseNameChoiceBox.getItems().addAll(courseNames);
+        courses = timeTableDAO.getCourses();
+        for (Map.Entry<Integer, String> entry : courses.entrySet()) {
+            courseNameChoiceBox.getItems().add(entry.getValue() + " (ID: " + entry.getKey() + ")");
+        }
 
         assignmentDAO = new AssignmentDAO();
 
@@ -64,46 +70,50 @@ public class AddAssignmentController {
     @FXML
     private void assignmentSaveButtonClicked() {
         // Save the assignment details
-        String courseName = courseNameChoiceBox.getValue();
-        String assignmentTitle = assignmentTitleTextField.getText();
-        String description = descriptionTextArea.getText();
-        LocalDate date = assignmentDatePicker.getValue();
-        String deadlineTimeString = deadlineChoiceBox.getValue();
-        String status = "";
-        if (notStartedCheckBox.isSelected()) {
-            status = "Not started";
-        } else if (ongoingCheckBox.isSelected()) {
-            status = "Ongoing";
-        }
-
-        if (date != null && deadlineTimeString != null) {
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
-            LocalDateTime assignmentDeadline = LocalDateTime.of(date, LocalTime.parse(deadlineTimeString, timeFormatter));
-            System.out.println(assignmentDeadline);
-            System.out.println(date);
-
-            Assignment assignment = new Assignment(courseName, assignmentTitle, description, assignmentDeadline, status);
-            assignmentDAO.add(assignment);
-            System.out.println("Assignment added" + assignment.getCourseName() + " " + assignment.getTitle() + " " + assignment.getDescription() + " " + assignment.getDeadline() + " " + assignment.getStatus());
-        }
-
-        // Small delay to ensure DB update before fetching data
-        // Update the UI after saving the assignment
-        new Thread(() -> {
-            try {
-                Thread.sleep(500); // Ensure database update completes
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        String selectedItem = courseNameChoiceBox.getValue();
+        if (selectedItem != null) {
+            int courseId = Integer.parseInt(selectedItem.replaceAll("[^0-9]", ""));
+            String assignmentTitle = assignmentTitleTextField.getText();
+            String description = descriptionTextArea.getText();
+            LocalDate date = assignmentDatePicker.getValue();
+            String deadlineTimeString = deadlineChoiceBox.getValue();
+            String status = "";
+            if (notStartedCheckBox.isSelected()) {
+                status = "Not started";
+            } else if (ongoingCheckBox.isSelected()) {
+                status = "Ongoing";
             }
 
-            Platform.runLater(() -> {
-                System.out.println("Updating UI...");
-                timetableController.fetchAndDisplayCurrentWeeksData();
-                System.out.println("UI updated.");
-            });
-        }).start();
 
-        backButtonClicked();
+            if (date != null && deadlineTimeString != null) {
+                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
+                LocalDateTime assignmentDeadline = LocalDateTime.of(date, LocalTime.parse(deadlineTimeString, timeFormatter));
+                System.out.println(assignmentDeadline);
+                System.out.println(date);
+
+                Assignment assignment = new Assignment(courseId, assignmentTitle, description, assignmentDeadline, status);
+                assignmentDAO.add(assignment);
+                System.out.println("Assignment added" + assignment.getCourseId() + " " + assignment.getTitle() + " " + assignment.getDescription() + " " + assignment.getDeadline() + " " + assignment.getStatus());
+            }
+
+            // Small delay to ensure DB update before fetching data
+            // Update the UI after saving the assignment
+            new Thread(() -> {
+                try {
+                    Thread.sleep(500); // Ensure database update completes
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                Platform.runLater(() -> {
+                    System.out.println("Updating UI...");
+                    timetableController.fetchAndDisplayCurrentWeeksData();
+                    System.out.println("UI updated.");
+                });
+            }).start();
+
+            backButtonClicked();
+        }
     }
 
     public void setTimetableController(TimetableController timetableController) {
