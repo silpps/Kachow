@@ -15,12 +15,12 @@ class StudySessionTest {
     void setUp() {
         LocalDateTime startTime = LocalDateTime.of(2025, 3, 15, 12,0);
         LocalDateTime endTime = LocalDateTime.of(2025, 3, 15, 14,0);
-        studySession = new StudySession("Math", "Matrix", "Study for the test", startTime, endTime);
+        studySession = new StudySession(1, "Matrix", "Study for the test", startTime, endTime);
     }
 
     @Test
-    void getCourseName() {
-        assertEquals("Math", studySession.getCourseName());
+    void getCourseId() {
+        assertEquals(1, studySession.getCourseId());
     }
 
     @Test
@@ -84,7 +84,7 @@ class StudySessionTest {
 
     @Test
     void getDetails(){
-        assertEquals("Title: Matrix\nCourse: Math\nDescription: Study for the test\nStart Time: 2025-03-15T12:00\nEnd Time: 2025-03-15T14:00", studySession.getDetails());
+        assertEquals("Title: Matrix\nCourse: 1\nDescription: Study for the test\nStart Time: 2025-03-15T12:00\nEnd Time: 2025-03-15T14:00", studySession.getDetails());
     }
 
 }

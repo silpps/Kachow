@@ -14,12 +14,12 @@ class ExamTest {
     @BeforeEach
     void setUp() {
         LocalDateTime examDate = LocalDateTime.of(2025, 2, 20, 10, 0);
-        exam = new Exam("TestCourseName", examDate, "Test Exam", "Test Description", "Test Location");
+        exam = new Exam(1, examDate, "Test Exam", "Test Description", "Test Location");
     }
 
     @Test
-    void getCourseName() {
-        assertEquals("TestCourseName", exam.getCourseName());
+    void getCourseId() {
+        assertEquals(1, exam.getCourseId());
 
     }
 
@@ -82,7 +82,7 @@ class ExamTest {
 
     @Test
     void getDetails() {
-        assertEquals("Title: Test Exam\nCourse: TestCourseName\nExam date: 2025-02-20T10:00\nDescription: Test Description\nLocation: Test Location", exam.getDetails());
+        assertEquals("Title: Test Exam\nCourse: 1\nExam date: 2025-02-20T10:00\nDescription: Test Description\nLocation: Test Location", exam.getDetails());
     }
 
 }

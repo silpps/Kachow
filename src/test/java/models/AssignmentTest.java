@@ -14,12 +14,12 @@ class AssignmentTest {
     @BeforeEach
      void setUp() {
         LocalDateTime deadline = LocalDateTime.of(2025, 2, 15, 0, 0);
-        assignment = new Assignment("Maths", "Matrix", "Do the matrix assignment", deadline, "Not Started");
+        assignment = new Assignment(1, "Matrix", "Do the matrix assignment", deadline, "Not Started");
     }
 
     @Test
     void getCourseName() {
-        assertEquals("Maths", assignment.getCourseName());
+        assertEquals(1, assignment.getCourseId());
     }
 
     @Test
@@ -55,12 +55,6 @@ class AssignmentTest {
     }
 
     @Test
-    void setCourseName() {
-        assignment.setCourseName("Programming 101");
-        assertEquals("Programming 101", assignment.getCourseName());
-    }
-
-    @Test
     void setTitle() {
         assignment.setTitle("Arrays");
         assertEquals("Arrays", assignment.getTitle());
@@ -87,6 +81,6 @@ class AssignmentTest {
 
     @Test
     void getDetails(){
-        assertEquals("Title: Matrix\nCourse: Maths\nDescription: Do the matrix assignment\nDeadline: 2025-02-15T00:00\nStatus: Not Started", assignment.getDetails());
+        assertEquals("Title: Matrix\nCourse: 1\nDescription: Do the matrix assignment\nDeadline: 2025-02-15T00:00\nStatus: Not Started", assignment.getDetails());
     }
 }

@@ -27,6 +27,7 @@ public class CourseDAO implements IDAO<Course> {
                         rs.getDate("end_date").toLocalDate()
                 );
                 course.setCourseID(rs.getInt("course_id"));
+                return course;
             }
         } catch (SQLException e) {
             e.printStackTrace();
