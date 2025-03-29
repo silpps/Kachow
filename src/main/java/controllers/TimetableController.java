@@ -64,6 +64,7 @@ public class TimetableController implements Initializable {
         clearTimetable();
 
         // Format to dd/MM
+        //TODO: Localize date format
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
         DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -76,6 +77,7 @@ public class TimetableController implements Initializable {
         saturdayDate.setText(startOfWeek.plusDays(5).format(formatter));
         sundayDate.setText(startOfWeek.plusDays(6).format(formatter));
 
+        //TODO: Localize date format
         currentWeekLabel.setText(startOfWeek.format(formatter2) + " - " + endOfWeek.format(formatter2));
 
         // Fetch current week's data from database
@@ -151,6 +153,7 @@ public class TimetableController implements Initializable {
     }
 
 
+    //TODO: Localize labels
     private VBox createTaskBox(Object task) {
         return switch (task) {
             case ClassSchedule classSchedule -> createClassScheduleBox(classSchedule);
@@ -243,6 +246,7 @@ public class TimetableController implements Initializable {
         }
     }
 
+    //TODO: Localize labels and date and time formats
     private <T> void detailsPopup(T event) {
         try {
             Stage popupStage = new Stage();
@@ -497,6 +501,33 @@ public class TimetableController implements Initializable {
             return exam.getDescription();
         }
         return "";
+    }
+
+    @FXML
+    private void onEnglishClicked() {
+        Locale.setDefault(new Locale("en", "US"));
+
+        //Tähän vois kans laittaa et tallentaa tän tietokantaan ja sit muiden ikkunoiden kontrollereissa tää tieto sit haetaan tietokannasta. myös käynnistyksen yhteydessä vois hakea tietokannasta ja asettaa sen.
+
+        fetchAndDisplayCurrentWeeksData();
+    }
+
+    @FXML
+    private void onKoreanClicked() {
+        Locale.setDefault(new Locale("ko", "KR"));
+
+        //Tähän vois kans laittaa et tallentaa tän tietokantaan ja sit muiden ikkunoiden kontrollereissa tää tieto sit haetaan tietokannasta. myös käynnistyksen yhteydessä vois hakea tietokannasta ja asettaa sen.
+
+        fetchAndDisplayCurrentWeeksData();
+    }
+
+    @FXML
+    private void onPersianClicked() {
+        Locale.setDefault(new Locale("fa", "IR"));
+
+        //Tähän vois kans laittaa et tallentaa tän tietokantaan ja sit muiden ikkunoiden kontrollereissa tää tieto sit haetaan tietokannasta. myös käynnistyksen yhteydessä vois hakea tietokannasta ja asettaa sen.
+
+        fetchAndDisplayCurrentWeeksData();
     }
 
 }

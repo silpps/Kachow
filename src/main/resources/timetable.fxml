@@ -102,9 +102,9 @@
             </HBox>
             <AnchorPane layoutX="430.0" layoutY="682.0" prefHeight="45.0" prefWidth="413.0">
                <children>
-                  <Button layoutX="14.0" layoutY="8.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="37.0" text="EN" />
-                  <Button layoutX="188.0" layoutY="8.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="37.0" text="KR" />
-                  <Button layoutX="361.0" layoutY="8.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="37.0" text="IR" />
+                  <Button layoutX="14.0" layoutY="8.0" mnemonicParsing="false" onAction="#onEnglishClicked" prefHeight="30.0" prefWidth="37.0" text="EN" />
+                  <Button layoutX="188.0" layoutY="8.0" mnemonicParsing="false" onAction="#onKoreanClicked" prefHeight="30.0" prefWidth="37.0" text="KR" />
+                  <Button layoutX="361.0" layoutY="8.0" mnemonicParsing="false" onAction="#onPersianClicked" prefHeight="30.0" prefWidth="37.0" text="IR" />
                </children>
             </AnchorPane>
             </children>
