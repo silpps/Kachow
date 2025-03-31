@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class AddTaskController{
@@ -20,6 +21,9 @@ public class AddTaskController{
 
     @FXML
     private Button backButton;
+
+    @FXML
+    private AnchorPane taskPane;
 
     private TimetableController timetableController;
 
@@ -36,8 +40,8 @@ public class AddTaskController{
         continueButton.setOnAction(event -> continueButtonClicked());
     }
 
-    public String getTask(ActionEvent event){
-        return taskChoiceBox.getValue();
+    public void getTask(ActionEvent event){
+        taskChoiceBox.getValue();
     }
 
 

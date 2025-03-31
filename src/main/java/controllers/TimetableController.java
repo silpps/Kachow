@@ -15,15 +15,11 @@ import javafx.stage.Stage;
 import models.*;
 
 import java.net.URL;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class TimetableController implements Initializable {
@@ -37,10 +33,11 @@ public class TimetableController implements Initializable {
     private TimeTableDAO timeTableDAO;
     private LocalDate startOfWeek;
     private LocalDate endOfWeek;
-    private StudySessionDAO studySessionDAO;
-    private ExamDAO examDAO;
-    private AssignmentDAO assignmentDAO;
-    private ClassScheduleDAO classScheduleDAO;
+    private IDAO<StudySession> studySessionDAO;
+    private IDAO<Exam> examDAO;
+    private IDAO<Assignment> assignmentDAO;
+    private IDAO<ClassSchedule> classScheduleDAO;
+    private Map<Integer, String> courses;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -50,6 +47,8 @@ public class TimetableController implements Initializable {
         assignmentDAO = new AssignmentDAO();
         classScheduleDAO = new ClassScheduleDAO();
 
+        courses = timeTableDAO.getCourses();
+
         LocalDate today = LocalDate.now();
         this.startOfWeek = today.with(java.time.DayOfWeek.MONDAY);
         this.endOfWeek = today.with(java.time.DayOfWeek.SUNDAY);
@@ -57,10 +56,15 @@ public class TimetableController implements Initializable {
         fetchAndDisplayCurrentWeeksData();
     }
 
+    public void updateCourseMap() {
+        this.courses = timeTableDAO.getCourses();
+    }
+
     public void fetchAndDisplayCurrentWeeksData() {
         clearTimetable();
 
         // Format to dd/MM
+        //TODO: Localize date format
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
         DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -73,6 +77,7 @@ public class TimetableController implements Initializable {
         saturdayDate.setText(startOfWeek.plusDays(5).format(formatter));
         sundayDate.setText(startOfWeek.plusDays(6).format(formatter));
 
+        //TODO: Localize date format
         currentWeekLabel.setText(startOfWeek.format(formatter2) + " - " + endOfWeek.format(formatter2));
 
         // Fetch current week's data from database
@@ -148,6 +153,7 @@ public class TimetableController implements Initializable {
     }
 
 
+    //TODO: Localize labels
     private VBox createTaskBox(Object task) {
         return switch (task) {
             case ClassSchedule classSchedule -> createClassScheduleBox(classSchedule);
@@ -162,7 +168,7 @@ public class TimetableController implements Initializable {
         VBox taskBox = new VBox();
         taskBox.getStyleClass().add("class-schedule-box");
 
-        Label courseLabel = new Label(classSchedule.getCourseName());
+        Label courseLabel = new Label(courses.get(classSchedule.getCourseId()));
         Label taskLabel = new Label("CLASS: ");
         taskLabel.setStyle("-fx-font-weight: bold;");
         Label timeLabel = new Label(classSchedule.getStartTime().toLocalTime() + " - " + classSchedule.getEndTime().toLocalTime());
@@ -176,7 +182,7 @@ public class TimetableController implements Initializable {
         VBox taskBox = new VBox();
         taskBox.getStyleClass().add("assignment-box");
 
-        Label courseLabel = new Label(assignment.getCourseName());
+        Label courseLabel = new Label(courses.get(assignment.getCourseId()));
         Label taskLabel = new Label("ASSIGNMENT: ");
         taskLabel.setStyle("-fx-font-weight: bold;");
         Label timeLabel = new Label("Deadline: " + assignment.getDeadline().toLocalTime().toString());
@@ -190,7 +196,7 @@ public class TimetableController implements Initializable {
         VBox taskBox = new VBox();
         taskBox.getStyleClass().add("study-session-box");
 
-        Label courseLabel = new Label(studySession.getCourseName());
+        Label courseLabel = new Label(courses.get(studySession.getCourseId()));
         Label taskLabel = new Label("STUDY SESSION: ");
         taskLabel.setStyle("-fx-font-weight: bold;");
         Label timeLabel = new Label(studySession.getStartTime().toLocalTime() + " - " + studySession.getEndTime().toLocalTime());
@@ -203,7 +209,7 @@ public class TimetableController implements Initializable {
         VBox taskBox = new VBox();
         taskBox.getStyleClass().add("exam-box");
 
-        Label courseLabel = new Label(exam.getCourseName());
+        Label courseLabel = new Label(courses.get(exam.getCourseId()));
         Label taskLabel = new Label("EXAM: ");
         taskLabel.setStyle("-fx-font-weight: bold;");
         Label timeLabel = new Label(exam.getExamDate().toLocalTime().toString());
@@ -240,6 +246,7 @@ public class TimetableController implements Initializable {
         }
     }
 
+    //TODO: Localize labels and date and time formats
     private <T> void detailsPopup(T event) {
         try {
             Stage popupStage = new Stage();
@@ -406,16 +413,16 @@ public class TimetableController implements Initializable {
 
     private void deleteEvent(Object event) {
         if (event instanceof ClassSchedule) {
-            String id = String.valueOf(((ClassSchedule) event).getId());
+            int id = ((ClassSchedule) event).getId();
             classScheduleDAO.delete(id);
         } else if (event instanceof StudySession) {
-            String id = String.valueOf(((StudySession) event).getId());
+            int id = ((StudySession) event).getId();
             studySessionDAO.delete(id);
         } else if (event instanceof Exam) {
-            String id = String.valueOf(((Exam) event).getId());
+            int id = ((Exam) event).getId();
             examDAO.delete(id);
         } else if (event instanceof Assignment) {
-            String id = String.valueOf(((Assignment) event).getId());
+            int id = ((Assignment) event).getId();
             assignmentDAO.delete(id);
         }
 
@@ -494,6 +501,33 @@ public class TimetableController implements Initializable {
             return exam.getDescription();
         }
         return "";
+    }
+
+    @FXML
+    private void onEnglishClicked() {
+        Locale.setDefault(new Locale("en", "US"));
+
+        //Tähän vois kans laittaa et tallentaa tän tietokantaan ja sit muiden ikkunoiden kontrollereissa tää tieto sit haetaan tietokannasta. myös käynnistyksen yhteydessä vois hakea tietokannasta ja asettaa sen.
+
+        fetchAndDisplayCurrentWeeksData();
+    }
+
+    @FXML
+    private void onKoreanClicked() {
+        Locale.setDefault(new Locale("ko", "KR"));
+
+        //Tähän vois kans laittaa et tallentaa tän tietokantaan ja sit muiden ikkunoiden kontrollereissa tää tieto sit haetaan tietokannasta. myös käynnistyksen yhteydessä vois hakea tietokannasta ja asettaa sen.
+
+        fetchAndDisplayCurrentWeeksData();
+    }
+
+    @FXML
+    private void onPersianClicked() {
+        Locale.setDefault(new Locale("fa", "IR"));
+
+        //Tähän vois kans laittaa et tallentaa tän tietokantaan ja sit muiden ikkunoiden kontrollereissa tää tieto sit haetaan tietokannasta. myös käynnistyksen yhteydessä vois hakea tietokannasta ja asettaa sen.
+
+        fetchAndDisplayCurrentWeeksData();
     }
 
 }

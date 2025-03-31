@@ -1,5 +1,6 @@
 package controllers;
 
+import dao.IDAO;
 import dao.StudySessionDAO;
 import dao.TimeTableDAO;
 import javafx.application.Platform;
@@ -12,10 +13,13 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 public class AddStudySessionController {
 
-    private StudySessionDAO studySessionDAO;
+    private IDAO<StudySession> studySessionDAO;
+
+    private Map<Integer, String> courses;
 
     @FXML
     private ChoiceBox<String> courseNameChoiceBox;
@@ -52,8 +56,10 @@ public class AddStudySessionController {
     @FXML
     private void initialize() {
         TimeTableDAO timeTableDAO = new TimeTableDAO();
-        List<String> courseNames = timeTableDAO.getCourseNames();
-        courseNameChoiceBox.getItems().addAll(courseNames);
+        courses= timeTableDAO.getCourses();
+        for (Map.Entry<Integer, String> entry : courses.entrySet()) {
+            courseNameChoiceBox.getItems().add(entry.getValue() + " (ID: " + entry.getKey() + ")");
+        }
 
         studySessionDAO = new StudySessionDAO();
 
@@ -68,52 +74,54 @@ public class AddStudySessionController {
     }
 
     public void sessionSaveButtonClicked() {
-        String courseName = courseNameChoiceBox.getValue();
-        String sessionTitle = sessionTitleTextField.getText();
-        String description = descriptionTextArea.getText();
-        LocalDate date = sessionDatePicker.getValue();
-        String fromTimeString = fromChoiceBox.getValue();
-        String toTimeString = toChoiceBox.getValue();
+        String selectedItem = courseNameChoiceBox.getValue();
+        if (selectedItem != null) {
+            int courseId = Integer.parseInt(selectedItem.replaceAll("[^0-9]", ""));
+            String sessionTitle = sessionTitleTextField.getText();
+            String description = descriptionTextArea.getText();
+            LocalDate date = sessionDatePicker.getValue();
+            String fromTimeString = fromChoiceBox.getValue();
+            String toTimeString = toChoiceBox.getValue();
 
 
-        if (date != null && fromTimeString != null && toTimeString != null) {
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
-            LocalDateTime fromTime = LocalDateTime.of(date, LocalTime.parse(fromTimeString, timeFormatter));
-            LocalDateTime toTime = LocalDateTime.of(date, LocalTime.parse(toTimeString, timeFormatter));
-            System.out.println(fromTime);
-            System.out.println(toTime);
-            System.out.println(date);
-            if (fromTime.isAfter(toTime)) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Invalid time");
-                alert.setContentText("From time must be before to time");
-                alert.showAndWait();
-                return;
-            }
+            if (date != null && fromTimeString != null && toTimeString != null) {
+                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
+                LocalDateTime fromTime = LocalDateTime.of(date, LocalTime.parse(fromTimeString, timeFormatter));
+                LocalDateTime toTime = LocalDateTime.of(date, LocalTime.parse(toTimeString, timeFormatter));
+                System.out.println(fromTime);
+                System.out.println(toTime);
+                System.out.println(date);
+                if (fromTime.isAfter(toTime)) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Invalid time");
+                    alert.setContentText("From time must be before to time");
+                    alert.showAndWait();
+                    return;
+                }
 
-                StudySession studySession = new StudySession(courseName, sessionTitle, description, fromTime, toTime);
+                StudySession studySession = new StudySession(courseId, sessionTitle, description, fromTime, toTime);
                 studySessionDAO.add(studySession);
-            System.out.println("Study session added" + studySession.getCourseName() + " " + studySession.getTitle() + " " + studySession.getDescription());
+                System.out.println("Study session added, CourseId:" + studySession.getCourseId() + " " + studySession.getTitle() + " " + studySession.getDescription());
             }
-        new Thread(() -> {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            new Thread(() -> {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
-            Platform.runLater(() -> {
-                System.out.println("Updating UI...");
-                timetableController.fetchAndDisplayCurrentWeeksData();
-                System.out.println("UI updated.");
-            });
-        }).start();
+                Platform.runLater(() -> {
+                    System.out.println("Updating UI...");
+                    timetableController.fetchAndDisplayCurrentWeeksData();
+                    System.out.println("UI updated.");
+                });
+            }).start();
 
 
-
-        sessionBackButtonClicked();
+            sessionBackButtonClicked();
         }
+    }
 
     public void setTimetableController(TimetableController timetableController) {
         this.timetableController = timetableController;

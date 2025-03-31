@@ -12,20 +12,22 @@ public class CourseDAO implements IDAO<Course> {
 
     // Get a Course from the database
     @Override
-    public Course get(String id) {
+    public Course get(int id) {
         conn = MariaDbConnection.getConnection();
-        String sql = "SELECT * FROM course WHERE course_name = ?";
+        String sql = "SELECT * FROM course WHERE course_id = ?";;
         try {
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setString(1, id);
+            st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
-                return new Course(
+                Course course = new Course(
                         rs.getString("course_name"),
                         rs.getString("instructor"),
                         rs.getDate("start_date").toLocalDate(),
                         rs.getDate("end_date").toLocalDate()
                 );
+                course.setCourseID(rs.getInt("course_id"));
+                return course;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -39,12 +41,17 @@ public class CourseDAO implements IDAO<Course> {
         String sql = "INSERT INTO course (course_name, instructor, start_date, end_date) VALUES (?, ?, ?, ?)";
         Connection conn = MariaDbConnection.getConnection();
         try {
-            PreparedStatement st = conn.prepareStatement(sql);
+            PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, course.getCourseName());
             st.setString(2, course.getInstructor());
             st.setDate(3, Date.valueOf(course.getStartDate()));
             st.setDate(4, Date.valueOf(course.getEndDate()));
             st.executeUpdate();
+
+            ResultSet rs = st.getGeneratedKeys();
+            if (rs.next()) {
+                course.setCourseID(rs.getInt(1));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -54,14 +61,14 @@ public class CourseDAO implements IDAO<Course> {
     @Override
     public void update(Course course) {
         conn = MariaDbConnection.getConnection();
-        String sql = "UPDATE course SET (course_name, instructor, start_date, end_date) VALUES (?, ?, ?, ?) WHERE course_name = ?";
+        String sql = "UPDATE course SET (course_name, instructor, start_date, end_date) VALUES (?, ?, ?, ?) WHERE course_id = ?";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, course.getCourseName());
             st.setString(2, course.getInstructor());
             st.setDate(3, Date.valueOf(course.getStartDate()));
             st.setDate(4, Date.valueOf(course.getEndDate()));
-            st.setString(5, course.getCourseName());
+            st.setInt(5, course.getCourseID());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -69,11 +76,11 @@ public class CourseDAO implements IDAO<Course> {
 
 
     // Delete a Course from the database
-    public void delete(String id) {
-        String sql = "DELETE FROM course WHERE course_name = ?";
+    public void delete(int id) {
+        String sql = "DELETE FROM course WHERE course_id = ?";
         try (Connection conn = MariaDbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, id);
+            stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

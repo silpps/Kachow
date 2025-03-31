@@ -13,11 +13,14 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 public class AddClassScheduleController {
     private IDAO<ClassSchedule> classScheduleDAO;
 
     private TimetableController timetableController;
+
+    private Map<Integer, String> courses;
 
     @FXML
     private DatePicker sessionDatePicker;
@@ -54,8 +57,10 @@ public class AddClassScheduleController {
     private void initialize() {
         classScheduleDAO = new ClassScheduleDAO();
         TimeTableDAO timeTableDAO = new TimeTableDAO();
-        List<String> courseNames = timeTableDAO.getCourseNames();
-        courseNameChoiceBox.getItems().addAll(courseNames);
+        courses = timeTableDAO.getCourses();
+        for (Map.Entry<Integer, String> entry : courses.entrySet()) {
+            courseNameChoiceBox.getItems().add(entry.getValue() + " (ID: " + entry.getKey() + ")");
+        }
 
         fromChoiceBox.getItems().addAll(startTimes);
         toChoiceBox.getItems().addAll(endTimes);
@@ -72,56 +77,60 @@ public class AddClassScheduleController {
     @FXML
     private void scheduleSaveButtonClicked() {
         // Get the selected course name
-        String courseName = courseNameChoiceBox.getValue();
+        String selectedItem = courseNameChoiceBox.getValue();
 
-        // Get location
-        String location = locationTextField.getText();
-        System.out.println("Location: " + location);
-        String description = scheduleDescriptionArea.getText();
-        LocalDate date = sessionDatePicker.getValue();
-        String fromTimeString = fromChoiceBox.getValue();
-        String toTimeString = toChoiceBox.getValue();
+        if (selectedItem != null) {
+            // Get the course ID
+            int courseId = Integer.parseInt(selectedItem.replaceAll("[^0-9]", ""));
+            // Get location
+            String location = locationTextField.getText();
+            System.out.println("Location: " + location);
+            String description = scheduleDescriptionArea.getText();
+            LocalDate date = sessionDatePicker.getValue();
+            String fromTimeString = fromChoiceBox.getValue();
+            String toTimeString = toChoiceBox.getValue();
 
 
-        // Parse the start and end times
-        if (date != null && fromTimeString != null && toTimeString != null) {
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
-            LocalDateTime fromTime = LocalDateTime.of(date, LocalTime.parse(fromTimeString, timeFormatter));
-            LocalDateTime toTime = LocalDateTime.of(date, LocalTime.parse(toTimeString, timeFormatter));
-            System.out.println(fromTime);
-            System.out.println(toTime);
-            System.out.println(date);
-            if (fromTime.isAfter(toTime)) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Invalid time");
-                alert.setContentText("From time must be before to time");
-                alert.showAndWait();
-                return;
+            // Parse the start and end times
+            if (date != null && fromTimeString != null && toTimeString != null) {
+                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
+                LocalDateTime fromTime = LocalDateTime.of(date, LocalTime.parse(fromTimeString, timeFormatter));
+                LocalDateTime toTime = LocalDateTime.of(date, LocalTime.parse(toTimeString, timeFormatter));
+                System.out.println(fromTime);
+                System.out.println(toTime);
+                System.out.println(date);
+                if (fromTime.isAfter(toTime)) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Invalid time");
+                    alert.setContentText("From time must be before to time");
+                    alert.showAndWait();
+                    return;
+                }
+                ClassSchedule classSchedule = new ClassSchedule(courseId, location, description, fromTime, toTime);
+                classScheduleDAO.add(classSchedule);
+                System.out.println("Class Schedule added" + classSchedule.getCourseId() + " " + classSchedule.getLocation());
+
+
             }
-            ClassSchedule classSchedule = new ClassSchedule(courseName, location,  description, fromTime, toTime);
-            classScheduleDAO.add(classSchedule);
-            System.out.println("Class Schedule added" + classSchedule.getCourseName() + " " + classSchedule.getLocation());
 
+            new Thread(() -> {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
+                Platform.runLater(() -> {
+                    System.out.println("Updating UI...");
+                    timetableController.fetchAndDisplayCurrentWeeksData();
+                    System.out.println("UI updated.");
+                });
+            }).start();
+
+            // Close the window
+            scheduleBackButtonClicked();
         }
-
-        new Thread(() -> {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            Platform.runLater(() -> {
-                System.out.println("Updating UI...");
-                timetableController.fetchAndDisplayCurrentWeeksData();
-                System.out.println("UI updated.");
-            });
-        }).start();
-
-        // Close the window
-        scheduleBackButtonClicked();
     }
 
     public void setTimetableController(TimetableController timetableController) {

@@ -3,23 +3,23 @@ import java.time.LocalDateTime;
 
 //TODO: Lisää deadline aika
 public class Assignment {
-    private String courseName;
+    private final int courseId;
     private String title;
     private String description;
     private LocalDateTime deadline;
     private String status;
     private int id;
-//
-    public Assignment(String courseName, String title, String description, LocalDateTime deadline, String status) {
-        this.courseName = courseName;
+
+    public Assignment(int courseId, String title, String description, LocalDateTime deadline, String status) {
+        this.courseId = courseId;
         this.title = title;
         this.description = description;
         this.deadline = deadline;
         this.status = status;
     }
 
-    public String getCourseName() {
-        return courseName;
+    public int getCourseId() {
+        return courseId;
     }
 
     public String getTitle() {
@@ -46,10 +46,6 @@ public class Assignment {
         this.id = id;
     }
 
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
-
     public void setTitle(String title) {
         this.title = title;
     }
@@ -67,6 +63,6 @@ public class Assignment {
     }
 
     public String getDetails() {
-        return "Title: " + title + "\nCourse: " + courseName + "\nDescription: " + description + "\nDeadline: " + deadline + "\nStatus: " + status;
+        return "Title: " + title + "\nCourse: " + courseId + "\nDescription: " + description + "\nDeadline: " + deadline + "\nStatus: " + status;
     }
 }
