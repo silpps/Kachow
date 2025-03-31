@@ -48,6 +48,9 @@ public class AddAssignmentController {
     private Label addAssignmentTitleLabel, assignmentCourseNameLabel, assignmentTitleLabel, assignmentDescriptionLabel, dateLabel, deadlineLabel, timeLabel, assignmentProgressLabel;
 
     @FXML
+    private Label courseErrorLabel, titleErrorLabel, dateErrorLabel, timeErrorLabel, progressErrorLabel;
+
+    @FXML
     private ChoiceBox<String> deadlineChoiceBox;
 
     private final String[] deadlineTimes = {"6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00",
@@ -63,7 +66,7 @@ public class AddAssignmentController {
         timeTableDAO = new TimeTableDAO();
         courses = timeTableDAO.getCourses();
         for (Map.Entry<Integer, String> entry : courses.entrySet()) {
-            courseNameChoiceBox.getItems().add(entry.getValue());
+            courseNameChoiceBox.getItems().add(entry.getValue() + " (ID: " + entry.getKey() + ")");
         }
 
         assignmentDAO = new AssignmentDAO();
@@ -77,12 +80,22 @@ public class AddAssignmentController {
     private void assignmentSaveButtonClicked() {
         // Save the assignment details
         String selectedItem = courseNameChoiceBox.getValue();
+        String assignmentTitle = assignmentTitleTextField.getText();
+        String description = descriptionTextArea.getText();
+        LocalDate date = assignmentDatePicker.getValue();
+        String deadlineTimeString = deadlineChoiceBox.getValue();
+        if (selectedItem == null || assignmentTitle.isEmpty() || date == null || deadlineTimeString == null || (!notStartedCheckBox.isSelected() && !ongoingCheckBox.isSelected())) {
+            courseErrorLabel.setText(selectedItem == null ? bundle.getString("courseErrorLabel") : "");
+            titleErrorLabel.setText(assignmentTitle.isEmpty() ? bundle.getString("titleErrorLabel") : "");
+            dateErrorLabel.setText(date == null ? bundle.getString("dateErrorLabel") : "");
+            timeErrorLabel.setText(deadlineTimeString == null ? bundle.getString("timeErrorLabel") : "");
+            progressErrorLabel.setText((!notStartedCheckBox.isSelected() && !ongoingCheckBox.isSelected()) ? bundle.getString("progressErrorLabel") : "");
+            return;
+        }
+
         if (selectedItem != null) {
             int courseId = Integer.parseInt(selectedItem.replaceAll("[^0-9]", ""));
-            String assignmentTitle = assignmentTitleTextField.getText();
-            String description = descriptionTextArea.getText();
-            LocalDate date = assignmentDatePicker.getValue();
-            String deadlineTimeString = deadlineChoiceBox.getValue();
+
             String status = "";
             if (notStartedCheckBox.isSelected()) {
                 status = "Not started";
