@@ -38,10 +38,10 @@ public class AddCourseController {
     private Button addCourseBackButton;
 
     @FXML
-    private Label addCourseTitleLabel, courseNameLabel, instructorLabel, locationLabel, startDateLabel, endDateLabel;
+    private Label addCourseTitleLabel, courseNameLabel, instructorLabel, startDateLabel, endDateLabel;
 
     @FXML
-    private Label nameErrorLabel, instructorErrorLabel, locationErrorLabel, startDateErrorLabel, endDateErrorLabel;
+    private Label nameErrorLabel, instructorErrorLabel, startDateErrorLabel, endDateErrorLabel;
 
     private TimetableController timetableController;
 
@@ -100,7 +100,6 @@ public class AddCourseController {
             addCourseTitleLabel.setText(bundle.getString("titleLabel"));
             courseNameLabel.setText(bundle.getString("courseNameLabel"));
             instructorLabel.setText(bundle.getString("instructorLabel"));
-            locationLabel.setText(bundle.getString("locationBoxLabel"));
             startDateLabel.setText(bundle.getString("startDateLabel"));
             endDateLabel.setText(bundle.getString("endDateLabel"));
 
