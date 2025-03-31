@@ -14,12 +14,16 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.Locale;
 
 public class AddStudySessionController {
 
     private IDAO<StudySession> studySessionDAO;
 
     private Map<Integer, String> courses;
+
+    private ResourceBundle bundle;
 
     @FXML
     private ChoiceBox<String> courseNameChoiceBox;
@@ -44,6 +48,9 @@ public class AddStudySessionController {
 
     @FXML
     private Button sessionBackButton;
+
+    @FXML
+    private Label addStudySessionTitleLabel, addCourseNameLabel, addSessionTitleLabel, addSessionDescriptionLabel, sessionDateLabel, fromLabel, toLabel;
 
     private final String[] startTimes = {"6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00",
             "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"};
@@ -104,6 +111,9 @@ public class AddStudySessionController {
                 studySessionDAO.add(studySession);
                 System.out.println("Study session added, CourseId:" + studySession.getCourseId() + " " + studySession.getTitle() + " " + studySession.getDescription());
             }
+
+            ResourceBundle bundle = ResourceBundle.getBundle("messages", Locale.getDefault());
+
             new Thread(() -> {
                 try {
                     Thread.sleep(500);
@@ -113,7 +123,7 @@ public class AddStudySessionController {
 
                 Platform.runLater(() -> {
                     System.out.println("Updating UI...");
-                    timetableController.fetchAndDisplayCurrentWeeksData();
+                    timetableController.fetchAndDisplayCurrentWeeksData(bundle);
                     System.out.println("UI updated.");
                 });
             }).start();
@@ -122,6 +132,27 @@ public class AddStudySessionController {
             sessionBackButtonClicked();
         }
     }
+
+    public void setBundle(ResourceBundle bundle) {
+        this.bundle = bundle;
+        translateUI();
+    }
+
+    private void translateUI() {
+        if (bundle != null) {
+            sessionSaveButton.setText(bundle.getString("saveButton"));
+            sessionBackButton.setText(bundle.getString("backButton"));
+            addStudySessionTitleLabel.setText(bundle.getString("addStudySessionTitleLabel"));
+            addCourseNameLabel.setText(bundle.getString("courseNameLabel"));
+            addSessionTitleLabel.setText(bundle.getString("titleLabel"));
+            addSessionDescriptionLabel.setText(bundle.getString("descriptionLabel"));
+            sessionDateLabel.setText(bundle.getString("dateLabel"));
+            fromLabel.setText(bundle.getString("fromTimeLabel"));
+            toLabel.setText(bundle.getString("toTimeLabel"));
+
+        }
+    }
+
 
     public void setTimetableController(TimetableController timetableController) {
         this.timetableController = timetableController;

@@ -12,14 +12,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AddAssignmentController {
     private TimeTableDAO timeTableDAO;
     private TimetableController timetableController;
     private Map<Integer, String> courses;
+    private ResourceBundle bundle;
 
     private IDAO<Assignment> assignmentDAO;
 
@@ -40,6 +39,9 @@ public class AddAssignmentController {
 
     @FXML
     private Button backButton, assignmentSaveButton;
+
+    @FXML
+    private Label addAssignmentTitleLabel, assignmentCourseNameLabel, assignmentTitleLabel, assignmentDescriptionLabel, dateLabel, deadlineLabel, timeLabel, assignmentProgressLabel;
 
     @FXML
     private ChoiceBox<String> deadlineChoiceBox;
@@ -96,6 +98,7 @@ public class AddAssignmentController {
                 System.out.println("Assignment added" + assignment.getCourseId() + " " + assignment.getTitle() + " " + assignment.getDescription() + " " + assignment.getDeadline() + " " + assignment.getStatus());
             }
 
+            ResourceBundle bundle = ResourceBundle.getBundle("messages", Locale.getDefault());
             // Small delay to ensure DB update before fetching data
             // Update the UI after saving the assignment
             new Thread(() -> {
@@ -107,7 +110,7 @@ public class AddAssignmentController {
 
                 Platform.runLater(() -> {
                     System.out.println("Updating UI...");
-                    timetableController.fetchAndDisplayCurrentWeeksData();
+                    timetableController.fetchAndDisplayCurrentWeeksData(bundle);
                     System.out.println("UI updated.");
                 });
             }).start();
@@ -118,5 +121,28 @@ public class AddAssignmentController {
 
     public void setTimetableController(TimetableController timetableController) {
         this.timetableController = timetableController;
+    }
+
+    public void setBundle(ResourceBundle bundle) {
+        this.bundle = bundle;
+        translateUI();
+    }
+
+    private void translateUI() {
+        if (bundle != null) {
+            assignmentSaveButton.setText(bundle.getString("saveButton"));
+            backButton.setText(bundle.getString("backButton"));
+            notStartedCheckBox.setText(bundle.getString("notStartedButton"));
+            ongoingCheckBox.setText(bundle.getString("ongoingButton"));
+            addAssignmentTitleLabel.setText(bundle.getString("addAssignmentTitleLabel"));
+            assignmentCourseNameLabel.setText(bundle.getString("courseNameLabel"));
+            assignmentTitleLabel.setText(bundle.getString("titleLabel"));
+            assignmentDescriptionLabel.setText(bundle.getString("descriptionLabel"));
+            dateLabel.setText(bundle.getString("dateLabel"));
+            deadlineLabel.setText(bundle.getString("deadlineLabel"));
+            timeLabel.setText(bundle.getString("timeLabel"));
+            assignmentProgressLabel.setText(bundle.getString("progressLabel"));
+
+        }
     }
 }

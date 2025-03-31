@@ -7,9 +7,13 @@ import javafx.scene.control.*;
 import models.Course;
 
 import java.time.LocalDate;
+import java.util.ResourceBundle;
+
 public class AddCourseController {
 
     private IDAO<Course> courseDAO;
+
+    private ResourceBundle bundle;
 
     @FXML
     private DatePicker startDatePicker;
@@ -28,6 +32,9 @@ public class AddCourseController {
 
     @FXML
     private Button addCourseBackButton;
+
+    @FXML
+    private Label addCourseTitleLabel, courseNameLabel, instructorLabel, locationLabel, startDateLabel, endDateLabel;
 
     private TimetableController timetableController;
 
@@ -70,6 +77,26 @@ public class AddCourseController {
          courseDAO = new CourseDAO();
 
      }
+
+    public void setBundle(ResourceBundle bundle) {
+        this.bundle = bundle;
+        translateUI();
+    }
+
+    private void translateUI() {
+        if (bundle != null) {
+            addCourseSaveButton.setText(bundle.getString("saveButton"));
+            addCourseBackButton.setText(bundle.getString("backButton"));
+            addCourseTitleLabel.setText(bundle.getString("titleLabel"));
+            courseNameLabel.setText(bundle.getString("courseNameLabel"));
+            instructorLabel.setText(bundle.getString("instructorLabel"));
+            locationLabel.setText(bundle.getString("locationBoxLabel"));
+            startDateLabel.setText(bundle.getString("startDateLabel"));
+            endDateLabel.setText(bundle.getString("endDateLabel"));
+
+        }
+    }
+
 
 
     public void setTimetableController(TimetableController timetableController) {

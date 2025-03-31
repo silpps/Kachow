@@ -10,8 +10,8 @@
     <children>
         <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="742.0" prefWidth="1276.0" stylesheets="@timetable.css" VBox.vgrow="ALWAYS">
             <children>
-                <Label id="studyFlowLabel" fx:id="label" alignment="CENTER" layoutX="533.0" layoutY="24.0" prefHeight="68.0" prefWidth="209.0" text="StudyFlow" />
-                <Button id="addButton" layoutX="871.0" layoutY="43.0" mnemonicParsing="false" onAction="#addButtonClicked" prefHeight="25.0" prefWidth="81.0" text="Add" />
+                <Label id="studyFlowLabel" fx:id="nameLabel" alignment="CENTER" layoutX="533.0" layoutY="24.0" prefHeight="68.0" prefWidth="209.0" />
+                <Button id="addButton" fx:id="addButton" layoutX="871.0" layoutY="43.0" mnemonicParsing="false" onAction="#addButtonClicked" prefHeight="25.0" prefWidth="81.0" />
             <HBox id="weekElement" layoutX="148.0" layoutY="100.0" prefHeight="573.0" prefWidth="980.0">
                <children>
                   <VBox id="monday" alignment="CENTER" prefHeight="591.0" prefWidth="140.0">
@@ -19,7 +19,7 @@
                         <VBox prefHeight="60.0" prefWidth="140.0" styleClass="dayHeader">
                            <children>
                               <Label fx:id="mondayDate" alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="140.0" />
-                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="140.0" text="Monday" />
+                              <Label fx:id="mondayLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="140.0" />
                            </children>
                         </VBox>
                         <VBox fx:id="mondayColumn" alignment="TOP_CENTER" prefHeight="533.0" prefWidth="140.0" styleClass="taskColumn" />
@@ -30,7 +30,7 @@
                         <VBox prefHeight="60.0" prefWidth="140.0" styleClass="dayHeader">
                            <children>
                               <Label fx:id="tuesdayDate" alignment="CENTER" contentDisplay="CENTER" prefHeight="29.0" prefWidth="140.0" />
-                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="29.0" prefWidth="140.0" text="Tuesday" />
+                              <Label fx:id="tuesdayLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="29.0" prefWidth="140.0" />
                            </children>
                         </VBox>
                         <VBox fx:id="tuesdayColumn" alignment="TOP_CENTER" prefHeight="533.0" prefWidth="140.0" styleClass="taskColumn" />
@@ -41,7 +41,7 @@
                         <VBox prefHeight="60.0" prefWidth="140.0" styleClass="dayHeader">
                            <children>
                               <Label fx:id="wednesdayDate" alignment="CENTER" contentDisplay="CENTER" prefHeight="29.0" prefWidth="140.0" />
-                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="29.0" prefWidth="140.0" text="Wednesday" />
+                              <Label fx:id="wednesdayLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="29.0" prefWidth="140.0" />
                            </children>
                         </VBox>
                         <VBox fx:id="wednesdayColumn" alignment="TOP_CENTER" prefHeight="533.0" prefWidth="140.0" styleClass="taskColumn" />
@@ -52,7 +52,7 @@
                         <VBox prefHeight="60.0" prefWidth="140.0" styleClass="dayHeader">
                            <children>
                               <Label fx:id="thursdayDate" alignment="CENTER" contentDisplay="CENTER" prefHeight="29.0" prefWidth="140.0" />
-                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="29.0" prefWidth="140.0" text="Thursday" />
+                              <Label fx:id="thursdayLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="29.0" prefWidth="140.0" />
                            </children>
                         </VBox>
                         <VBox fx:id="thursdayColumn" alignment="TOP_CENTER" prefHeight="533.0" prefWidth="140.0" styleClass="taskColumn" />
@@ -63,7 +63,7 @@
                         <VBox prefHeight="60.0" prefWidth="140.0" styleClass="dayHeader">
                            <children>
                               <Label fx:id="fridayDate" alignment="CENTER" contentDisplay="CENTER" prefHeight="29.0" prefWidth="140.0" />
-                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="29.0" prefWidth="140.0" text="Friday" />
+                              <Label fx:id="fridayLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="29.0" prefWidth="140.0" />
                            </children>
                         </VBox>
                         <VBox fx:id="fridayColumn" alignment="TOP_CENTER" prefHeight="533.0" prefWidth="140.0" styleClass="taskColumn" />
@@ -74,7 +74,7 @@
                         <VBox prefHeight="60.0" prefWidth="140.0" styleClass="dayHeader">
                            <children>
                               <Label fx:id="saturdayDate" alignment="CENTER" contentDisplay="CENTER" prefHeight="29.0" prefWidth="140.0" />
-                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="29.0" prefWidth="140.0" text="Saturday" />
+                              <Label fx:id="saturdayLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="29.0" prefWidth="140.0" />
                            </children>
                         </VBox>
                         <VBox fx:id="saturdayColumn" alignment="TOP_CENTER" prefHeight="533.0" prefWidth="140.0" styleClass="taskColumn" />
@@ -85,7 +85,7 @@
                         <VBox prefHeight="60.0" prefWidth="140.0" styleClass="dayHeader">
                            <children>
                               <Label fx:id="sundayDate" alignment="CENTER" contentDisplay="CENTER" prefHeight="29.0" prefWidth="140.0" />
-                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="29.0" prefWidth="140.0" text="Sunday" />
+                              <Label fx:id="sundayLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="29.0" prefWidth="140.0" />
                            </children>
                         </VBox>
                         <VBox fx:id="sundayColumn" alignment="TOP_CENTER" prefHeight="533.0" prefWidth="140.0" styleClass="taskColumn" />
@@ -102,9 +102,9 @@
             </HBox>
             <AnchorPane layoutX="430.0" layoutY="682.0" prefHeight="45.0" prefWidth="413.0">
                <children>
-                  <Button layoutX="14.0" layoutY="8.0" mnemonicParsing="false" onAction="#onEnglishClicked" prefHeight="30.0" prefWidth="37.0" text="EN" />
-                  <Button layoutX="188.0" layoutY="8.0" mnemonicParsing="false" onAction="#onKoreanClicked" prefHeight="30.0" prefWidth="37.0" text="KR" />
-                  <Button layoutX="361.0" layoutY="8.0" mnemonicParsing="false" onAction="#onPersianClicked" prefHeight="30.0" prefWidth="37.0" text="IR" />
+                  <Button fx:id="englishButton" layoutX="14.0" layoutY="8.0" mnemonicParsing="false" onAction="#onEnglishClicked" prefHeight="30.0" prefWidth="37.0" text="EN" />
+                  <Button fx:id="koreanButton" layoutX="188.0" layoutY="8.0" mnemonicParsing="false" onAction="#onKoreanClicked" prefHeight="30.0" prefWidth="37.0" text="KR" />
+                  <Button fx:id="arabicButton" layoutX="361.0" layoutY="8.0" mnemonicParsing="false" onAction="#onArabicClicked" prefHeight="30.0" prefWidth="37.0" text="AR" />
                </children>
             </AnchorPane>
             </children>

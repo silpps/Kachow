@@ -12,12 +12,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 public class AddExamController {
 
     private IDAO<Exam> examDAO;
     private Map<Integer, String> courses;
+    private ResourceBundle bundle;
 
     @FXML
     private ChoiceBox<String> courseNameChoiceBox;
@@ -33,6 +36,9 @@ public class AddExamController {
 
     @FXML
     private Button backButton, examSaveButton;
+
+    @FXML
+    private Label addExamTitleLabel, courseNameLabel, examDateLabel, fromLabel, locationLabel, descriptionLabel;
 
     @FXML
     private ChoiceBox<String> fromChoiceBox;
@@ -86,6 +92,7 @@ public class AddExamController {
                 examDAO.add(exam);
             }
 
+            ResourceBundle bundle = ResourceBundle.getBundle("messages", Locale.getDefault());
             // Update the UI after saving the exam
             new Thread(() -> {
                 try {
@@ -96,12 +103,30 @@ public class AddExamController {
 
                 Platform.runLater(() -> {
                     System.out.println("Updating UI...");
-                    timetableController.fetchAndDisplayCurrentWeeksData();
+                    timetableController.fetchAndDisplayCurrentWeeksData(bundle);
                     System.out.println("UI updated.");
                 });
             }).start();
 
             backButtonClicked();
+        }
+    }
+
+    public void setBundle(ResourceBundle bundle) {
+        this.bundle = bundle;
+        translateUI();
+    }
+
+    private void translateUI() {
+        if (bundle != null) {
+            examSaveButton.setText(bundle.getString("saveButton"));
+            backButton.setText(bundle.getString("backButton"));
+            addExamTitleLabel.setText(bundle.getString("titleLabel"));
+            courseNameLabel.setText(bundle.getString("courseNameLabel"));
+            examDateLabel.setText(bundle.getString("dateLabel"));
+            fromLabel.setText(bundle.getString("fromTimeLabel"));
+            descriptionLabel.setText(bundle.getString("descriptionLabel"));
+            locationLabel.setText(bundle.getString("locationBoxLabel"));
         }
     }
 

@@ -14,9 +14,12 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.Locale;
 
 public class AddClassScheduleController {
     private IDAO<ClassSchedule> classScheduleDAO;
+    private ResourceBundle bundle;
 
     private TimetableController timetableController;
 
@@ -45,6 +48,10 @@ public class AddClassScheduleController {
 
     @FXML
     private Button scheduleSaveButton;
+
+    @FXML
+    private Label addClassScheduleTitleLabel, courseNameLabel, locationLabel, sessionDateLabel, fromLabel, toLabel, descriptionLabel;
+
 
     private final String[] startTimes = {"6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00",
             "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"};
@@ -113,6 +120,7 @@ public class AddClassScheduleController {
 
 
             }
+            ResourceBundle bundle = ResourceBundle.getBundle("messages", Locale.getDefault());
 
             new Thread(() -> {
                 try {
@@ -123,13 +131,33 @@ public class AddClassScheduleController {
 
                 Platform.runLater(() -> {
                     System.out.println("Updating UI...");
-                    timetableController.fetchAndDisplayCurrentWeeksData();
+                    timetableController.fetchAndDisplayCurrentWeeksData(bundle);
                     System.out.println("UI updated.");
                 });
             }).start();
 
             // Close the window
             scheduleBackButtonClicked();
+        }
+    }
+
+    public void setBundle(ResourceBundle bundle) {
+        this.bundle = bundle;
+        translateUI();
+    }
+
+    private void translateUI() {
+        if (bundle != null) {
+            scheduleSaveButton.setText(bundle.getString("saveButton"));
+            scheduleBackButton.setText(bundle.getString("backButton"));
+            addClassScheduleTitleLabel.setText(bundle.getString("addClassScheduleTitleLabel"));
+            courseNameLabel.setText(bundle.getString("courseNameLabel"));
+            locationLabel.setText(bundle.getString("locationBoxLabel"));
+            sessionDateLabel.setText(bundle.getString("dateLabel"));
+            fromLabel.setText(bundle.getString("fromTimeLabel"));
+            toLabel.setText(bundle.getString("toTimeLabel"));
+            descriptionLabel.setText(bundle.getString("descriptionLabel"));
+
         }
     }
 
