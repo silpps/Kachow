@@ -14,7 +14,7 @@ public class View extends Application {
 
         @Override
         public void start(Stage stage) throws Exception {
-            Locale.setDefault(new Locale("en", "US"));
+            Locale.setDefault(new Locale("en", "UK"));
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/timetable.fxml"), ResourceBundle.getBundle("messages"));
             Parent root = fxmlLoader.load();
             stage.getIcons().add(new Image("/calendar.png"));

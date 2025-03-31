@@ -557,7 +557,7 @@ public class TimetableController implements Initializable {
 
     @FXML
     private void onEnglishClicked() {
-        Locale.setDefault(new Locale("en", "US"));
+        Locale.setDefault(new Locale("en", "UK"));
         this.locale = Locale.getDefault();
         System.out.println("English clicked");
         bundle = ResourceBundle.getBundle("messages", locale);
