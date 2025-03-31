@@ -563,7 +563,7 @@ public class TimetableController implements Initializable {
     private void onArabicClicked() {
         Locale.setDefault(new Locale("ar", "AE"));
         this.locale = Locale.getDefault();
-        System.out.println("Persian clicked");
+        System.out.println("Arabic clicked");
 
         loadLanguage(locale);
         ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
