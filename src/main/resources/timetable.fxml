@@ -93,11 +93,11 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox fx:id="weekBox" layoutX="148.0" layoutY="53.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="29.0" prefWidth="289.0">
+            <HBox fx:id="weekBox" alignment="TOP_CENTER" layoutX="148.0" layoutY="53.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="37.0" prefWidth="383.0">
                <children>
-                  <Button fx:id="previousWeekButton" mnemonicParsing="false" onAction="#showPreviousWeek" text="&lt;" />
-                  <Label fx:id="currentWeekLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="38.0" prefWidth="231.0" style="-fx-padding: 10px;" />
-                  <Button fx:id="nextWeekButton" mnemonicParsing="false" onAction="#showNextWeek" text="&gt;" />
+                  <Button fx:id="lastWeekButton" mnemonicParsing="false" onAction="#showPreviousWeek" text="Last" />
+                  <Label fx:id="currentWeekLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="37.0" prefWidth="241.0" style="-fx-padding: 10px;" />
+                  <Button fx:id="nextWeekButton" mnemonicParsing="false" onAction="#showNextWeek" text="Next" />
                </children>
             </HBox>
             <AnchorPane layoutX="430.0" layoutY="682.0" prefHeight="45.0" prefWidth="413.0">
