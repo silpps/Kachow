@@ -97,7 +97,7 @@ public class AddCourseController {
         if (bundle != null) {
             addCourseSaveButton.setText(bundle.getString("saveButton"));
             addCourseBackButton.setText(bundle.getString("backButton"));
-            addCourseTitleLabel.setText(bundle.getString("titleLabel"));
+            addCourseTitleLabel.setText(bundle.getString("addCourseTitleLabel"));
             courseNameLabel.setText(bundle.getString("courseNameLabel"));
             instructorLabel.setText(bundle.getString("instructorLabel"));
             startDateLabel.setText(bundle.getString("startDateLabel"));
