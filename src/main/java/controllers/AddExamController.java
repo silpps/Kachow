@@ -6,6 +6,7 @@ import dao.TimeTableDAO;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import models.Exam;
 
 import java.time.LocalDate;
@@ -21,6 +22,9 @@ public class AddExamController {
     private IDAO<Exam> examDAO;
     private Map<Integer, String> courses;
     private ResourceBundle bundle;
+
+    @FXML
+    private AnchorPane rootPane;
 
     @FXML
     private ChoiceBox<String> courseNameChoiceBox;
@@ -127,6 +131,10 @@ public class AddExamController {
             fromLabel.setText(bundle.getString("fromTimeLabel"));
             descriptionLabel.setText(bundle.getString("descriptionLabel"));
             locationLabel.setText(bundle.getString("locationBoxLabel"));
+
+            if (bundle.getLocale().getLanguage().equals("ar")) {
+                rootPane.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
+            }
         }
     }
 

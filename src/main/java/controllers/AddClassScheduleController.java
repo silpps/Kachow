@@ -6,6 +6,7 @@ import dao.TimeTableDAO;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import models.ClassSchedule;
 
 import java.time.LocalDate;
@@ -24,6 +25,9 @@ public class AddClassScheduleController {
     private TimetableController timetableController;
 
     private Map<Integer, String> courses;
+
+    @FXML
+    private AnchorPane rootPane;
 
     @FXML
     private DatePicker sessionDatePicker;
@@ -157,6 +161,10 @@ public class AddClassScheduleController {
             fromLabel.setText(bundle.getString("fromTimeLabel"));
             toLabel.setText(bundle.getString("toTimeLabel"));
             descriptionLabel.setText(bundle.getString("descriptionLabel"));
+
+            if (bundle.getLocale().getLanguage().equals("ar")) {
+                rootPane.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
+            }
 
         }
     }

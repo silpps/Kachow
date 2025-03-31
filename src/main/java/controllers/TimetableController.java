@@ -277,7 +277,7 @@ public class TimetableController implements Initializable {
             VBox popupVBox = new VBox(10);
             popupVBox.setStyle("-fx-padding: 20;");
 
-            Label titleLabel = new Label(bundle.getString("titleLabel") + ": ");
+            Label titleLabel = new Label(bundle.getString("titleLabel") + " ");
             TextField titleField = new TextField(getEventTitle(event));
 
             if (!(event instanceof ClassSchedule)) {
@@ -302,29 +302,29 @@ public class TimetableController implements Initializable {
                 }
             });
 
-            Label fromTimeLabel = new Label(bundle.getString("fromTimeLabel") + ": ");
+            Label fromTimeLabel = new Label(bundle.getString("fromTimeLabel") + " ");
             ChoiceBox<String> fromTimeChoiceBox = new ChoiceBox<>();
             fromTimeChoiceBox.getItems().addAll("06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00");
             fromTimeChoiceBox.setValue(getEventStartTime(event));
 
-            Label toTimeLabel = new Label(bundle.getString("toTimeLabel") + ": ");
+            Label toTimeLabel = new Label(bundle.getString("toTimeLabel") + " ");
             ChoiceBox<String> toTimeChoiceBox = new ChoiceBox<>();
             toTimeChoiceBox.getItems().addAll("07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00");
             toTimeChoiceBox.setValue(getEventEndTime(event));
 
-            Label descriptionLabel = new Label(bundle.getString("descriptionLabel") + ": ");
+            Label descriptionLabel = new Label(bundle.getString("descriptionLabel") + " ");
             TextArea descriptionField = new TextArea(getEventDescription(event));
 
             TextField locationField = null;
             if (event instanceof ClassSchedule classSchedule || event instanceof Exam exam) {
-                Label locationLabel = new Label(bundle.getString("locationBoxLabel") + ": ");
+                Label locationLabel = new Label(bundle.getString("locationBoxLabel") + " ");
                 locationField = new TextField(getEventLocation(event));
                 popupVBox.getChildren().addAll(locationLabel, locationField);
             }
             final TextField finalLocationField = locationField;
 
             if (event instanceof Assignment assignment) {
-                Label statusLabel = new Label(bundle.getString("statusLabel") + ": ");
+                Label statusLabel = new Label(bundle.getString("statusLabel") + " ");
                 ToggleGroup statusGroup = new ToggleGroup();
 
                 RadioButton notStartedButton = new RadioButton(bundle.getString("notStartedButton"));
@@ -349,8 +349,8 @@ public class TimetableController implements Initializable {
                 timeBox.getChildren().add(toTimeChoiceBox);
             }
 
-            Button saveButton = new Button("Save");
-            Button deleteButton = new Button("Delete");
+            Button saveButton = new Button(bundle.getString("saveButton"));
+            Button deleteButton = new Button(bundle.getString("deleteButton"));
 
             HBox buttonHBox = new HBox(30, deleteButton, saveButton);
             buttonHBox.setAlignment(Pos.CENTER);
@@ -360,6 +360,9 @@ public class TimetableController implements Initializable {
 
             popupVBox.getChildren().addAll(dateLabel, datePicker, timeBox, descriptionLabel, descriptionField, buttonHBox);
 
+            if (bundle.getLocale().getLanguage().equals("ar")) {
+                popupVBox.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
+            }
             Scene popupScene = new Scene(popupVBox, 300, 600);
             popupScene.getStylesheets().add("/timetable.css");
             popupStage.setScene(popupScene);
@@ -540,7 +543,7 @@ public class TimetableController implements Initializable {
         Locale.setDefault(new Locale("en", "US"));
         this.locale = Locale.getDefault();
         System.out.println("English clicked");
-        ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
+        bundle = ResourceBundle.getBundle("messages", locale);
         loadLanguage(locale);
 
         fetchAndDisplayCurrentWeeksData(bundle);
@@ -551,7 +554,7 @@ public class TimetableController implements Initializable {
         Locale.setDefault(new Locale("ko", "KR"));
         this.locale = Locale.getDefault();
         System.out.println("Korean clicked");
-        ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
+        bundle = ResourceBundle.getBundle("messages", locale);
         loadLanguage(locale);
 
         fetchAndDisplayCurrentWeeksData(bundle);
@@ -566,7 +569,7 @@ public class TimetableController implements Initializable {
         System.out.println("Arabic clicked");
 
         loadLanguage(locale);
-        ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
+        bundle = ResourceBundle.getBundle("messages", locale);
 
 
         fetchAndDisplayCurrentWeeksData(bundle);

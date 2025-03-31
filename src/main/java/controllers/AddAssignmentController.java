@@ -6,6 +6,7 @@ import dao.TimeTableDAO;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import models.Assignment;
 
 import java.time.LocalDate;
@@ -21,6 +22,9 @@ public class AddAssignmentController {
     private ResourceBundle bundle;
 
     private IDAO<Assignment> assignmentDAO;
+
+    @FXML
+    private AnchorPane rootPane;
 
     @FXML
     private ChoiceBox<String> courseNameChoiceBox;
@@ -59,7 +63,7 @@ public class AddAssignmentController {
         timeTableDAO = new TimeTableDAO();
         courses = timeTableDAO.getCourses();
         for (Map.Entry<Integer, String> entry : courses.entrySet()) {
-            courseNameChoiceBox.getItems().add(entry.getValue() + " (ID: " + entry.getKey() + ")");
+            courseNameChoiceBox.getItems().add(entry.getValue());
         }
 
         assignmentDAO = new AssignmentDAO();
@@ -142,6 +146,10 @@ public class AddAssignmentController {
             deadlineLabel.setText(bundle.getString("deadlineLabel"));
             timeLabel.setText(bundle.getString("timeLabel"));
             assignmentProgressLabel.setText(bundle.getString("progressLabel"));
+
+            if (bundle.getLocale().getLanguage().equals("ar")) {
+                rootPane.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
+            }
 
         }
     }

@@ -77,6 +77,10 @@ public class AddTaskController {
                     bundle.getString("exam"),
                     bundle.getString("studySession")
             );
+
+            if (bundle.getLocale().getLanguage().equals("ar")) {
+                taskPane.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
+            }
         }
     }
 

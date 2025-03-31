@@ -6,6 +6,7 @@ import dao.TimeTableDAO;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import models.StudySession;
 
 import java.time.LocalDate;
@@ -24,6 +25,9 @@ public class AddStudySessionController {
     private Map<Integer, String> courses;
 
     private ResourceBundle bundle;
+
+    @FXML
+    private AnchorPane rootPane;
 
     @FXML
     private ChoiceBox<String> courseNameChoiceBox;
@@ -150,6 +154,9 @@ public class AddStudySessionController {
             fromLabel.setText(bundle.getString("fromTimeLabel"));
             toLabel.setText(bundle.getString("toTimeLabel"));
 
+            if (bundle.getLocale().getLanguage().equals("ar")) {
+                rootPane.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
+            }
         }
     }
 

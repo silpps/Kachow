@@ -4,6 +4,7 @@ import dao.CourseDAO;
 import dao.IDAO;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import models.Course;
 
 import java.time.LocalDate;
@@ -14,6 +15,9 @@ public class AddCourseController {
     private IDAO<Course> courseDAO;
 
     private ResourceBundle bundle;
+
+    @FXML
+    private AnchorPane rootPane;
 
     @FXML
     private DatePicker startDatePicker;
@@ -94,6 +98,9 @@ public class AddCourseController {
             startDateLabel.setText(bundle.getString("startDateLabel"));
             endDateLabel.setText(bundle.getString("endDateLabel"));
 
+            if (bundle.getLocale().getLanguage().equals("ar")) {
+                rootPane.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
+            }
         }
     }
 
