@@ -12,5 +12,6 @@
       <ChoiceBox fx:id="taskChoiceBox" layoutX="120.0" layoutY="89.0" prefWidth="150.0" stylesheets="@timetable.css" />
       <Button fx:id="continueButton" layoutX="203.0" layoutY="183.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Continue" />
       <Button fx:id="backButton" layoutX="31.0" layoutY="183.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Back" />
+      <Label fx:id="taskErrorLabel" layoutX="120.0" layoutY="135.0" textFill="#c32828" />
    </children>
 </AnchorPane>

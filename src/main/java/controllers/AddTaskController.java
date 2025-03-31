@@ -26,7 +26,7 @@ public class AddTaskController {
     private AnchorPane taskPane;
 
     @FXML
-    private Label addPageTitleLabel, taskLabel;
+    private Label addPageTitleLabel, taskLabel, taskErrorLabel;
 
     private TimetableController timetableController;
     private ResourceBundle bundle; // Store translation bundle
@@ -98,6 +98,7 @@ public class AddTaskController {
         String taskChoice = taskChoiceBox.getValue();
         if (taskChoice == null) {
             System.out.println("Please select a task before proceeding.");
+            taskErrorLabel.setText(bundle.getString("taskErrorLabel"));
             return;
         }
 
