@@ -42,7 +42,10 @@ public class AddExamController {
     private Button backButton, examSaveButton;
 
     @FXML
-    private Label addExamTitleLabel, courseNameLabel, examDateLabel, fromLabel, locationLabel, descriptionLabel;
+    private Label addExamTitleLabel, courseNameLabel,  titleLabel ,examDateLabel, fromLabel, locationLabel, descriptionLabel;
+
+    @FXML
+    private Label courseErrorLabel, titleErrorLabel, dateErrorLabel, timeErrorLabel;
 
     @FXML
     private ChoiceBox<String> fromChoiceBox;
@@ -77,13 +80,23 @@ public class AddExamController {
     private void examSaveButtonClicked() {
         // Save the exam details
         String selectedItem = courseNameChoiceBox.getValue();
+        String examTitle = examTitleTextField.getText();
+        String description = descriptionTextArea.getText();
+        String location = locationTextField.getText();
+        LocalDate examDate = examDatePicker.getValue();
+        String fromTimeString = fromChoiceBox.getValue();
+
+        if (selectedItem == null || examTitle.isEmpty() || description.isEmpty() || location.isEmpty() || examDate == null || fromTimeString == null) {
+            courseErrorLabel.setText(selectedItem == null ? bundle.getString("courseErrorLabel") : "");
+            titleErrorLabel.setText(examTitle.isEmpty() ? bundle.getString("titleErrorLabel") : "");
+            dateErrorLabel.setText(examDate == null ? bundle.getString("dateErrorLabel") : "");
+            timeErrorLabel.setText(fromTimeString == null ? bundle.getString("timeErrorLabel") : "");
+            return;
+        }
+
         if (selectedItem != null) {
             int courseId = Integer.parseInt(selectedItem.replaceAll("[^0-9]", ""));
-            String examTitle = examTitleTextField.getText();
-            String description = descriptionTextArea.getText();
-            String location = locationTextField.getText();
-            LocalDate examDate = examDatePicker.getValue();
-            String fromTimeString = fromChoiceBox.getValue();
+
 
             if (examDate != null && fromTimeString != null) {
                 DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
@@ -125,7 +138,8 @@ public class AddExamController {
         if (bundle != null) {
             examSaveButton.setText(bundle.getString("saveButton"));
             backButton.setText(bundle.getString("backButton"));
-            addExamTitleLabel.setText(bundle.getString("titleLabel"));
+            addExamTitleLabel.setText(bundle.getString("addExamTitleLabel"));
+            titleLabel.setText(bundle.getString("titleLabel"));
             courseNameLabel.setText(bundle.getString("courseNameLabel"));
             examDateLabel.setText(bundle.getString("dateLabel"));
             fromLabel.setText(bundle.getString("fromTimeLabel"));
