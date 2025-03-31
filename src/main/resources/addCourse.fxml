@@ -21,5 +21,10 @@
       <DatePicker fx:id="startDatePicker" layoutX="596.0" layoutY="138.0" />
       <Label fx:id="endDateLabel" layoutX="490.0" layoutY="236.0" prefHeight="17.0" text="End Date:" />
       <DatePicker fx:id="endDatePicker" layoutX="596.0" layoutY="229.0" />
+      <Label fx:id="nameErrorLabel" layoutX="256.0" layoutY="175.0" textFill="#c32828" />
+      <Label fx:id="instructorErrorLabel" layoutX="256.0" layoutY="271.0" textFill="#c32828" />
+      <Label fx:id="locationErrorLabel" layoutX="256.0" layoutY="367.0" textFill="#c32828" />
+      <Label fx:id="endDateErrorLabel" layoutX="596.0" layoutY="271.0" textFill="#c32828" />
+      <Label fx:id="startDateErrorLabel" layoutX="596.0" layoutY="175.0" textFill="#c32828" />
    </children>
 </AnchorPane>
