@@ -20,10 +20,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.*;
 
 
 public class TimetableController implements Initializable {
+
+    @FXML
+    private HBox weekBox;
 
     @FXML
     private VBox mondayColumn, tuesdayColumn, wednesdayColumn, thursdayColumn, fridayColumn, saturdayColumn, sundayColumn;
@@ -32,7 +36,7 @@ public class TimetableController implements Initializable {
     private Label mondayDate, tuesdayDate, wednesdayDate, thursdayDate, fridayDate, saturdayDate, sundayDate, currentWeekLabel, nameLabel, mondayLabel, tuesdayLabel, wednesdayLabel, thursdayLabel, fridayLabel, saturdayLabel, sundayLabel;
 
     @FXML
-    private Button addButton;
+    private Button addButton, nextWeekButton, lastWeekButton;
 
     private TimeTableDAO timeTableDAO;
     private LocalDate startOfWeek;
@@ -74,8 +78,19 @@ public class TimetableController implements Initializable {
         loadLanguage(locale);
         // Format to dd/MM
         //TODO: Localize date format
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
-        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(locale);
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(locale);
+
+        nextWeekButton.setText(bundle.getString("nextWeekButton"));
+        lastWeekButton.setText(bundle.getString("lastWeekButton"));
+
+        if (locale.getLanguage().equals("ar")) {
+            weekBox.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
+        }
+        else
+        {
+            weekBox.setNodeOrientation(javafx.geometry.NodeOrientation.LEFT_TO_RIGHT);
+        }
 
         // Set the dates to the labels
         mondayDate.setText(startOfWeek.format(formatter));
@@ -89,6 +104,8 @@ public class TimetableController implements Initializable {
 
         //TODO: Localize date format
         currentWeekLabel.setText(startOfWeek.format(formatter2) + " - " + endOfWeek.format(formatter2));
+
+
 
         // Fetch current week's data from database
         List<ClassSchedule> classSchedules = timeTableDAO.getClassSchedule(startOfWeek, endOfWeek);
