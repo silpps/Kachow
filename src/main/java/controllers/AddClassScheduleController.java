@@ -56,6 +56,8 @@ public class AddClassScheduleController {
     @FXML
     private Label addClassScheduleTitleLabel, courseNameLabel, locationLabel, sessionDateLabel, fromLabel, toLabel, descriptionLabel;
 
+    @FXML
+    private Label courseErrorLabel, dateErrorLabel, fromTimeErrorLabel, toTimeErrorLabel;
 
     private final String[] startTimes = {"6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00",
             "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"};
@@ -89,17 +91,25 @@ public class AddClassScheduleController {
     private void scheduleSaveButtonClicked() {
         // Get the selected course name
         String selectedItem = courseNameChoiceBox.getValue();
+        String location = locationTextField.getText();
+        System.out.println("Location: " + location);
+        String description = scheduleDescriptionArea.getText();
+        LocalDate date = sessionDatePicker.getValue();
+        String fromTimeString = fromChoiceBox.getValue();
+        String toTimeString = toChoiceBox.getValue();
+
+        if (selectedItem == null || date == null || fromTimeString == null || toTimeString == null) {
+            courseErrorLabel.setText(selectedItem == null ? bundle.getString("courseErrorLabel") : "");
+            dateErrorLabel.setText(date == null ? bundle.getString("dateErrorLabel") : "");
+            fromTimeErrorLabel.setText(fromTimeString == null ? bundle.getString("timeErrorLabel") : "");
+            toTimeErrorLabel.setText(toTimeString == null ? bundle.getString("timeErrorLabel") : "");
+            return;
+        }
 
         if (selectedItem != null) {
             // Get the course ID
             int courseId = Integer.parseInt(selectedItem.replaceAll("[^0-9]", ""));
-            // Get location
-            String location = locationTextField.getText();
-            System.out.println("Location: " + location);
-            String description = scheduleDescriptionArea.getText();
-            LocalDate date = sessionDatePicker.getValue();
-            String fromTimeString = fromChoiceBox.getValue();
-            String toTimeString = toChoiceBox.getValue();
+
 
 
             // Parse the start and end times
@@ -111,11 +121,7 @@ public class AddClassScheduleController {
                 System.out.println(toTime);
                 System.out.println(date);
                 if (fromTime.isAfter(toTime)) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText("Invalid time");
-                    alert.setContentText("From time must be before to time");
-                    alert.showAndWait();
+                    fromTimeErrorLabel.setText(bundle.getString("toTimeBeforeFromTimeError"));
                     return;
                 }
                 ClassSchedule classSchedule = new ClassSchedule(courseId, location, description, fromTime, toTime);
