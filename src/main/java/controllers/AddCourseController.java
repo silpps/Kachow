@@ -38,7 +38,10 @@ public class AddCourseController {
     private Button addCourseBackButton;
 
     @FXML
-    private Label addCourseTitleLabel, courseNameLabel, instructorLabel, locationLabel, startDateLabel, endDateLabel;
+    private Label addCourseTitleLabel, courseNameLabel, instructorLabel, startDateLabel, endDateLabel;
+
+    @FXML
+    private Label nameErrorLabel, instructorErrorLabel, startDateErrorLabel, endDateErrorLabel;
 
     private TimetableController timetableController;
 
@@ -50,13 +53,16 @@ public class AddCourseController {
         LocalDate startDate = startDatePicker.getValue();
         LocalDate endDate = endDatePicker.getValue();
 
+        if (courseName.isEmpty() || instructor.isEmpty() || startDate == null || endDate == null) {
+            nameErrorLabel.setText(courseName.isEmpty() ? bundle.getString("courseNameErrorLabel") : "");
+            instructorErrorLabel.setText(instructor.isEmpty() ? bundle.getString("instructionErrorLabel") : "");
+            startDateErrorLabel.setText(startDate == null ? bundle.getString("startDateErrorLabel") : "");
+            endDateErrorLabel.setText(endDate == null ? bundle.getString("endDateErrorLabel") : "");
+            return;
+        }
 
         if (startDate.isAfter(endDate)) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Invalid date");
-            alert.setContentText("Start date must be before end date");
-            alert.showAndWait();
+            startDateErrorLabel.setText(bundle.getString("startDateAfterEndDateErrorLabel"));
             return;
         }
         Course course = new Course(courseName, instructor, startDate, endDate);
@@ -91,10 +97,9 @@ public class AddCourseController {
         if (bundle != null) {
             addCourseSaveButton.setText(bundle.getString("saveButton"));
             addCourseBackButton.setText(bundle.getString("backButton"));
-            addCourseTitleLabel.setText(bundle.getString("titleLabel"));
+            addCourseTitleLabel.setText(bundle.getString("addCourseTitleLabel"));
             courseNameLabel.setText(bundle.getString("courseNameLabel"));
             instructorLabel.setText(bundle.getString("instructorLabel"));
-            locationLabel.setText(bundle.getString("locationBoxLabel"));
             startDateLabel.setText(bundle.getString("startDateLabel"));
             endDateLabel.setText(bundle.getString("endDateLabel"));
 

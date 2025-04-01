@@ -28,5 +28,10 @@
       <Label fx:id="dateLabel" layoutX="580.0" layoutY="188.0" text="Date:" />
       <Label fx:id="timeLabel" layoutX="580.0" layoutY="257.0" text="Time:" />
       <ChoiceBox fx:id="deadlineChoiceBox" layoutX="644.0" layoutY="253.0" prefHeight="25.0" prefWidth="75.0" />
+      <Label fx:id="courseErrorLabel" layoutX="202.0" layoutY="152.0" textFill="#c32828" />
+      <Label fx:id="titleErrorLabel" layoutX="202.0" layoutY="220.0" textFill="#c32828" />
+      <Label fx:id="progressErrorLabel" layoutX="202.0" layoutY="472.0" textFill="#c32828" />
+      <Label fx:id="dateErrorLabel" layoutX="644.0" layoutY="220.0" textFill="#c32828" />
+      <Label fx:id="timeErrorLabel" layoutX="644.0" layoutY="291.0" textFill="#c32828" />
    </children>
 </AnchorPane>

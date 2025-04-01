@@ -42,7 +42,7 @@ CREATE TABLE exam
     exam_date   DATETIME NOT NULL,
     title       VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
     description VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
-    location    VARCHAR(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+    location    VARCHAR(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
     FOREIGN KEY (course_id) REFERENCES course (course_id) ON DELETE CASCADE
 );
 
@@ -50,7 +50,7 @@ CREATE TABLE class_schedule
 (
     class_id    INT AUTO_INCREMENT PRIMARY KEY,
     course_id   INT NOT NULL,
-    location    VARCHAR(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+    location    VARCHAR(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
     description VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
     start_time  DATETIME NOT NULL,
     end_time    DATETIME NOT NULL,

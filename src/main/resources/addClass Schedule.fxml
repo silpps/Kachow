@@ -20,14 +20,18 @@
 
         <Label fx:id="sessionDateLabel" layoutX="282.0" layoutY="321.0" text="Date:" />
         <DatePicker fx:id="sessionDatePicker" layoutX="409.0" layoutY="321.0" />
-        <Label fx:id="fromLabel" layoutX="219.0" layoutY="390.0" text="From:" />
-        <ChoiceBox fx:id="fromChoiceBox" layoutX="314.0" layoutY="385.0" prefHeight="25.0" prefWidth="75.0" />
-        <Label fx:id="toLabel" layoutX="483.0" layoutY="390.0" text="To:" />
-        <ChoiceBox fx:id="toChoiceBox" layoutX="553.0" layoutY="385.0" prefHeight="25.0" prefWidth="75.0" />
+        <Label fx:id="fromLabel" layoutX="216.0" layoutY="415.0" text="From:" />
+        <ChoiceBox fx:id="fromChoiceBox" layoutX="307.0" layoutY="415.0" prefHeight="25.0" prefWidth="75.0" />
+        <Label fx:id="toLabel" layoutX="529.0" layoutY="415.0" text="To:" />
+        <ChoiceBox fx:id="toChoiceBox" layoutX="588.0" layoutY="415.0" prefHeight="25.0" prefWidth="75.0" />
         <!-- Buttons -->
         <Button fx:id="scheduleBackButton" layoutX="171.0" layoutY="508.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Back" />
         <Button fx:id="scheduleSaveButton" layoutX="638.0" layoutY="508.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Save" />
         <Label fx:id="descriptionLabel" layoutX="282.0" layoutY="262.0" text="Description:" />
         <TextArea fx:id="scheduleDescriptionArea" layoutX="409.0" layoutY="234.0" prefHeight="56.0" prefWidth="255.0" />
+      <Label fx:id="courseErrorLabel" layoutX="409.0" layoutY="155.0" textFill="#c32828" />
+      <Label fx:id="dateErrorLabel" layoutX="409.0" layoutY="361.0" textFill="#c32828" />
+      <Label fx:id="fromTimeErrorLabel" layoutX="305.0" layoutY="457.0" textFill="#c32828" />
+      <Label fx:id="toTimeErrorLabel" layoutX="588.0" layoutY="457.0" textFill="#c32828" />
     </children>
 </AnchorPane>
