@@ -57,6 +57,13 @@ CREATE TABLE class_schedule
     FOREIGN KEY (course_id) REFERENCES course (course_id) ON DELETE CASCADE
 );
 
+CREATE TABLE setting
+(
+    setting_id INT AUTO_INCREMENT PRIMARY KEY,
+    language    VARCHAR(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+    region      VARCHAR(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+);
+
 DROP USER IF EXISTS 'student_test'@'localhost';
 CREATE USER 'student_test'@'localhost' IDENTIFIED BY 'schedule';
 GRANT SELECT, INSERT, DELETE, UPDATE ON study_planner.* TO 'student_test'@'localhost';

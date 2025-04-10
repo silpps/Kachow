@@ -45,21 +45,27 @@ public class TimetableController implements Initializable {
     private IDAO<Exam> examDAO;
     private IDAO<Assignment> assignmentDAO;
     private IDAO<ClassSchedule> classScheduleDAO;
+    private SettingDAO settingDAO;
     private Map<Integer, String> courses;
     private Locale locale;
     private ResourceBundle bundle = ResourceBundle.getBundle("messages");
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Initialize the DAO classes
+        settingDAO = new SettingDAO();
         timeTableDAO = new TimeTableDAO();
         studySessionDAO = new StudySessionDAO();
         examDAO = new ExamDAO();
         assignmentDAO = new AssignmentDAO();
         classScheduleDAO = new ClassScheduleDAO();
 
+        // Fetch the language
+        Map<String, String> language = settingDAO.getLanguage();
+
         courses = timeTableDAO.getCourses();
 
-        this.locale = Locale.getDefault();
+        this.locale = Locale.of(language.get("language"), language.get("region"));
 
         LocalDate today = LocalDate.now();
         this.startOfWeek = today.with(java.time.DayOfWeek.MONDAY);
@@ -76,8 +82,8 @@ public class TimetableController implements Initializable {
     public void fetchAndDisplayCurrentWeeksData(ResourceBundle bundle) {
         clearTimetable();
         loadLanguage(locale);
+
         // Format to dd/MM
-        //TODO: Localize date format
         DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(locale);
         DateTimeFormatter formatter2 = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(locale);
 
@@ -557,6 +563,9 @@ public class TimetableController implements Initializable {
 
     @FXML
     private void onEnglishClicked() {
+        // Update the language in the database
+        settingDAO.setLanguage("en", "UK");
+
         Locale.setDefault(new Locale("en", "UK"));
         this.locale = Locale.getDefault();
         System.out.println("English clicked");
@@ -568,6 +577,8 @@ public class TimetableController implements Initializable {
 
     @FXML
     private void onKoreanClicked() {
+        // Update the language in the database
+        settingDAO.setLanguage("ko", "KR");
         Locale.setDefault(new Locale("ko", "KR"));
         this.locale = Locale.getDefault();
         System.out.println("Korean clicked");
@@ -581,6 +592,8 @@ public class TimetableController implements Initializable {
 
     @FXML
     private void onArabicClicked() {
+        // Update the language in the database
+        settingDAO.setLanguage("ar", "AE");
         Locale.setDefault(new Locale("ar", "AE"));
         this.locale = Locale.getDefault();
         System.out.println("Arabic clicked");
@@ -588,11 +601,8 @@ public class TimetableController implements Initializable {
         loadLanguage(locale);
         bundle = ResourceBundle.getBundle("messages", locale);
 
-
         fetchAndDisplayCurrentWeeksData(bundle);
     }
-
-
 
     private void loadLanguage(Locale locale) {
         ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
