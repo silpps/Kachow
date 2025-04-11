@@ -2,7 +2,7 @@ package models;
 import java.time.LocalDateTime;
 
 //TODO: Pitäiskö tähän kanssa lisätä jonkinlainen description? se vois vaik sisältää tietyn tunnin aiheet tms
-public class ClassSchedule {
+public class ClassSchedule extends MyEvent {
     private final String courseName;
     private String  location;
     private String description;
@@ -19,6 +19,11 @@ public class ClassSchedule {
         this.endTime = endTime;
     }
 
+    @Override
+    public String getTitle() {
+        return "";
+    }
+
     public String getCourseName() {
         return courseName;
     }
@@ -28,8 +33,14 @@ public class ClassSchedule {
         return location;
     }
 
+    @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public LocalDateTime getDate() {
+        return getStartTime();
     }
 
     public LocalDateTime getStartTime() {
