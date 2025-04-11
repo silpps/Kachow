@@ -11,16 +11,16 @@ public class ClassScheduleDAO implements IDAO<ClassSchedule> {
 
     // Get a ClassSchedule from the database
     @Override
-    public ClassSchedule get(String id) {
+    public ClassSchedule get(int id) {
         conn = MariaDbConnection.getConnection();
         String sql = "SELECT * FROM class_schedule WHERE id = ?";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1,  Integer.parseInt(id));
+            st.setInt(1,  id);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 return new ClassSchedule(
-                        rs.getString("course_name"),
+                        rs.getInt("course_id"),
                         rs.getString("days_of_week"),
                         rs.getString("location"),
                         rs.getTimestamp("start_time").toLocalDateTime(),
@@ -37,10 +37,10 @@ public class ClassScheduleDAO implements IDAO<ClassSchedule> {
     @Override
     public void add(ClassSchedule classSchedule) {
         conn = MariaDbConnection.getConnection();
-        String sql = "INSERT INTO class_schedule (course_name, location, description, start_time, end_time) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO class_schedule (course_id, location, description, start_time, end_time) VALUES (?, ?, ?, ?, ?)";
         try {
             PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            st.setString(1, classSchedule.getCourseName());
+            st.setInt(1, classSchedule.getCourseId());
             st.setString(2, classSchedule.getLocation());
             st.setString(3, classSchedule.getDescription());
             st.setTimestamp(4, Timestamp.valueOf(classSchedule.getStartTime()));
@@ -76,12 +76,12 @@ public class ClassScheduleDAO implements IDAO<ClassSchedule> {
 
     // Delete a ClassSchedule from the database
     @Override
-    public void delete(String id) {
+    public void delete(int id) {
         conn = MariaDbConnection.getConnection();
         String sql = "DELETE FROM class_schedule WHERE class_id = ?";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, Integer.parseInt(id));
+            st.setInt(1, id);
             st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

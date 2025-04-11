@@ -3,23 +3,23 @@ import java.time.LocalDateTime;
 
 //TODO: Lisää start ja end time
 public class Exam extends MyEvent {
-    private final String courseName;
+    private final int courseId;
     private LocalDateTime examDate;
     private String title;
     private String description;
     private String location;
     private int id;
 
-    public Exam(String courseName, LocalDateTime examDate, String title, String description, String location) {
-        this.courseName = courseName;
+    public Exam(int courseId, LocalDateTime examDate, String title, String description, String location) {
+        this.courseId = courseId;
         this.examDate = examDate;
         this.title = title;
         this.description = description;
         this.location = location;
     }
 
-    public String getCourseName() {
-        return courseName;
+    public int getCourseId() {
+        return courseId;
     }
 
     @Override
@@ -71,7 +71,7 @@ public class Exam extends MyEvent {
 
 
     public String getDetails() {
-        return "Title: " + title + "\nCourse: " + courseName + "\nExam date: " + examDate + "\nDescription: " + description + "\nLocation: " + location;
+        return "Title: " + title + "\nCourse: " + courseId + "\nExam date: " + examDate + "\nDescription: " + description + "\nLocation: " + location;
     }
 
 

@@ -2,7 +2,7 @@ package models;
 import java.time.LocalDateTime;
 
 public class StudySession extends MyEvent {
-    private final String courseName;
+    private final int courseId;
     private String title;
     private String description;
     private LocalDateTime startTime;
@@ -10,16 +10,16 @@ public class StudySession extends MyEvent {
     private int id;
 
 
-    public StudySession(String courseName, String title, String description, LocalDateTime startTime, LocalDateTime endTime) {
-        this.courseName = courseName;
+    public StudySession(int courseId, String title, String description, LocalDateTime startTime, LocalDateTime endTime) {
+        this.courseId = courseId;
         this.title = title;
         this.description = description;
         this.startTime = startTime;
         this.endTime = endTime;
     }
 
-    public String getCourseName() {
-        return courseName;
+    public int getCourseId() {
+        return courseId;
     }
 
     @Override
@@ -72,6 +72,6 @@ public class StudySession extends MyEvent {
 
 
     public String getDetails() {
-        return  "Title: " + title + "\nCourse: " + courseName + "\nDescription: " + description + "\nStart Time: " + startTime + "\nEnd Time: " + endTime;
+        return  "Title: " + title + "\nCourse: " + courseId + "\nDescription: " + description + "\nStart Time: " + startTime + "\nEnd Time: " + endTime;
     }
 }

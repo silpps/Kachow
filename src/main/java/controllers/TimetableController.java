@@ -12,57 +12,91 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import models.*;
 
 import java.net.URL;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.time.format.FormatStyle;
+import java.util.*;
 
 
 public class TimetableController implements Initializable {
 
     @FXML
+    private HBox weekBox;
+
+    @FXML
     private VBox mondayColumn, tuesdayColumn, wednesdayColumn, thursdayColumn, fridayColumn, saturdayColumn, sundayColumn;
 
     @FXML
-    private Label mondayDate, tuesdayDate, wednesdayDate, thursdayDate, fridayDate, saturdayDate, sundayDate, currentWeekLabel;
+    private Label mondayDate, tuesdayDate, wednesdayDate, thursdayDate, fridayDate, saturdayDate, sundayDate, currentWeekLabel, nameLabel, mondayLabel, tuesdayLabel, wednesdayLabel, thursdayLabel, fridayLabel, saturdayLabel, sundayLabel;
+
+    @FXML
+    private Button addButton, nextWeekButton, lastWeekButton;
 
     private TimeTableDAO timeTableDAO;
     private LocalDate startOfWeek;
     private LocalDate endOfWeek;
-    private StudySessionDAO studySessionDAO;
-    private ExamDAO examDAO;
-    private AssignmentDAO assignmentDAO;
-    private ClassScheduleDAO classScheduleDAO;
+    private IDAO<StudySession> studySessionDAO;
+    private IDAO<Exam> examDAO;
+    private IDAO<Assignment> assignmentDAO;
+    private IDAO<ClassSchedule> classScheduleDAO;
+    private SettingDAO settingDAO;
+    private Map<Integer, String> courses;
+    private Locale locale;
+    private ResourceBundle bundle = ResourceBundle.getBundle("messages");
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Initialize the DAO classes
+        settingDAO = new SettingDAO();
         timeTableDAO = new TimeTableDAO();
         studySessionDAO = new StudySessionDAO();
         examDAO = new ExamDAO();
         assignmentDAO = new AssignmentDAO();
         classScheduleDAO = new ClassScheduleDAO();
 
+        // Fetch the language
+        Map<String, String> language = settingDAO.getLanguage();
+
+        courses = timeTableDAO.getCourses();
+
+        this.locale = Locale.of(language.get("language"), language.get("region"));
+
         LocalDate today = LocalDate.now();
         this.startOfWeek = today.with(java.time.DayOfWeek.MONDAY);
         this.endOfWeek = today.with(java.time.DayOfWeek.SUNDAY);
 
-        fetchAndDisplayCurrentWeeksData();
+        fetchAndDisplayCurrentWeeksData(bundle);
     }
 
-    public void fetchAndDisplayCurrentWeeksData() {
+
+    public void updateCourseMap() {
+        this.courses = timeTableDAO.getCourses();
+    }
+
+    public void fetchAndDisplayCurrentWeeksData(ResourceBundle bundle) {
         clearTimetable();
+        loadLanguage(locale);
 
         // Format to dd/MM
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
-        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(locale);
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(locale);
+
+        nextWeekButton.setText(bundle.getString("nextWeekButton"));
+        lastWeekButton.setText(bundle.getString("lastWeekButton"));
+
+        if (locale.getLanguage().equals("ar")) {
+            weekBox.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
+        }
+        else
+        {
+            weekBox.setNodeOrientation(javafx.geometry.NodeOrientation.LEFT_TO_RIGHT);
+        }
 
         // Set the dates to the labels
         mondayDate.setText(startOfWeek.format(formatter));
@@ -73,7 +107,11 @@ public class TimetableController implements Initializable {
         saturdayDate.setText(startOfWeek.plusDays(5).format(formatter));
         sundayDate.setText(startOfWeek.plusDays(6).format(formatter));
 
+
+        //TODO: Localize date format
         currentWeekLabel.setText(startOfWeek.format(formatter2) + " - " + endOfWeek.format(formatter2));
+
+
 
         // Fetch current week's data from database
         List<ClassSchedule> classSchedules = timeTableDAO.getClassSchedule(startOfWeek, endOfWeek);
@@ -89,14 +127,14 @@ public class TimetableController implements Initializable {
         allTasks.addAll(exams);
 
         // Add tasks to the correct day's VBox
-        addTasksToDay(allTasks);
+        addTasksToDay(allTasks, bundle);
     }
 
     @FXML
     private void showNextWeek() {
         this.startOfWeek = this.startOfWeek.plusDays(7);
         this.endOfWeek = this.endOfWeek.plusDays(7);
-        fetchAndDisplayCurrentWeeksData();
+        fetchAndDisplayCurrentWeeksData(bundle);
 
     }
 
@@ -104,7 +142,7 @@ public class TimetableController implements Initializable {
     private void showPreviousWeek() {
         this.startOfWeek = this.startOfWeek.minusDays(7);
         this.endOfWeek = this.endOfWeek.minusDays(7);
-        fetchAndDisplayCurrentWeeksData();
+        fetchAndDisplayCurrentWeeksData(bundle);
     }
 
     private void clearTimetable() {
@@ -117,7 +155,7 @@ public class TimetableController implements Initializable {
         sundayColumn.getChildren().clear();
     }
 
-    private <T> void addTasksToDay(List<T> tasks) {
+    private <T> void addTasksToDay(List<T> tasks, ResourceBundle bundle) {
         tasks.sort(Comparator.comparing(task -> switch (task) {
             case ClassSchedule classSchedule -> classSchedule.getStartTime();
             case StudySession studySession -> studySession.getStartTime();
@@ -128,8 +166,8 @@ public class TimetableController implements Initializable {
 
         for (T task : tasks) {
             VBox dayColumn = getDayColumn(getTaskDayOfWeek(task));
-            VBox taskBox = createTaskBox(task);
-            taskBox.setOnMouseClicked(e -> detailsPopup(task));
+            VBox taskBox = createTaskBox(task, bundle);
+            taskBox.setOnMouseClicked(e -> detailsPopup(task, bundle));
             dayColumn.getChildren().add(taskBox);
         }
     }
@@ -148,68 +186,74 @@ public class TimetableController implements Initializable {
     }
 
 
-    private VBox createTaskBox(Object task) {
+    //TODO: Localize labels
+    private VBox createTaskBox(Object task, ResourceBundle bundle) {
         return switch (task) {
-            case ClassSchedule classSchedule -> createClassScheduleBox(classSchedule);
-            case Assignment assignment -> createAssignmentBox(assignment);
-            case StudySession studySession -> createStudySessionBox(studySession);
-            case Exam exam -> createExamBox(exam);
+            case ClassSchedule classSchedule -> createClassScheduleBox(classSchedule, bundle);
+            case Assignment assignment -> createAssignmentBox(assignment, bundle);
+            case StudySession studySession -> createStudySessionBox(studySession, bundle);
+            case Exam exam -> createExamBox(exam, bundle);
             case null, default -> throw new IllegalArgumentException("Unknown task type");
         };
+
     }
 
-    private VBox createClassScheduleBox(ClassSchedule classSchedule) {
+    private VBox createClassScheduleBox(ClassSchedule classSchedule, ResourceBundle bundle) {
         VBox taskBox = new VBox();
         taskBox.getStyleClass().add("class-schedule-box");
 
-        Label courseLabel = new Label(classSchedule.getCourseName());
-        Label taskLabel = new Label("CLASS: ");
-        taskLabel.setStyle("-fx-font-weight: bold;");
+        // Localized labels
+        Label courseLabel = new Label(courses.get(classSchedule.getCourseId()));
+        Label classScheduleTaskLabel = new Label(bundle.getString("classScheduleBoxLabel"));
+        classScheduleTaskLabel.setStyle("-fx-font-weight: bold;");
         Label timeLabel = new Label(classSchedule.getStartTime().toLocalTime() + " - " + classSchedule.getEndTime().toLocalTime());
-        Label locationLabel = new Label("Location: " + classSchedule.getLocation());
+        Label locationLabel = new Label(bundle.getString("locationBoxLabel") + classSchedule.getLocation());
 
-        taskBox.getChildren().addAll(courseLabel, taskLabel, timeLabel, locationLabel);
+        taskBox.getChildren().addAll(courseLabel, classScheduleTaskLabel, timeLabel, locationLabel);
         return taskBox;
     }
 
-    private VBox createAssignmentBox(Assignment assignment) {
+    private VBox createAssignmentBox(Assignment assignment, ResourceBundle bundle) {
         VBox taskBox = new VBox();
         taskBox.getStyleClass().add("assignment-box");
 
-        Label courseLabel = new Label(assignment.getCourseName());
-        Label taskLabel = new Label("ASSIGNMENT: ");
-        taskLabel.setStyle("-fx-font-weight: bold;");
-        Label timeLabel = new Label("Deadline: " + assignment.getDeadline().toLocalTime().toString());
-        Label statusLabel = new Label("Status: " + (assignment.getStatus()));
+        // Localized labels
+        Label courseLabel = new Label(courses.get(assignment.getCourseId()));
+        Label assignmentTaskLabel = new Label(bundle.getString("assignmentLabel"));
+        assignmentTaskLabel.setStyle("-fx-font-weight: bold;");
+        Label timeLabel = new Label(bundle.getString("deadlineLabel") + assignment.getDeadline().toLocalTime().toString());
+        Label statusLabel = new Label(bundle.getString("statusLabel") + (assignment.getStatus()));
 
-        taskBox.getChildren().addAll(courseLabel, taskLabel, timeLabel, statusLabel);
+        taskBox.getChildren().addAll(courseLabel, assignmentTaskLabel, timeLabel, statusLabel);
         return taskBox;
     }
 
-    private VBox createStudySessionBox(StudySession studySession) {
+    private VBox createStudySessionBox(StudySession studySession, ResourceBundle bundle) {
         VBox taskBox = new VBox();
         taskBox.getStyleClass().add("study-session-box");
 
-        Label courseLabel = new Label(studySession.getCourseName());
-        Label taskLabel = new Label("STUDY SESSION: ");
-        taskLabel.setStyle("-fx-font-weight: bold;");
+        // Localized labels
+        Label courseLabel = new Label(courses.get(studySession.getCourseId()));
+        Label studySessionTaskLabel = new Label(bundle.getString("studySessionLabel"));
+        studySessionTaskLabel.setStyle("-fx-font-weight: bold;");
         Label timeLabel = new Label(studySession.getStartTime().toLocalTime() + " - " + studySession.getEndTime().toLocalTime());
 
-        taskBox.getChildren().addAll(courseLabel, taskLabel, timeLabel);
+        taskBox.getChildren().addAll(courseLabel, studySessionTaskLabel, timeLabel);
         return taskBox;
     }
 
-    private VBox createExamBox(Exam exam) {
+    private VBox createExamBox(Exam exam, ResourceBundle bundle) {
         VBox taskBox = new VBox();
         taskBox.getStyleClass().add("exam-box");
 
-        Label courseLabel = new Label(exam.getCourseName());
-        Label taskLabel = new Label("EXAM: ");
-        taskLabel.setStyle("-fx-font-weight: bold;");
+        // Localized labels
+        Label courseLabel = new Label(courses.get(exam.getCourseId()));
+        Label examTaskLabel = new Label(bundle.getString("examLabel"));
+        examTaskLabel.setStyle("-fx-font-weight: bold;");
         Label timeLabel = new Label(exam.getExamDate().toLocalTime().toString());
-        Label locationLabel = new Label("Location: " + exam.getLocation());
+        Label locationLabel = new Label(bundle.getString("locationBoxLabel") + exam.getLocation());
 
-        taskBox.getChildren().addAll(courseLabel, taskLabel, timeLabel, locationLabel);
+        taskBox.getChildren().addAll(courseLabel, examTaskLabel, timeLabel, locationLabel);
         return taskBox;
     }
 
@@ -227,11 +271,17 @@ public class TimetableController implements Initializable {
     @FXML
     private void addButtonClicked() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/addTask.fxml"));
+            Locale locale = Locale.getDefault();
+            ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/addTask.fxml"), bundle);
             Scene scene = new Scene(loader.load());
             scene.getStylesheets().add("/timetable.css");
+
             AddTaskController controller = loader.getController();
             controller.setTimetableController(this);
+            controller.setBundle(bundle);
+
             Stage stage = new Stage();
             stage.setScene(scene);
             stage.show();
@@ -240,15 +290,17 @@ public class TimetableController implements Initializable {
         }
     }
 
-    private <T> void detailsPopup(T event) {
+
+    //TODO: Localize labels and date and time formats
+    private <T> void detailsPopup(T event, ResourceBundle bundle) {
         try {
             Stage popupStage = new Stage();
-            popupStage.setTitle("Event Details");
+            popupStage.setTitle(bundle.getString("eventDetailsLabel"));
 
             VBox popupVBox = new VBox(10);
             popupVBox.setStyle("-fx-padding: 20;");
 
-            Label titleLabel = new Label("Title:");
+            Label titleLabel = new Label(bundle.getString("titleLabel") + " ");
             TextField titleField = new TextField(getEventTitle((MyEvent) event));
 
             if (!(event instanceof ClassSchedule)) {
@@ -256,39 +308,53 @@ public class TimetableController implements Initializable {
             }
 
 
-            Label dateLabel = new Label("Date:");
+            Label dateLabel = new Label(bundle.getString("dateLabel"));
             DatePicker datePicker = new DatePicker(getEventDate((MyEvent) event).toLocalDate());
 
-            Label fromTimeLabel = new Label("From:");
+            datePicker.setConverter(new StringConverter<LocalDate>() {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+                @Override
+                public String toString(LocalDate date) {
+                    return date != null ? date.format(formatter) : "";
+                }
+
+                @Override
+                public LocalDate fromString(String string) {
+                    return string != null && !string.isEmpty() ? LocalDate.parse(string, formatter) : null;
+                }
+            });
+
+            Label fromTimeLabel = new Label(bundle.getString("fromTimeLabel") + " ");
             ChoiceBox<String> fromTimeChoiceBox = new ChoiceBox<>();
             fromTimeChoiceBox.getItems().addAll("06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00");
             fromTimeChoiceBox.setValue(getEventStartTime(event));
 
-            Label toTimeLabel = new Label("To:");
+            Label toTimeLabel = new Label(bundle.getString("toTimeLabel") + " ");
             ChoiceBox<String> toTimeChoiceBox = new ChoiceBox<>();
             toTimeChoiceBox.getItems().addAll("07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00");
             toTimeChoiceBox.setValue(getEventEndTime(event));
 
-            Label descriptionLabel = new Label("Description:");
+            Label descriptionLabel = new Label(bundle.getString("descriptionLabel") + " ");
             TextArea descriptionField = new TextArea(getEventDescription((MyEvent) event));
 
             TextField locationField = null;
             if (event instanceof ClassSchedule classSchedule || event instanceof Exam exam) {
-                Label locationLabel = new Label("Location:");
+                Label locationLabel = new Label(bundle.getString("locationBoxLabel") + " ");
                 locationField = new TextField(getEventLocation(event));
                 popupVBox.getChildren().addAll(locationLabel, locationField);
             }
             final TextField finalLocationField = locationField;
 
             if (event instanceof Assignment assignment) {
-                Label statusLabel = new Label("Status:");
+                Label statusLabel = new Label(bundle.getString("statusLabel") + " ");
                 ToggleGroup statusGroup = new ToggleGroup();
 
-                RadioButton notStartedButton = new RadioButton("Not Started");
+                RadioButton notStartedButton = new RadioButton(bundle.getString("notStartedButton"));
                 notStartedButton.setToggleGroup(statusGroup);
-                RadioButton ongoingButton = new RadioButton("Ongoing");
+                RadioButton ongoingButton = new RadioButton(bundle.getString("ongoingButton"));
                 ongoingButton.setToggleGroup(statusGroup);
-                RadioButton completedButton = new RadioButton("Completed");
+                RadioButton completedButton = new RadioButton(bundle.getString("completedButton"));
                 completedButton.setToggleGroup(statusGroup);
 
                 switch (assignment.getStatus()) {
@@ -306,9 +372,8 @@ public class TimetableController implements Initializable {
                 timeBox.getChildren().add(toTimeChoiceBox);
             }
 
-
-            Button saveButton = new Button("Save");
-            Button deleteButton = new Button("Delete");
+            Button saveButton = new Button(bundle.getString("saveButton"));
+            Button deleteButton = new Button(bundle.getString("deleteButton"));
 
             HBox buttonHBox = new HBox(30, deleteButton, saveButton);
             buttonHBox.setAlignment(Pos.CENTER);
@@ -318,9 +383,9 @@ public class TimetableController implements Initializable {
 
             popupVBox.getChildren().addAll(dateLabel, datePicker, timeBox, descriptionLabel, descriptionField, buttonHBox);
 
-
-
-
+            if (bundle.getLocale().getLanguage().equals("ar")) {
+                popupVBox.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
+            }
             Scene popupScene = new Scene(popupVBox, 300, 600);
             popupScene.getStylesheets().add("/timetable.css");
             popupStage.setScene(popupScene);
@@ -392,7 +457,7 @@ public class TimetableController implements Initializable {
         }
 
         popupStage.close();
-        fetchAndDisplayCurrentWeeksData();
+        fetchAndDisplayCurrentWeeksData(bundle);
     }
 
 
@@ -406,20 +471,20 @@ public class TimetableController implements Initializable {
 
     private void deleteEvent(Object event) {
         if (event instanceof ClassSchedule) {
-            String id = String.valueOf(((ClassSchedule) event).getId());
+            int id = ((ClassSchedule) event).getId();
             classScheduleDAO.delete(id);
         } else if (event instanceof StudySession) {
-            String id = String.valueOf(((StudySession) event).getId());
+            int id = ((StudySession) event).getId();
             studySessionDAO.delete(id);
         } else if (event instanceof Exam) {
-            String id = String.valueOf(((Exam) event).getId());
+            int id = ((Exam) event).getId();
             examDAO.delete(id);
         } else if (event instanceof Assignment) {
-            String id = String.valueOf(((Assignment) event).getId());
+            int id = ((Assignment) event).getId();
             assignmentDAO.delete(id);
         }
 
-        fetchAndDisplayCurrentWeeksData();
+        fetchAndDisplayCurrentWeeksData(bundle);
     }
 
     private <T> String getEventTitle(T event) {
@@ -507,6 +572,65 @@ public class TimetableController implements Initializable {
         }
         return "";
     }
+
+    @FXML
+    private void onEnglishClicked() {
+        // Update the language in the database
+        settingDAO.setLanguage("en", "UK");
+
+        Locale.setDefault(new Locale("en", "UK"));
+        this.locale = Locale.getDefault();
+        System.out.println("English clicked");
+        bundle = ResourceBundle.getBundle("messages", locale);
+        loadLanguage(locale);
+
+        fetchAndDisplayCurrentWeeksData(bundle);
+    }
+
+    @FXML
+    private void onKoreanClicked() {
+        // Update the language in the database
+        settingDAO.setLanguage("ko", "KR");
+        Locale.setDefault(new Locale("ko", "KR"));
+        this.locale = Locale.getDefault();
+        System.out.println("Korean clicked");
+        bundle = ResourceBundle.getBundle("messages", locale);
+        loadLanguage(locale);
+
+        fetchAndDisplayCurrentWeeksData(bundle);
+    }
+
+
+
+    @FXML
+    private void onArabicClicked() {
+        // Update the language in the database
+        settingDAO.setLanguage("ar", "AE");
+        Locale.setDefault(new Locale("ar", "AE"));
+        this.locale = Locale.getDefault();
+        System.out.println("Arabic clicked");
+
+        loadLanguage(locale);
+        bundle = ResourceBundle.getBundle("messages", locale);
+
+        fetchAndDisplayCurrentWeeksData(bundle);
+    }
+
+    private void loadLanguage(Locale locale) {
+        ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
+
+        nameLabel.setText(bundle.getString("nameLabel"));
+        addButton.setText(bundle.getString("addLabel"));
+        mondayLabel.setText(bundle.getString("mondayLabel"));
+        tuesdayLabel.setText(bundle.getString("tuesdayLabel"));
+        wednesdayLabel.setText(bundle.getString("wednesdayLabel"));
+        thursdayLabel.setText(bundle.getString("thursdayLabel"));
+        fridayLabel.setText(bundle.getString("fridayLabel"));
+        saturdayLabel.setText(bundle.getString("saturdayLabel"));
+        sundayLabel.setText(bundle.getString("sundayLabel"));
+
+    }
+
 
     private String getEventDescription(MyEvent myEvent) {
         return myEvent.getDescription();

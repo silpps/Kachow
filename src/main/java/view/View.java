@@ -7,11 +7,15 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 
-    public class View extends Application {
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+public class View extends Application {
 
         @Override
         public void start(Stage stage) throws Exception {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/timetable.fxml"));
+            Locale.setDefault(new Locale("en", "UK"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/timetable.fxml"), ResourceBundle.getBundle("messages"));
             Parent root = fxmlLoader.load();
             stage.getIcons().add(new Image("/calendar.png"));
             stage.setTitle("StudyFlow");

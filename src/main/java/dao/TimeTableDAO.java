@@ -6,26 +6,28 @@ import models.*;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TimeTableDAO {
     Connection conn = null;
 
     // get all course names from the database
-    public List<String> getCourseNames() {
+    public Map<Integer, String> getCourses() {
         conn = MariaDbConnection.getConnection();
-        List<String> courseNames = new ArrayList<>();
-        String sql = "SELECT DISTINCT course_name FROM course";
+        Map<Integer, String> courses = new HashMap<>();
+        String sql = "SELECT * FROM course";
         try {
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
-                courseNames.add(rs.getString("course_name"));
+                courses.put(rs.getInt("course_id"), rs.getString("course_name"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return courseNames;
+        return courses;
     }
 
     //get current week's courses from the database
@@ -67,7 +69,7 @@ public class TimeTableDAO {
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 ClassSchedule classSchedule = new ClassSchedule(
-                        rs.getString("course_name"),
+                        rs.getInt("course_id"),
                         rs.getString("location"),
                         rs.getString("description"),
                         rs.getTimestamp("start_time").toLocalDateTime(),
@@ -94,7 +96,7 @@ public class TimeTableDAO {
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 Assignment assignment = new Assignment(
-                        rs.getString("course_name"),
+                        rs.getInt("course_id"),
                         rs.getString("title"),
                         rs.getString("description"),
                         rs.getTimestamp("deadline").toLocalDateTime(),
@@ -121,7 +123,7 @@ public class TimeTableDAO {
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 StudySession studySession = new StudySession(
-                        rs.getString("course_name"),
+                        rs.getInt("course_id"),
                         rs.getString("title"),
                         rs.getString("description"),
                         rs.getTimestamp("start_time").toLocalDateTime(),
@@ -148,7 +150,7 @@ public class TimeTableDAO {
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 Exam exam = new Exam(
-                        rs.getString("course_name"),
+                        rs.getInt("course_id"),
                         rs.getTimestamp("exam_date").toLocalDateTime(),
                         rs.getString("title"),
                         rs.getString("description"),

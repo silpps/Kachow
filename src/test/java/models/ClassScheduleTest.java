@@ -15,12 +15,12 @@ class ClassScheduleTest {
     void setUp() {
         LocalDateTime startTime = LocalDateTime.of(2025, 2, 20, 10, 0);
         LocalDateTime endTime = LocalDateTime.of(2025, 2, 20, 12, 0);
-        classSchedule = new ClassSchedule("Maths", "Building A", "Math class", startTime, endTime);
+        classSchedule = new ClassSchedule(1, "Building A", "Math class", startTime, endTime);
     }
 
     @Test
-    void getCourseName() {
-        assertEquals("Maths", classSchedule.getCourseName());
+    void getCourseId() {
+        assertEquals(1, classSchedule.getCourseId());
 
     }
 
@@ -86,7 +86,7 @@ class ClassScheduleTest {
 
     @Test
     void getDetails(){
-        String details = "Course: Maths\nLocation: Building A\nDescription: Math class\nStart time: 2025-02-20T10:00\nEnd time: 2025-02-20T12:00";
+        String details = "Course: 1\nLocation: Building A\nDescription: Math class\nStart time: 2025-02-20T10:00\nEnd time: 2025-02-20T12:00";
         assertEquals(details, classSchedule.getDetails());
     }
 

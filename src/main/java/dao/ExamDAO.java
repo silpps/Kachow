@@ -11,16 +11,16 @@ public class ExamDAO implements IDAO<Exam> {
 
     // Get an Exam from the database
     @Override
-    public Exam get(String id) {
+    public Exam get(int id) {
         conn = MariaDbConnection.getConnection();
         String sql = "SELECT * FROM exam WHERE id = ?";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1,  Integer.parseInt(id));
+            st.setInt(1,  id);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 return new Exam(
-                        rs.getString("course_name"),
+                        rs.getInt("course_Id"),
                         rs.getTimestamp("exam_date").toLocalDateTime(),
                         rs.getString("title"),
                         rs.getString("description"),
@@ -37,10 +37,10 @@ public class ExamDAO implements IDAO<Exam> {
     @Override
     public void add(Exam exam) {
         conn = MariaDbConnection.getConnection();
-        String sql = "INSERT INTO exam (course_name, exam_date, title, description, location) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO exam (course_id, exam_date, title, description, location) VALUES (?, ?, ?, ?, ?)";
         try {
             PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            st.setString(1, exam.getCourseName());
+            st.setInt(1, exam.getCourseId());
             st.setTimestamp(2, Timestamp.valueOf(exam.getExamDate()));
             st.setString(3, exam.getTitle());
             st.setString(4, exam.getDescription());
@@ -60,10 +60,10 @@ public class ExamDAO implements IDAO<Exam> {
     @Override
     public void update(Exam exam) {
         conn = MariaDbConnection.getConnection();
-        String sql = "UPDATE exam SET course_name = ?, exam_date = ?, title = ?, description = ?, location = ? WHERE exam_id = ?";
+        String sql = "UPDATE exam SET course_id = ?, exam_date = ?, title = ?, description = ?, location = ? WHERE exam_id = ?";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setString(1, exam.getCourseName());
+            st.setInt(1, exam.getCourseId());
             st.setTimestamp(2, Timestamp.valueOf(exam.getExamDate()));
             st.setString(3, exam.getTitle());
             st.setString(4, exam.getDescription());
@@ -77,12 +77,12 @@ public class ExamDAO implements IDAO<Exam> {
 
     // Delete an Exam from the database
     @Override
-    public void delete(String id) {
+    public void delete(int id) {
         conn = MariaDbConnection.getConnection();
         String sql = "DELETE FROM exam WHERE exam_id = ?";
         try {
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1, Integer.parseInt(id));
+            st.setInt(1, id);
             st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
