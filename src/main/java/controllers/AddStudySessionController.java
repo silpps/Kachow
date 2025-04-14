@@ -22,8 +22,6 @@ public class AddStudySessionController {
 
     private IDAO<StudySession> studySessionDAO;
 
-    private Map<Integer, String> courses;
-
     private ResourceBundle bundle;
 
     @FXML
@@ -70,7 +68,7 @@ public class AddStudySessionController {
     @FXML
     private void initialize() {
         TimeTableDAO timeTableDAO = new TimeTableDAO();
-        courses= timeTableDAO.getCourses();
+        Map<Integer, String> courses = timeTableDAO.getCourses();
         for (Map.Entry<Integer, String> entry : courses.entrySet()) {
             courseNameChoiceBox.getItems().add(entry.getValue() + " (ID: " + entry.getKey() + ")");
         }
@@ -104,48 +102,45 @@ public class AddStudySessionController {
             return;
         }
 
-        if (selectedItem != null) {
-            int courseId = Integer.parseInt(selectedItem.replaceAll(".*\\(ID: (\\d+)\\).*", "$1"));
+
+        int courseId = Integer.parseInt(selectedItem.replaceAll(".*\\(ID: (\\d+)\\).*", "$1"));
 
 
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
+        LocalDateTime fromTime = LocalDateTime.of(date, LocalTime.parse(fromTimeString, timeFormatter));
+        LocalDateTime toTime = LocalDateTime.of(date, LocalTime.parse(toTimeString, timeFormatter));
+        System.out.println(fromTime);
+        System.out.println(toTime);
+        System.out.println(date);
+        if (fromTime.isAfter(toTime)) {
+            fromTimeErrorLabel.setText(bundle.getString("toTimeBeforeFromTimeError"));
+            return;
+        }
 
-            if (date != null && fromTimeString != null && toTimeString != null) {
-                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
-                LocalDateTime fromTime = LocalDateTime.of(date, LocalTime.parse(fromTimeString, timeFormatter));
-                LocalDateTime toTime = LocalDateTime.of(date, LocalTime.parse(toTimeString, timeFormatter));
-                System.out.println(fromTime);
-                System.out.println(toTime);
-                System.out.println(date);
-                if (fromTime.isAfter(toTime)) {
-                    fromTimeErrorLabel.setText(bundle.getString("toTimeBeforeFromTimeError"));
-                    return;
-                }
+        StudySession studySession = new StudySession(courseId, sessionTitle, description, fromTime, toTime);
+        studySessionDAO.add(studySession);
+        System.out.println("Study session added, CourseId:" + studySession.getCourseId() + " " + studySession.getTitle() + " " + studySession.getDescription());
 
-                StudySession studySession = new StudySession(courseId, sessionTitle, description, fromTime, toTime);
-                studySessionDAO.add(studySession);
-                System.out.println("Study session added, CourseId:" + studySession.getCourseId() + " " + studySession.getTitle() + " " + studySession.getDescription());
+        bundle = ResourceBundle.getBundle("messages", Locale.getDefault());
+
+        new Thread(() -> {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
 
-            ResourceBundle bundle = ResourceBundle.getBundle("messages", Locale.getDefault());
-
-            new Thread(() -> {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    Thread.currentThread().interrupt();
-                }
-
-                Platform.runLater(() -> {
-                    System.out.println("Updating UI...");
-                    timetableController.fetchAndDisplayCurrentWeeksData(bundle);
-                    System.out.println("UI updated.");
-                });
-            }).start();
+            Platform.runLater(() -> {
+                System.out.println("Updating UI...");
+                timetableController.fetchAndDisplayCurrentWeeksData(bundle);
+                System.out.println("UI updated.");
+            });
+        }).start();
 
 
-            sessionBackButtonClicked();
-        }
+        sessionBackButtonClicked();
+
     }
 
     public void setBundle(ResourceBundle bundle) {

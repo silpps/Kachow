@@ -48,7 +48,7 @@ public class TimetableController implements Initializable {
     private SettingDAO settingDAO;
     private Map<Integer, String> courses;
     private Locale locale;
-    private ResourceBundle bundle = ResourceBundle.getBundle("messages");
+    private ResourceBundle bundle;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -66,6 +66,8 @@ public class TimetableController implements Initializable {
         courses = timeTableDAO.getCourses();
 
         this.locale = Locale.of(language.get("language"), language.get("region"));
+        Locale.setDefault(this.locale);
+        bundle = ResourceBundle.getBundle("messages", locale);
 
         LocalDate today = LocalDate.now();
         this.startOfWeek = today.with(java.time.DayOfWeek.MONDAY);
@@ -107,8 +109,7 @@ public class TimetableController implements Initializable {
         saturdayDate.setText(startOfWeek.plusDays(5).format(formatter));
         sundayDate.setText(startOfWeek.plusDays(6).format(formatter));
 
-
-        //TODO: Localize date format
+        // Set the current week label
         currentWeekLabel.setText(startOfWeek.format(formatter2) + " - " + endOfWeek.format(formatter2));
 
 
@@ -126,6 +127,7 @@ public class TimetableController implements Initializable {
         allTasks.addAll(studySessions);
         allTasks.addAll(exams);
 
+        System.out.println("Locale: " + locale + " " + bundle.getLocale().getLanguage());
         // Add tasks to the correct day's VBox
         addTasksToDay(allTasks, bundle);
     }
@@ -186,7 +188,6 @@ public class TimetableController implements Initializable {
     }
 
 
-    //TODO: Localize labels
     private VBox createTaskBox(Object task, ResourceBundle bundle) {
         return switch (task) {
             case ClassSchedule classSchedule -> createClassScheduleBox(classSchedule, bundle);
@@ -291,7 +292,6 @@ public class TimetableController implements Initializable {
     }
 
 
-    //TODO: Localize labels and date and time formats
     private <T> void detailsPopup(T event, ResourceBundle bundle) {
         try {
             Stage popupStage = new Stage();
@@ -312,7 +312,7 @@ public class TimetableController implements Initializable {
             DatePicker datePicker = new DatePicker(getEventDate((MyEvent) event).toLocalDate());
 
             datePicker.setConverter(new StringConverter<LocalDate>() {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
                 @Override
                 public String toString(LocalDate date) {

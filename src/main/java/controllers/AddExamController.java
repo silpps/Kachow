@@ -20,7 +20,6 @@ import java.util.ResourceBundle;
 public class AddExamController {
 
     private IDAO<Exam> examDAO;
-    private Map<Integer, String> courses;
     private ResourceBundle bundle;
 
     @FXML
@@ -58,7 +57,7 @@ public class AddExamController {
     @FXML
     public void initialize(){
         TimeTableDAO timeTableDAO = new TimeTableDAO();
-        courses = timeTableDAO.getCourses();
+        Map<Integer, String> courses = timeTableDAO.getCourses();
         for (Map.Entry<Integer, String> entry : courses.entrySet()) {
             courseNameChoiceBox.getItems().add(entry.getValue() + " (ID: " + entry.getKey() + ")");
         }
@@ -94,40 +93,36 @@ public class AddExamController {
             return;
         }
 
-        if (selectedItem != null) {
-            int courseId = Integer.parseInt(selectedItem.replaceAll(".*\\(ID: (\\d+)\\).*", "$1"));
+        int courseId = Integer.parseInt(selectedItem.replaceAll(".*\\(ID: (\\d+)\\).*", "$1"));
 
 
-            if (examDate != null && fromTimeString != null) {
-                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
-                LocalDateTime examDateTime = LocalDateTime.of(examDate, LocalTime.parse(fromTimeString, timeFormatter));
-                System.out.println(examDateTime);
-                System.out.println(examDate);
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
+        LocalDateTime examDateTime = LocalDateTime.of(examDate, LocalTime.parse(fromTimeString, timeFormatter));
+        System.out.println(examDateTime);
+        System.out.println(examDate);
 
 
-                Exam exam = new Exam(courseId, examDateTime, examTitle, description, location);
-                examDAO.add(exam);
+        Exam exam = new Exam(courseId, examDateTime, examTitle, description, location);
+        examDAO.add(exam);
+
+        bundle = ResourceBundle.getBundle("messages", Locale.getDefault());
+        // Update the UI after saving the exam
+        new Thread(() -> {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
 
-            ResourceBundle bundle = ResourceBundle.getBundle("messages", Locale.getDefault());
-            // Update the UI after saving the exam
-            new Thread(() -> {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    Thread.currentThread().interrupt();
-                }
+            Platform.runLater(() -> {
+                System.out.println("Updating UI...");
+                timetableController.fetchAndDisplayCurrentWeeksData(bundle);
+                System.out.println("UI updated.");
+            });
+        }).start();
 
-                Platform.runLater(() -> {
-                    System.out.println("Updating UI...");
-                    timetableController.fetchAndDisplayCurrentWeeksData(bundle);
-                    System.out.println("UI updated.");
-                });
-            }).start();
-
-            backButtonClicked();
-        }
+        backButtonClicked();
     }
 
     public void setBundle(ResourceBundle bundle) {
