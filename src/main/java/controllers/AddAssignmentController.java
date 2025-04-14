@@ -37,13 +37,39 @@ public class AddAssignmentController {
     @FXML
     private DatePicker assignmentDatePicker;
     @FXML
-    private CheckBox notStartedCheckBox, ongoingCheckBox;
+    private CheckBox notStartedCheckBox;
     @FXML
-    private Button backButton, assignmentSaveButton;
+    private CheckBox ongoingCheckBox;
     @FXML
-    private Label addAssignmentTitleLabel, assignmentCourseNameLabel, assignmentTitleLabel, assignmentDescriptionLabel, dateLabel, deadlineLabel, timeLabel, assignmentProgressLabel;
+    private Button backButton;
     @FXML
-    private Label courseErrorLabel, titleErrorLabel, dateErrorLabel, timeErrorLabel, progressErrorLabel;
+    private Button assignmentSaveButton;
+    @FXML
+    private Label addAssignmentTitleLabel;
+    @FXML
+    private Label assignmentCourseNameLabel;
+    @FXML
+    private Label assignmentProgressLabel;
+    @FXML
+    private Label timeLabel;
+    @FXML
+    private Label deadlineLabel;
+    @FXML
+    private Label dateLabel;
+    @FXML
+    private Label assignmentTitleLabel;
+    @FXML
+    private Label assignmentDescriptionLabel;
+    @FXML
+    private Label titleErrorLabel;
+    @FXML
+    private Label dateErrorLabel;
+    @FXML
+    private Label timeErrorLabel;
+    @FXML
+    private Label progressErrorLabel;
+    @FXML
+    private Label courseErrorLabel;
     @FXML
     private ChoiceBox<String> deadlineChoiceBox;
 
@@ -177,7 +203,7 @@ public class AddAssignmentController {
             timeLabel.setText(bundle.getString("timeLabel"));
             assignmentProgressLabel.setText(bundle.getString("progressLabel"));
 
-            if (bundle.getLocale().getLanguage().equals("ar")) {
+            if ("ar".equals(bundle.getLocale().getLanguage())) {
                 rootPane.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
             }
 

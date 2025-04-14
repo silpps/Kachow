@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Singleton class to manage the list of courses.
  */
-public class CourseService {
+public final class CourseService {
     private static CourseService instance;
     private final List<String> courses = new ArrayList<>();
 

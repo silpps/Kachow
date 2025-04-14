@@ -32,15 +32,60 @@ public class TimetableController implements Initializable {
 
     @FXML
     private HBox weekBox;
+    @FXML
+    private VBox mondayColumn;
+    @FXML
+    private VBox tuesdayColumn;
+    @FXML
+    private VBox wednesdayColumn;
+    @FXML
+    private VBox thursdayColumn;
+    @FXML
+    private VBox fridayColumn;
+    @FXML
+    private VBox saturdayColumn;
+    @FXML
+    private VBox sundayColumn;
 
     @FXML
-    private VBox mondayColumn, tuesdayColumn, wednesdayColumn, thursdayColumn, fridayColumn, saturdayColumn, sundayColumn;
-
+    private Label mondayDate;
     @FXML
-    private Label mondayDate, tuesdayDate, wednesdayDate, thursdayDate, fridayDate, saturdayDate, sundayDate, currentWeekLabel, nameLabel, mondayLabel, tuesdayLabel, wednesdayLabel, thursdayLabel, fridayLabel, saturdayLabel, sundayLabel;
-
+    private Label tuesdayDate;
     @FXML
-    private Button addButton, nextWeekButton, lastWeekButton;
+    private Label wednesdayDate;
+    @FXML
+    private Label thursdayDate;
+    @FXML
+    private Label fridayDate;
+    @FXML
+    private Label saturdayDate;
+    @FXML
+    private Label sundayDate;
+    @FXML
+    private Label currentWeekLabel;
+    @FXML
+    private Label nameLabel;
+    @FXML
+    private Label mondayLabel;
+    @FXML
+    private Label tuesdayLabel;
+    @FXML
+    private Label wednesdayLabel;
+    @FXML
+    private Label thursdayLabel;
+    @FXML
+    private Label fridayLabel;
+    @FXML
+    private Label saturdayLabel;
+    @FXML
+    private Label sundayLabel;
+    @FXML
+    private Button addButton;
+    @FXML
+    private Button nextWeekButton;
+    @FXML
+    private Button lastWeekButton;
+
 
     private TimeTableDAO timeTableDAO;
     private LocalDate startOfWeek;
@@ -110,7 +155,7 @@ public class TimetableController implements Initializable {
         nextWeekButton.setText(bundle.getString("nextWeekButton"));
         lastWeekButton.setText(bundle.getString("lastWeekButton"));
 
-        if (locale.getLanguage().equals("ar")) {
+        if ("ar".equals(bundle.getLocale().getLanguage())) {
             weekBox.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
         }
         else
@@ -282,7 +327,7 @@ public class TimetableController implements Initializable {
         Label assignmentTaskLabel = new Label(bundle.getString("assignmentLabel"));
         assignmentTaskLabel.setStyle("-fx-font-weight: bold;");
         Label timeLabel = new Label(bundle.getString("deadlineLabel") + assignment.getDeadline().toLocalTime().toString());
-        Label statusLabel = new Label(bundle.getString("statusLabel") + (assignment.getStatus()));
+        Label statusLabel = new Label(bundle.getString("statusLabel") + assignment.getStatus());
 
         taskBox.getChildren().addAll(courseLabel, assignmentTaskLabel, timeLabel, statusLabel);
         return taskBox;

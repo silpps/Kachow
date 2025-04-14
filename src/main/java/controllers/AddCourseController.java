@@ -23,30 +23,36 @@ public class AddCourseController {
 
     @FXML
     private AnchorPane rootPane;
-
     @FXML
     private DatePicker startDatePicker;
-
     @FXML
     private DatePicker endDatePicker;
-
     @FXML
     private TextField courseNameTextField;
-
     @FXML
     private TextField instructorTextField;
-
     @FXML
     private Button addCourseSaveButton;
-
     @FXML
     private Button addCourseBackButton;
-
     @FXML
-    private Label addCourseTitleLabel, courseNameLabel, instructorLabel, startDateLabel, endDateLabel;
-
+    private Label courseNameLabel;
     @FXML
-    private Label nameErrorLabel, instructorErrorLabel, startDateErrorLabel, endDateErrorLabel;
+    private Label instructorLabel;
+    @FXML
+    private Label startDateLabel;
+    @FXML
+    private Label endDateLabel;
+    @FXML
+    private Label addCourseTitleLabel;
+    @FXML
+    private Label instructorErrorLabel;
+    @FXML
+    private Label startDateErrorLabel;
+    @FXML
+    private Label endDateErrorLabel;
+    @FXML
+    private Label nameErrorLabel;
 
     private TimetableController timetableController;
 
@@ -130,7 +136,7 @@ public class AddCourseController {
             startDateLabel.setText(bundle.getString("startDateLabel"));
             endDateLabel.setText(bundle.getString("endDateLabel"));
 
-            if (bundle.getLocale().getLanguage().equals("ar")) {
+            if ("ar".equals(bundle.getLocale().getLanguage())) {
                 rootPane.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
             }
         }
