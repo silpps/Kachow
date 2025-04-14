@@ -2,7 +2,7 @@ package models;
 import java.time.LocalDateTime;
 
 //TODO: Lisää deadline aika
-public class Assignment {
+public class Assignment extends MyEvent {
     private final int courseId;
     private String title;
     private String description;
@@ -22,12 +22,19 @@ public class Assignment {
         return courseId;
     }
 
+    @Override
     public String getTitle() {
         return title;
     }
 
+    @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public LocalDateTime getDate() {
+        return getDeadline();
     }
 
     public LocalDateTime getDeadline() {
