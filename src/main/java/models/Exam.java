@@ -2,7 +2,7 @@ package models;
 import java.time.LocalDateTime;
 
 //TODO: Lisää start ja end time
-public class Exam {
+public class Exam extends MyEvent {
     private final int courseId;
     private LocalDateTime examDate;
     private String title;
@@ -22,14 +22,21 @@ public class Exam {
         return courseId;
     }
 
+    @Override
+    public LocalDateTime getDate() {
+        return getExamDate();
+    }
+
     public LocalDateTime getExamDate() {
         return examDate;
     }
 
+    @Override
     public String getTitle() {
         return title;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }

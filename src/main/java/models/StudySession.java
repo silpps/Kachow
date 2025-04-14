@@ -1,7 +1,7 @@
 package models;
 import java.time.LocalDateTime;
 
-public class StudySession {
+public class StudySession extends MyEvent {
     private final int courseId;
     private String title;
     private String description;
@@ -22,12 +22,19 @@ public class StudySession {
         return courseId;
     }
 
+    @Override
     public String getTitle() {
         return title;
     }
 
+    @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public LocalDateTime getDate() {
+        return getStartTime();
     }
 
     public LocalDateTime getStartTime() {

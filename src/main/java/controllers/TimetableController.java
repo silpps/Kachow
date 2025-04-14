@@ -301,7 +301,7 @@ public class TimetableController implements Initializable {
             popupVBox.setStyle("-fx-padding: 20;");
 
             Label titleLabel = new Label(bundle.getString("titleLabel") + " ");
-            TextField titleField = new TextField(getEventTitle(event));
+            TextField titleField = new TextField(getEventTitle((MyEvent) event));
 
             if (!(event instanceof ClassSchedule)) {
                 popupVBox.getChildren().addAll(titleLabel, titleField);
@@ -309,7 +309,7 @@ public class TimetableController implements Initializable {
 
 
             Label dateLabel = new Label(bundle.getString("dateLabel"));
-            DatePicker datePicker = new DatePicker(getEventDate(event).toLocalDate());
+            DatePicker datePicker = new DatePicker(getEventDate((MyEvent) event).toLocalDate());
 
             datePicker.setConverter(new StringConverter<LocalDate>() {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -336,7 +336,7 @@ public class TimetableController implements Initializable {
             toTimeChoiceBox.setValue(getEventEndTime(event));
 
             Label descriptionLabel = new Label(bundle.getString("descriptionLabel") + " ");
-            TextArea descriptionField = new TextArea(getEventDescription(event));
+            TextArea descriptionField = new TextArea(getEventDescription((MyEvent) event));
 
             TextField locationField = null;
             if (event instanceof ClassSchedule classSchedule || event instanceof Exam exam) {
@@ -463,7 +463,7 @@ public class TimetableController implements Initializable {
 
 
     private void handleDeleteEvent(Object event, Stage popupStage) {
-        System.out.println("Delete event: " + getEventTitle(event));
+        System.out.println("Delete event: " + getEventTitle((MyEvent) event));
 
         deleteEvent(event);
         popupStage.close();
@@ -500,6 +500,10 @@ public class TimetableController implements Initializable {
         return "Unknown Event";
     }
 
+    private String getEventTitle(MyEvent myEvent) {
+        return myEvent.getTitle();
+    }
+
     private <T> LocalDateTime getEventDate(T event) {
         if (event instanceof ClassSchedule classSchedule) {
             return classSchedule.getStartTime();
@@ -513,6 +517,10 @@ public class TimetableController implements Initializable {
         return LocalDateTime.now(); // Default to now if unknown event
     }
 
+    private LocalDateTime getEventDate(MyEvent myEvent) {
+        return myEvent.getDate();
+    }
+
     private <T> String getEventStartTime(T event) {
         if (event instanceof ClassSchedule classSchedule) {
             return classSchedule.getStartTime().toLocalTime().toString();
@@ -524,6 +532,10 @@ public class TimetableController implements Initializable {
             return assignment.getDeadline().toLocalTime().toString();
         }
         return "00:00"; // Default
+    }
+
+    private String getEventStartTime(MyEvent myEvent) {
+        return myEvent.getLTStartTime().toString();
     }
 
     private <T> String getEventEndTime(T event) {
@@ -620,4 +632,7 @@ public class TimetableController implements Initializable {
     }
 
 
+    private String getEventDescription(MyEvent myEvent) {
+        return myEvent.getDescription();
+    }
 }
