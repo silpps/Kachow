@@ -15,6 +15,11 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+/**
+ * Controller class for the "Add Assignment" view.
+ * This class handles user interactions and logic for adding a new assignment to the timetable.
+ * It validates user input, interacts with the database through DAOs, and updates the timetable view.
+ */
 public class AddAssignmentController {
     private final String[] deadlineTimes = {"6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00",
             "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"};
@@ -42,11 +47,21 @@ public class AddAssignmentController {
     @FXML
     private ChoiceBox<String> deadlineChoiceBox;
 
+    /**
+     * Handles the action when the back button is clicked.
+     * Closes the current window.
+     */
     @FXML
     private void backButtonClicked() {
         backButton.getScene().getWindow().hide();
     }
 
+    /**
+     * Initializes the controller.
+     * Populates the course choice box with available courses and the deadline choice box with predefined times.
+     * Sets up event handlers for the save and back buttons.
+     * Retrieves course data from the database using {@link TimeTableDAO}.
+     */
     @FXML
     public void initialize() {
         TimeTableDAO timeTableDAO = new TimeTableDAO();
@@ -62,6 +77,12 @@ public class AddAssignmentController {
         assignmentSaveButton.setOnAction(e -> assignmentSaveButtonClicked());
     }
 
+    /**
+     * Handles the action when the save button is clicked.
+     * Validates the input fields, checks for logical errors (e.g., missing or invalid data),
+     * and saves the assignment to the database if all validations pass.
+     * Updates the timetable view after successfully saving the assignment.
+     */
     @FXML
     private void assignmentSaveButtonClicked() {
         // Save the assignment details
@@ -118,15 +139,29 @@ public class AddAssignmentController {
 
     }
 
+    /**
+     * Sets the timetable controller for this view.
+     *
+     * @param timetableController the timetable controller
+     */
     public void setTimetableController(TimetableController timetableController) {
         this.timetableController = timetableController;
     }
 
+    /**
+     * Sets the resource bundle for localization and translates the UI.
+     *
+     * @param bundle the resource bundle
+     */
     public void setBundle(ResourceBundle bundle) {
         this.bundle = bundle;
         translateUI();
     }
 
+    /**
+     * Translates the UI components based on the provided resource bundle.
+     * This method updates the text of various UI elements to match the selected language.
+     */
     private void translateUI() {
         if (bundle != null) {
             assignmentSaveButton.setText(bundle.getString("saveButton"));

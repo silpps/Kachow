@@ -5,10 +5,20 @@ import models.Assignment;
 
 import java.sql.*;
 
+/**
+ * Data Access Object (DAO) class for managing {@link Assignment} objects in the database.
+ * Implements {@link IDAO} interface for CRUD (Create, Read, Update, Delete) operations.
+ */
 public class AssignmentDAO implements IDAO<Assignment> {
     private Connection conn = null;
 
-    // Get an Assignment from the database
+
+    /**
+     * Retrieves an Assignment from the database by its ID.
+     *
+     * @param id the ID of the assignment to retrieve
+     * @return the {@link Assignment} object with the specified ID, or null if not found
+     */
     @Override
     public Assignment get(int id) {
         conn = MariaDbConnection.getConnection();
@@ -32,7 +42,11 @@ public class AssignmentDAO implements IDAO<Assignment> {
         return null;
     }
 
-    // Add a new Assignment to the database
+    /**
+     * Adds a new assignment to the database.
+     *
+     * @param assignment the {@link Assignment} object to add
+     */
     @Override
     public void add(Assignment assignment) {
         conn = MariaDbConnection.getConnection();
@@ -55,7 +69,11 @@ public class AssignmentDAO implements IDAO<Assignment> {
         }
     }
 
-    // Update an Assignment in the database
+    /**
+     * Updates an existing assignment in the database.
+     *
+     * @param assignment the {@link Assignment} object with updated details
+     */
     @Override
     public void update(Assignment assignment) {
         conn = MariaDbConnection.getConnection();
@@ -73,7 +91,11 @@ public class AssignmentDAO implements IDAO<Assignment> {
         }
     }
 
-    // Delete an Assignment from the database
+    /**
+     * Deletes an assignment from the database by its ID.
+     *
+     * @param id the ID of the assignment to delete
+     */
     @Override
     public void delete(int id) {
         conn = MariaDbConnection.getConnection();

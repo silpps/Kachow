@@ -17,6 +17,11 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Locale;
 
+/**
+ * Controller class for the "Add Class Schedule" view.
+ * This class handles user interactions and logic for adding a new class schedule to the timetable.
+ * It validates user input, interacts with the database through DAOs, and updates the timetable view.
+ */
 public class AddClassScheduleController {
     private final String[] startTimes = {"6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00",
             "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"};
@@ -48,6 +53,12 @@ public class AddClassScheduleController {
     @FXML
     private Label courseErrorLabel, dateErrorLabel, fromTimeErrorLabel, toTimeErrorLabel;
 
+    /**
+     * Initializes the controller.
+     * Populates the course choice box with available courses and the time choice boxes with predefined start and end times.
+     * Sets up event handlers for the save and back buttons.
+     * Retrieves course data from the database using {@link TimeTableDAO}.
+     */
     @FXML
     private void initialize() {
         classScheduleDAO = new ClassScheduleDAO();
@@ -63,12 +74,22 @@ public class AddClassScheduleController {
         scheduleBackButton.setOnAction(e -> scheduleBackButtonClicked());
     }
 
+    /**
+     * Handles the action when the back button is clicked.
+     * Closes the current window.
+     */
     @FXML
     private void scheduleBackButtonClicked() {
         // Close the window
         scheduleBackButton.getScene().getWindow().hide();
     }
 
+    /**
+     * Handles the action when the save button is clicked.
+     * Validates the input fields, checks for logical errors (e.g., start time is after end time),
+     * and saves the class schedule to the database if all validations pass.
+     * Updates the timetable view after successfully saving the class schedule.
+     */
     @FXML
     private void scheduleSaveButtonClicked() {
         // Get the selected course name
@@ -126,11 +147,20 @@ public class AddClassScheduleController {
 
     }
 
+    /**
+     * Sets the resource bundle for localization and translates the UI components.
+     *
+     * @param bundle the resource bundle containing localized strings.
+     */
     public void setBundle(ResourceBundle bundle) {
         this.bundle = bundle;
         translateUI();
     }
 
+    /**
+     * Translates the UI components using the provided resource bundle.
+     * Sets the text of various labels and buttons based on the current locale.
+     */
     private void translateUI() {
         if (bundle != null) {
             scheduleSaveButton.setText(bundle.getString("saveButton"));
@@ -150,6 +180,11 @@ public class AddClassScheduleController {
         }
     }
 
+    /**
+     * Sets the timetable controller for this view.
+     *
+     * @param timetableController the timetable controller
+     */
     public void setTimetableController(TimetableController timetableController) {
         this.timetableController = timetableController;
     }

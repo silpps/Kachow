@@ -5,10 +5,19 @@ import models.StudySession;
 
 import java.sql.*;
 
+/**
+ * Data Access Object (DAO) class for managing {@link StudySession} objects in the database.
+ * Implements {@link IDAO} interface for CRUD (Create, Read, Update, Delete) operations.
+ */
 public class StudySessionDAO implements IDAO<StudySession> {
     private Connection conn = null;
 
-    // Get a StudySession from the database
+    /**
+     * Retrieves a StudySession from the database by its ID.
+     *
+     * @param id the ID of the study session to retrieve
+     * @return the {@link StudySession} object with the specified ID, or null if not found
+     */
     @Override
     public StudySession get(int id) {
         conn = MariaDbConnection.getConnection();
@@ -32,7 +41,11 @@ public class StudySessionDAO implements IDAO<StudySession> {
         return null;
     }
 
-    // Add a new StudySession to the database
+    /**
+     * Adds a new study session to the database.
+     *
+     * @param session the {@link StudySession} object to add
+     */
     @Override
     public void add(StudySession session) {
         conn = MariaDbConnection.getConnection();
@@ -56,7 +69,11 @@ public class StudySessionDAO implements IDAO<StudySession> {
         }
     }
 
-    // Update a StudySession in the database
+    /**
+     * Updates an existing study session in the database.
+     *
+     * @param studySession the {@link StudySession} object to update
+     */
     @Override
     public void update(StudySession studySession) {
         conn = MariaDbConnection.getConnection();
@@ -74,7 +91,11 @@ public class StudySessionDAO implements IDAO<StudySession> {
         }
     }
 
-    // Delete a StudySession from the database
+    /**
+     * Deletes a study session from the database by its ID.
+     *
+     * @param id the ID of the study session to delete
+     */
     @Override
     public void delete(int id) {
         conn = MariaDbConnection.getConnection();

@@ -4,10 +4,19 @@ import config.MariaDbConnection;
 import models.Exam;
 import java.sql.*;
 
+/**
+ * Data Access Object (DAO) class for managing {@link Exam} objects in the database.
+ * Implements {@link IDAO} interface for CRUD (Create, Read, Update, Delete) operations.
+ */
 public class ExamDAO implements IDAO<Exam> {
     private Connection conn = null;
 
-    // Get an Exam from the database
+    /**
+     * Retrieves an Exam from the database by its ID.
+     *
+     * @param id the ID of the exam to retrieve
+     * @return the {@link Exam} object with the specified ID, or null if not found
+     */
     @Override
     public Exam get(int id) {
         conn = MariaDbConnection.getConnection();
@@ -31,7 +40,11 @@ public class ExamDAO implements IDAO<Exam> {
         return null;
     }
 
-    // Add a new Exam to the database
+
+    /**
+     * Adds a new exam to the database.
+     * @param exam the {@link Exam} object to add
+     */
     @Override
     public void add(Exam exam) {
         conn = MariaDbConnection.getConnection();
@@ -54,7 +67,10 @@ public class ExamDAO implements IDAO<Exam> {
         }
     }
 
-    // Update an Exam in the database
+    /**
+     * Updates an existing exam in the database.
+     * @param exam the {@link Exam} object to update
+     */
     @Override
     public void update(Exam exam) {
         conn = MariaDbConnection.getConnection();
@@ -72,7 +88,10 @@ public class ExamDAO implements IDAO<Exam> {
         }
     }
 
-    // Delete an Exam from the database
+    /**
+     * Deletes an exam from the database by its ID.
+     * @param id the ID of the exam to delete
+     */
     @Override
     public void delete(int id) {
         conn = MariaDbConnection.getConnection();

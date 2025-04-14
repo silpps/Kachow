@@ -35,13 +35,14 @@ public abstract class MyEvent {
         return getDate().toLocalTime();
     }
 
+    //abstract String getEndTime();
+
     /**
      * Returns the description of the event.
      * Subclasses can override this method to provide a specific description.
      *
      * @return the description of the event, or an empty string if not overridden
      */
-    //abstract String getEndTime();
     public String getDescription() {
         return "";
     }

@@ -10,10 +10,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Data Access Object (DAO) class for managing timetable-related data in the database.
+ * Provides methods to retrieve course names, class schedules, assignments, study sessions, and exams.
+ */
 public class TimeTableDAO {
     Connection conn = null;
 
-    // get all course names from the database
+    /**
+     * Retrieves a map of course IDs and names from the database.
+     *
+     * @return a map where the key is the course ID and the value is the course name
+     */
     public Map<Integer, String> getCourses() {
         conn = MariaDbConnection.getConnection();
         Map<Integer, String> courses = new HashMap<>();
@@ -29,7 +37,13 @@ public class TimeTableDAO {
         return courses;
     }
 
-    // get current week's courses from the database
+    /**
+     * Retrieves a list of courses from the database within the specified date range.
+     *
+     * @param startDate the start date of the course
+     * @param endDate   the end date of the course
+     * @return a list of {@link Course} objects within the specified date range
+     */
     public List<Course> getCourses(LocalDate startDate, LocalDate endDate) {
         conn = MariaDbConnection.getConnection();
         List<Course> courses = new ArrayList<>();
@@ -54,7 +68,13 @@ public class TimeTableDAO {
         return courses;
     }
 
-    // get current week's class schedule from the database
+    /**
+     * Retrieves a list of class schedules from the database within the specified date range.
+     *
+     * @param startDate the start date of the class schedule
+     * @param endDate   the end date of the class schedule
+     * @return a list of {@link ClassSchedule} objects within the specified date range
+     */
     public List<ClassSchedule> getClassSchedule(LocalDate startDate, LocalDate endDate) {
         conn = MariaDbConnection.getConnection();
         List<ClassSchedule> classSchedules = new ArrayList<>();
@@ -81,7 +101,13 @@ public class TimeTableDAO {
         return classSchedules;
     }
 
-    // get current week's assignments from the database
+    /**
+     * Retrieves a list of assignments from the database within the specified date range.
+     *
+     * @param startDate the start date of the assignment
+     * @param endDate   the end date of the assignment
+     * @return a list of {@link Assignment} objects within the specified date range
+     */
     public List<Assignment> getAssignmentSchedule(LocalDate startDate, LocalDate endDate) {
         conn = MariaDbConnection.getConnection();
         List<Assignment> assignments = new ArrayList<>();
@@ -108,7 +134,13 @@ public class TimeTableDAO {
         return assignments;
     }
 
-    // get current week's study sessions from the database
+    /**
+     * Retrieves a list of study sessions from the database within the specified date range.
+     *
+     * @param startDate the start date of the study session
+     * @param endDate   the end date of the study session
+     * @return a list of {@link StudySession} objects within the specified date range
+     */
     public List<StudySession> getStudySessionSchedule(LocalDate startDate, LocalDate endDate) {
         conn = MariaDbConnection.getConnection();
         List<StudySession> studySessions = new ArrayList<>();
@@ -135,7 +167,13 @@ public class TimeTableDAO {
         return studySessions;
     }
 
-    // get current week's exam schedule from the database
+    /**
+     * Retrieves a list of exams from the database within the specified date range.
+     *
+     * @param startDate the start date of the exam
+     * @param endDate   the end date of the exam
+     * @return a list of {@link Exam} objects within the specified date range
+     */
     public List<Exam> getExamSchedule(LocalDate startDate, LocalDate endDate) {
         conn = MariaDbConnection.getConnection();
         List<Exam> exams = new ArrayList<>();

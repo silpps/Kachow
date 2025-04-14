@@ -5,10 +5,19 @@ import models.Course;
 
 import java.sql.*;
 
+/**
+ * Data Access Object (DAO) class for managing {@link Course} objects in the database.
+ * Implements {@link IDAO} interface for CRUD (Create, Read, Update, Delete) operations.
+ */
 public class CourseDAO implements IDAO<Course> {
     private Connection conn = null;
 
-    // Get a Course from the database
+    /**
+     * Retrieves a Course from the database by its ID.
+     *
+     * @param id the ID of the course to retrieve
+     * @return the {@link Course} object with the specified ID, or null if not found
+     */
     @Override
     public Course get(int id) {
         conn = MariaDbConnection.getConnection();
@@ -33,7 +42,11 @@ public class CourseDAO implements IDAO<Course> {
         return null;
     }
 
-    // Add a new Course to the database
+
+    /**
+     * Adds a new course to the database.
+     * @param course the {@link Course} object to add
+     */
     @Override
     public void add(Course course) {
         String sql = "INSERT INTO course (course_name, instructor, start_date, end_date) VALUES (?, ?, ?, ?)";
@@ -55,7 +68,11 @@ public class CourseDAO implements IDAO<Course> {
         }
     }
 
-    // Update a Course in the database
+
+    /**
+     * Updates an existing course in the database.
+     * @param course the {@link Course} object to update
+     */
     @Override
     public void update(Course course) {
         conn = MariaDbConnection.getConnection();
@@ -72,7 +89,10 @@ public class CourseDAO implements IDAO<Course> {
         }
     }
 
-    // Delete a Course from the database
+    /**
+     * Deletes a course from the database by its ID.
+     * @param id the ID of the course to delete
+     */
     @Override
     public void delete(int id) {
         String sql = "DELETE FROM course WHERE course_id = ?";

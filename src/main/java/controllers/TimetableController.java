@@ -24,6 +24,10 @@ import java.time.format.FormatStyle;
 import java.util.*;
 
 
+/**
+ * Controller class for the Timetable view.
+ * This class handles the user interactions and logic for displaying and managing the timetable.
+ */
 public class TimetableController implements Initializable {
 
     @FXML
@@ -49,8 +53,14 @@ public class TimetableController implements Initializable {
     private Map<Integer, String> courses;
     private Locale locale;
     private ResourceBundle bundle;
-    private String bundleName = "messages";
+    private final String bundleName = "messages";
 
+    /**
+     * Initializes the controller and sets up the timetable view.
+     *
+     * @param url the location used to resolve relative paths for the root object
+     * @param resourceBundle the resource bundle for localization
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Initialize the DAO classes
@@ -77,11 +87,18 @@ public class TimetableController implements Initializable {
         fetchAndDisplayCurrentWeeksData(bundle);
     }
 
-
+    /**
+     * Updates the course map with the latest courses from the database.
+     */
     public void updateCourseMap() {
         this.courses = timeTableDAO.getCourses();
     }
 
+    /**
+     * Fetches and displays the current week's data in the timetable.
+     *
+     * @param bundle the resource bundle for localization
+     */
     public void fetchAndDisplayCurrentWeeksData(ResourceBundle bundle) {
         clearTimetable();
         loadLanguage(locale);
@@ -132,6 +149,9 @@ public class TimetableController implements Initializable {
         addTasksToDay(allTasks, bundle);
     }
 
+    /**
+     * Shows the next week in the timetable.
+     */
     @FXML
     private void showNextWeek() {
         this.startOfWeek = this.startOfWeek.plusDays(7);
@@ -140,6 +160,9 @@ public class TimetableController implements Initializable {
 
     }
 
+    /**
+     * Shows the previous week in the timetable.
+     */
     @FXML
     private void showPreviousWeek() {
         this.startOfWeek = this.startOfWeek.minusDays(7);
@@ -147,6 +170,9 @@ public class TimetableController implements Initializable {
         fetchAndDisplayCurrentWeeksData(bundle);
     }
 
+    /**
+     * Clears the timetable by removing all tasks from the columns.
+     */
     private void clearTimetable() {
         mondayColumn.getChildren().clear();
         tuesdayColumn.getChildren().clear();
@@ -157,6 +183,13 @@ public class TimetableController implements Initializable {
         sundayColumn.getChildren().clear();
     }
 
+    /**
+     * Adds tasks to the appropriate day columns in the timetable.
+     *
+     * @param tasks  the list of tasks to add
+     * @param bundle the resource bundle for localization
+     * @param <T>    the type of tasks
+     */
     private <T> void addTasksToDay(List<T> tasks, ResourceBundle bundle) {
         tasks.sort(Comparator.comparing(task -> switch (task) {
             case ClassSchedule classSchedule -> classSchedule.getStartTime();
@@ -174,6 +207,12 @@ public class TimetableController implements Initializable {
         }
     }
 
+    /**
+     * Returns the VBox corresponding to the given day of the week.
+     *
+     * @param dayOfWeek the day of the week (1 = Monday, 7 = Sunday)
+     * @return the VBox for the specified day
+     */
     private VBox getDayColumn(int dayOfWeek) {
         return switch (dayOfWeek) {
             case 1 -> mondayColumn;
@@ -187,7 +226,13 @@ public class TimetableController implements Initializable {
         };
     }
 
-
+    /**
+     * Creates a VBox for the given task type.
+     *
+     * @param task   the task object
+     * @param bundle the resource bundle for localization
+     * @return the VBox containing the task details
+     */
     private VBox createTaskBox(Object task, ResourceBundle bundle) {
         return switch (task) {
             case ClassSchedule classSchedule -> createClassScheduleBox(classSchedule, bundle);
@@ -199,6 +244,13 @@ public class TimetableController implements Initializable {
 
     }
 
+    /**
+     * Creates a VBox for the ClassSchedule task.
+     *
+     * @param classSchedule the ClassSchedule object
+     * @param bundle        the resource bundle for localization
+     * @return the VBox containing the ClassSchedule details
+     */
     private VBox createClassScheduleBox(ClassSchedule classSchedule, ResourceBundle bundle) {
         VBox taskBox = new VBox();
         taskBox.getStyleClass().add("class-schedule-box");
@@ -214,6 +266,13 @@ public class TimetableController implements Initializable {
         return taskBox;
     }
 
+    /**
+     * Creates a VBox for the Assignment task.
+     *
+     * @param assignment the Assignment object
+     * @param bundle     the resource bundle for localization
+     * @return the VBox containing the Assignment details
+     */
     private VBox createAssignmentBox(Assignment assignment, ResourceBundle bundle) {
         VBox taskBox = new VBox();
         taskBox.getStyleClass().add("assignment-box");
@@ -229,6 +288,13 @@ public class TimetableController implements Initializable {
         return taskBox;
     }
 
+    /**
+     * Creates a VBox for the StudySession task.
+     *
+     * @param studySession the StudySession object
+     * @param bundle       the resource bundle for localization
+     * @return the VBox containing the StudySession details
+     */
     private VBox createStudySessionBox(StudySession studySession, ResourceBundle bundle) {
         VBox taskBox = new VBox();
         taskBox.getStyleClass().add("study-session-box");
@@ -243,6 +309,13 @@ public class TimetableController implements Initializable {
         return taskBox;
     }
 
+    /**
+     * Creates a VBox for the Exam task.
+     *
+     * @param exam   the Exam object
+     * @param bundle the resource bundle for localization
+     * @return the VBox containing the Exam details
+     */
     private VBox createExamBox(Exam exam, ResourceBundle bundle) {
         VBox taskBox = new VBox();
         taskBox.getStyleClass().add("exam-box");
@@ -258,7 +331,12 @@ public class TimetableController implements Initializable {
         return taskBox;
     }
 
-
+    /**
+     * Returns the day of the week for the given task.
+     *
+     * @param task the task object
+     * @return the day of the week (1 = Monday, 7 = Sunday)
+     */
     private int getTaskDayOfWeek(Object task) {
         return switch (task) {
             case ClassSchedule classSchedule -> classSchedule.getStartTime().getDayOfWeek().getValue();
@@ -269,6 +347,10 @@ public class TimetableController implements Initializable {
         };
     }
 
+    /**
+     * Handles the action when the add button is clicked.
+     * Opens a new window to add a new task.
+     */
     @FXML
     private void addButtonClicked() {
         try {
@@ -291,7 +373,12 @@ public class TimetableController implements Initializable {
         }
     }
 
-
+    /**
+     * Displays a popup with the details of the selected event.
+     *
+     * @param event  the event object
+     * @param bundle the resource bundle for localization
+     */
     private <T> void detailsPopup(T event, ResourceBundle bundle) {
         try {
             Stage popupStage = new Stage();
@@ -395,7 +482,18 @@ public class TimetableController implements Initializable {
         }
     }
 
-
+    /**
+     * Handles the save event when the save button is clicked in the popup.
+     *
+     * @param event         the event object
+     * @param titleField    the title field
+     * @param datePicker    the date picker
+     * @param fromTimeChoiceBox the "from" time choice box
+     * @param toTimeChoiceBox   the "to" time choice box
+     * @param descriptionField  the description field
+     * @param locationField     the location field
+     * @param popupStage        the popup stage
+     */
     private <T> void handleSaveEvent(T event, TextField titleField, DatePicker datePicker, ChoiceBox<String> fromTimeChoiceBox, ChoiceBox<String> toTimeChoiceBox, TextArea descriptionField, TextField locationField, Stage popupStage) {
         String newTitle = titleField.getText();
         LocalDate newDate = datePicker.getValue();
@@ -460,6 +558,12 @@ public class TimetableController implements Initializable {
         fetchAndDisplayCurrentWeeksData(bundle);
     }
 
+    /**
+     * Handles the delete event when the delete button is clicked in the popup.
+     *
+     * @param event      the event object
+     * @param popupStage the popup stage
+     */
     private void handleDeleteEvent(Object event, Stage popupStage) {
         System.out.println("Delete event: " + getEventTitle((MyEvent) event));
 
@@ -485,14 +589,32 @@ public class TimetableController implements Initializable {
         fetchAndDisplayCurrentWeeksData(bundle);
     }
 
+    /**
+     * Returns the day of the week for the given event.
+     *
+     * @param myEvent the event object
+     * @return the day of the week (1 = Monday, 7 = Sunday)
+     */
     private String getEventTitle(MyEvent myEvent) {
         return myEvent.getTitle();
     }
 
+    /**
+     * Returns the date of the event.
+     *
+     * @param myEvent the event object
+     * @return the date of the event
+     */
     private LocalDateTime getEventDate(MyEvent myEvent) {
         return myEvent.getDate();
     }
 
+    /**
+     * Returns the start time of the event.
+     *
+     * @param event the event object
+     * @return the start time of the event
+     */
     private <T> String getEventStartTime(T event) {
         if (event instanceof ClassSchedule classSchedule) {
             return classSchedule.getStartTime().toLocalTime().toString();
@@ -506,6 +628,12 @@ public class TimetableController implements Initializable {
         return "00:00"; // Default
     }
 
+    /**
+     * Returns the end time of the event.
+     *
+     * @param event the event object
+     * @return the end time of the event
+     */
     private <T> String getEventEndTime(T event) {
         if (event instanceof ClassSchedule classSchedule) {
             return classSchedule.getEndTime().toLocalTime().toString();
@@ -519,6 +647,12 @@ public class TimetableController implements Initializable {
         return "01:00"; // Default
     }
 
+    /**
+     * Returns the location of the event.
+     *
+     * @param event the event object
+     * @return the location of the event
+     */
     private <T> String getEventLocation(T event) {
         if (event instanceof ClassSchedule classSchedule) {
             return classSchedule.getLocation();
@@ -528,6 +662,10 @@ public class TimetableController implements Initializable {
         return "";
     }
 
+    /**
+     * Handles the action when the English button is clicked.
+     * Updates the language to English, saves it to the database, and refreshes the timetable.
+     */
     @FXML
     private void onEnglishClicked() {
         // Update the language in the database
@@ -542,6 +680,10 @@ public class TimetableController implements Initializable {
         fetchAndDisplayCurrentWeeksData(bundle);
     }
 
+    /**
+     * Handles the action when the Arabic button is clicked.
+     * Updates the language to Arabic, saves it to the database, and refreshes the timetable.
+     */
     @FXML
     private void onKoreanClicked() {
         // Update the language in the database
@@ -555,8 +697,10 @@ public class TimetableController implements Initializable {
         fetchAndDisplayCurrentWeeksData(bundle);
     }
 
-
-
+    /**
+     * Handles the action when the Arabic button is clicked.
+     * Updates the language to Arabic, saves it to the database, and refreshes the timetable.
+     */
     @FXML
     private void onArabicClicked() {
         // Update the language in the database
@@ -571,6 +715,11 @@ public class TimetableController implements Initializable {
         fetchAndDisplayCurrentWeeksData(bundle);
     }
 
+    /**
+     * Loads the localized strings for the application based on the current locale.
+     *
+     * @param locale the current locale
+     */
     private void loadLanguage(Locale locale) {
         bundle = ResourceBundle.getBundle(bundleName, locale);
 
@@ -586,6 +735,12 @@ public class TimetableController implements Initializable {
 
     }
 
+    /**
+     * Returns the description of the event.
+     *
+     * @param myEvent the event object
+     * @return the description of the event
+     */
     private String getEventDescription(MyEvent myEvent) {
         return myEvent.getDescription();
     }

@@ -11,10 +11,18 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Data Access Object (DAO) class for managing language settings in the database.
+ */
 public class SettingDAO {
     Connection conn = null;
 
-    // get language setting
+
+    /**
+     * Retrieves the current language settings from the database.
+     *
+     * @return a map containing the language and region settings
+     */
     public Map<String, String> getLanguage() {
         conn = MariaDbConnection.getConnection();
         String sql = "SELECT language, region FROM setting";
@@ -36,6 +44,13 @@ public class SettingDAO {
         return Collections.emptyMap();
     }
 
+    /**
+     * Retrieves the language and region settings from the ResultSet.
+     *
+     * @param rs the ResultSet containing the settings
+     * @return a map containing the language and region settings
+     * @throws SQLException if an SQL error occurs
+     */
     private Map<String, String> getSettingResult(ResultSet rs) throws SQLException {
         String language = rs.getString("language");
         String region = rs.getString("region");
@@ -45,7 +60,9 @@ public class SettingDAO {
         return setting;
     }
 
-    // set language setting
+    /**
+     * Adds a default language setting to the database.
+     */
     public void addLanguage() {
         conn = MariaDbConnection.getConnection();
         String sql = "INSERT INTO setting (language, region) VALUES (?, ?)";
@@ -58,7 +75,12 @@ public class SettingDAO {
         }
     }
 
-    // update language setting
+    /**
+     * Updates the language and region settings in the database.
+     *
+     * @param language the new language setting
+     * @param region   the new region setting
+     */
     public void setLanguage(String language, String region) {
         conn = MariaDbConnection.getConnection();
         String sql = "UPDATE setting SET language = ?, region = ? WHERE setting_id = 1";

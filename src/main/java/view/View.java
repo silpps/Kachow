@@ -10,6 +10,12 @@ import javafx.fxml.FXMLLoader;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+/**
+ * Main class for the JavaFX application.
+ * This class initializes the application, sets the default locale,
+ * loads the FXML file, and sets up the primary stage.
+ * It also sets the application icon and title.
+ */
 public class View extends Application {
 
         @Override

@@ -18,6 +18,11 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Locale;
 
+/**
+ * Controller class for the "Add Study Session" view.
+ * This class handles the user interactions and logic for adding a new study session to the timetable.
+ * It validates user input, interacts with the database through DAOs, and updates the timetable view.
+ */
 public class AddStudySessionController {
 
     private IDAO<StudySession> studySessionDAO;
@@ -65,6 +70,12 @@ public class AddStudySessionController {
 
     private TimetableController timetableController;
 
+    /**
+     * Initializes the controller.
+     * Populates the course choice box and time choice boxes with data.
+     * Sets up event handlers for the save and back buttons.
+     * Retrieves course data from the database using {@link TimeTableDAO}.
+     */
     @FXML
     private void initialize() {
         TimeTableDAO timeTableDAO = new TimeTableDAO();
@@ -81,10 +92,20 @@ public class AddStudySessionController {
         sessionBackButton.setOnAction(e -> sessionBackButtonClicked());
     }
 
+    /**
+     * Handles the action when the back button is clicked.
+     * Closes the current window.
+     */
     public void sessionBackButtonClicked() {
         sessionBackButton.getScene().getWindow().hide();
     }
 
+    /**
+     * Handles the action when the save button is clicked.
+     * Validates the input fields, checks for logical errors (e.g., from time after to time),
+     * and adds the study session to the database if validation passes.
+     * Updates the timetable view after successfully adding the session.
+     */
     public void sessionSaveButtonClicked() {
         String selectedItem = courseNameChoiceBox.getValue();
         String sessionTitle = sessionTitleTextField.getText();
@@ -143,11 +164,19 @@ public class AddStudySessionController {
 
     }
 
+    /**
+     * Sets the ResourceBundle for localization and translates the UI.
+     *
+     * @param bundle the ResourceBundle to set
+     */
     public void setBundle(ResourceBundle bundle) {
         this.bundle = bundle;
         translateUI();
     }
 
+    /**
+     * Translates the UI elements based on the provided ResourceBundle.
+     */
     private void translateUI() {
         if (bundle != null) {
             sessionSaveButton.setText(bundle.getString("saveButton"));
@@ -166,7 +195,11 @@ public class AddStudySessionController {
         }
     }
 
-
+    /**
+     * Sets the timetable controller for this view.
+     *
+     * @param timetableController the timetable controller
+     */
     public void setTimetableController(TimetableController timetableController) {
         this.timetableController = timetableController;
     }

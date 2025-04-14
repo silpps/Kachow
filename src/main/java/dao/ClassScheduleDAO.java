@@ -5,10 +5,19 @@ import models.ClassSchedule;
 
 import java.sql.*;
 
+/**
+ * Data Access Object (DAO) class for managing {@link ClassSchedule} objects in the database.
+ * Implements {@link IDAO} interface for CRUD (Create, Read, Update, Delete) operations.
+ */
 public class ClassScheduleDAO implements IDAO<ClassSchedule> {
     private Connection conn = null;
 
-    // Get a ClassSchedule from the database
+
+    /**
+     * Retrieves a ClassSchedule from the database by its ID.
+     * @param id the ID of the class schedule to retrieve
+     * @return the {@link ClassSchedule} object with the specified ID, or null if not found
+     */
     @Override
     public ClassSchedule get(int id) {
         conn = MariaDbConnection.getConnection();
@@ -32,7 +41,11 @@ public class ClassScheduleDAO implements IDAO<ClassSchedule> {
         return null;
     }
 
-    // Add a new ClassSchedule to the database
+
+    /**
+     * Adds a new class schedule to the database.
+     * @param classSchedule the {@link ClassSchedule} object to add
+     */
     @Override
     public void add(ClassSchedule classSchedule) {
         conn = MariaDbConnection.getConnection();
@@ -55,7 +68,10 @@ public class ClassScheduleDAO implements IDAO<ClassSchedule> {
         }
     }
 
-    // Update a ClassSchedule in the database
+    /**
+     * Updates an existing class schedule in the database.
+     * @param classSchedule the {@link ClassSchedule} object to update
+     */
     @Override
     public void update(ClassSchedule classSchedule) {
         conn = MariaDbConnection.getConnection();
@@ -72,7 +88,10 @@ public class ClassScheduleDAO implements IDAO<ClassSchedule> {
         }
     }
 
-    // Delete a ClassSchedule from the database
+    /**
+     * Deletes a class schedule from the database by its ID.
+     * @param id the ID of the class schedule to delete
+     */
     @Override
     public void delete(int id) {
         conn = MariaDbConnection.getConnection();
