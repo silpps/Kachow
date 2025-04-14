@@ -116,6 +116,7 @@ public class AddExamController {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    Thread.currentThread().interrupt();
                 }
 
                 Platform.runLater(() -> {

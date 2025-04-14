@@ -94,7 +94,7 @@ public class AddAssignmentController {
         }
 
         if (selectedItem != null) {
-            int courseId = Integer.parseInt(selectedItem.replaceAll("[^0-9]", ""));
+            int courseId = Integer.parseInt(selectedItem.replaceAll(".*\\(ID: (\\d+)\\).*", "$1"));
 
             String status = "";
             if (notStartedCheckBox.isSelected()) {
@@ -123,6 +123,7 @@ public class AddAssignmentController {
                     Thread.sleep(500); // Ensure database update completes
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    Thread.currentThread().interrupt();
                 }
 
                 Platform.runLater(() -> {

@@ -133,6 +133,7 @@ public class AddStudySessionController {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    Thread.currentThread().interrupt();
                 }
 
                 Platform.runLater(() -> {
