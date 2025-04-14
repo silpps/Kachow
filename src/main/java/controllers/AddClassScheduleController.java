@@ -88,7 +88,7 @@ public class AddClassScheduleController {
         }
 
         // Get the course ID
-        int courseId = Integer.parseInt(selectedItem.replaceAll(".*\\(ID: (\\d+)\\).*", "$1"));
+        int courseId = Integer.parseInt(selectedItem.replaceFirst(".*\\(ID: (\\d+)\\)$", "$1"));
 
 
         // Parse the start and end times

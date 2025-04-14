@@ -93,7 +93,7 @@ public class AddExamController {
             return;
         }
 
-        int courseId = Integer.parseInt(selectedItem.replaceAll(".*\\(ID: (\\d+)\\).*", "$1"));
+        int courseId = Integer.parseInt(selectedItem.replaceFirst(".*\\(ID: (\\d+)\\)$", "$1"));
 
 
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
