@@ -108,7 +108,7 @@ public class AddClassScheduleController {
 
         if (selectedItem != null) {
             // Get the course ID
-            int courseId = Integer.parseInt(selectedItem.replaceAll("[^0-9]", ""));
+            int courseId = Integer.parseInt(selectedItem.replaceAll(".*\\(ID: (\\d+)\\).*", "$1"));
 
 
 

@@ -105,7 +105,7 @@ public class AddStudySessionController {
         }
 
         if (selectedItem != null) {
-            int courseId = Integer.parseInt(selectedItem.replaceAll("[^0-9]", ""));
+            int courseId = Integer.parseInt(selectedItem.replaceAll(".*\\(ID: (\\d+)\\).*", "$1"));
 
 
 

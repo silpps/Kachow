@@ -32,7 +32,7 @@ public class AddTaskController {
     private ResourceBundle bundle; // Store translation bundle
 
     // Map to store the mapping of localized task names to their English names
-    private Map<String, String> localizedToEnglishMap = new HashMap<>();
+    private final Map<String, String> localizedToEnglishMap = new HashMap<>();
 
     public void setTimetableController(TimetableController timetableController) {
         this.timetableController = timetableController;
