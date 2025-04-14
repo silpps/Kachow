@@ -37,8 +37,8 @@ public class CourseDAO implements IDAO<Course> {
     @Override
     public void add(Course course) {
         String sql = "INSERT INTO course (course_name, instructor, start_date, end_date) VALUES (?, ?, ?, ?)";
-        try (Connection conn = MariaDbConnection.getConnection();
-             PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        conn = MariaDbConnection.getConnection();
+        try (PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setString(1, course.getCourseName());
             st.setString(2, course.getInstructor());
             st.setDate(3, Date.valueOf(course.getStartDate()));

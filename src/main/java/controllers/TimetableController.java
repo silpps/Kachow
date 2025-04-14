@@ -273,7 +273,7 @@ public class TimetableController implements Initializable {
     private void addButtonClicked() {
         try {
             Locale locale = Locale.getDefault();
-            ResourceBundle bundle = ResourceBundle.getBundle(bundleName, locale);
+            bundle = ResourceBundle.getBundle(bundleName, locale);
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/addTask.fxml"), bundle);
             Scene scene = new Scene(loader.load());
@@ -572,7 +572,7 @@ public class TimetableController implements Initializable {
     }
 
     private void loadLanguage(Locale locale) {
-        ResourceBundle bundle = ResourceBundle.getBundle(bundleName, locale);
+        bundle = ResourceBundle.getBundle(bundleName, locale);
 
         nameLabel.setText(bundle.getString("nameLabel"));
         addButton.setText(bundle.getString("addLabel"));
