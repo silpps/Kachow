@@ -4,7 +4,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * Luokka, joka luo yhteyden tietokantaan.
+ * A class that creates a connection to the database.
  *
  * @author Veera Ruotsalainen
  */
@@ -12,8 +12,14 @@ public class MariaDbConnection {
     private static Connection conn = null;
 
     /**
-     * konstruktori joka hakee yhteyden tietokantaan
-     * @return palauttaa yhteyden tietokantaan.
+     * Private constructor to prevent instantiation of the class.
+     */
+    private MariaDbConnection() {
+    }
+
+    /**
+     * A method that retrieves a connection to the database.
+     * @return returns the connection to the database.
      */
     public static Connection getConnection() {
         if (conn == null) {
