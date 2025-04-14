@@ -17,7 +17,7 @@ public class TimeTableDAO {
     public Map<Integer, String> getCourses() {
         conn = MariaDbConnection.getConnection();
         Map<Integer, String> courses = new HashMap<>();
-        String sql = "SELECT * FROM course";
+        String sql = "SELECT course_id, course_name FROM course";
         try (Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
@@ -33,7 +33,7 @@ public class TimeTableDAO {
     public List<Course> getCourses(LocalDate startDate, LocalDate endDate) {
         conn = MariaDbConnection.getConnection();
         List<Course> courses = new ArrayList<>();
-        String sql = "SELECT * FROM course WHERE start_date >= ? AND end_date <= ?";
+        String sql = "SELECT course_id, course_name, instructor, start_date, end_date FROM course WHERE start_date >= ? AND end_date <= ?";
         try (PreparedStatement st = conn.prepareStatement(sql)) {
             st.setDate(1, Date.valueOf(startDate));
             st.setDate(2, Date.valueOf(endDate));
@@ -58,7 +58,7 @@ public class TimeTableDAO {
     public List<ClassSchedule> getClassSchedule(LocalDate startDate, LocalDate endDate) {
         conn = MariaDbConnection.getConnection();
         List<ClassSchedule> classSchedules = new ArrayList<>();
-        String sql = "SELECT * FROM class_schedule WHERE start_time >= ? AND end_time <= ? ORDER BY start_time ASC";
+        String sql = "SELECT class_id, course_id, location, description, start_time, end_time FROM class_schedule WHERE start_time >= ? AND end_time <= ? ORDER BY start_time ASC";
         try (PreparedStatement st = conn.prepareStatement(sql)) {
             st.setTimestamp(1, Timestamp.valueOf(startDate.atStartOfDay()));
             st.setTimestamp(2, Timestamp.valueOf(endDate.atTime(23, 59, 59)));
@@ -85,7 +85,7 @@ public class TimeTableDAO {
     public List<Assignment> getAssignmentSchedule(LocalDate startDate, LocalDate endDate) {
         conn = MariaDbConnection.getConnection();
         List<Assignment> assignments = new ArrayList<>();
-        String sql = "SELECT * FROM assignment WHERE deadline >= ? AND deadline <= ?";
+        String sql = "SELECT assignment_id, course_id, title, description, deadline, status FROM assignment WHERE deadline >= ? AND deadline <= ?";
         try (PreparedStatement st = conn.prepareStatement(sql)) {
             st.setTimestamp(1, Timestamp.valueOf(startDate.atStartOfDay()));
             st.setTimestamp(2, Timestamp.valueOf(endDate.atTime(23, 59, 59)));
@@ -112,7 +112,7 @@ public class TimeTableDAO {
     public List<StudySession> getStudySessionSchedule(LocalDate startDate, LocalDate endDate) {
         conn = MariaDbConnection.getConnection();
         List<StudySession> studySessions = new ArrayList<>();
-        String sql = "SELECT * FROM study_session WHERE start_time >= ? AND end_time <= ? ORDER BY start_time ASC";
+        String sql = "SELECT session_id, course_id, title, description, start_time, end_time FROM study_session WHERE start_time >= ? AND end_time <= ? ORDER BY start_time ASC";
         try (PreparedStatement st = conn.prepareStatement(sql)) {
             st.setTimestamp(1, Timestamp.valueOf(startDate.atStartOfDay()));
             st.setTimestamp(2, Timestamp.valueOf(endDate.atTime(23, 59, 59)));
@@ -139,7 +139,7 @@ public class TimeTableDAO {
     public List<Exam> getExamSchedule(LocalDate startDate, LocalDate endDate) {
         conn = MariaDbConnection.getConnection();
         List<Exam> exams = new ArrayList<>();
-        String sql = "SELECT * FROM exam WHERE exam_date >= ? AND exam_date <= ?";
+        String sql = "SELECT exam_id, course_id, exam_date, title, description, location FROM exam WHERE exam_date >= ? AND exam_date <= ?";
         try (PreparedStatement st = conn.prepareStatement(sql)) {
             st.setTimestamp(1, Timestamp.valueOf(startDate.atStartOfDay()));
             st.setTimestamp(2, Timestamp.valueOf(endDate.atTime(23, 59, 59)));

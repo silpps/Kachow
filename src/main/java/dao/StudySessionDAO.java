@@ -12,7 +12,7 @@ public class StudySessionDAO implements IDAO<StudySession> {
     @Override
     public StudySession get(int id) {
         conn = MariaDbConnection.getConnection();
-        String sql = "SELECT * FROM study_session WHERE id = ?";
+        String sql = "SELECT session_id, course_id, title, description, start_time, end_time FROM study_session WHERE session_id = ?";
         try (PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, id);
             try (ResultSet rs = st.executeQuery()) {

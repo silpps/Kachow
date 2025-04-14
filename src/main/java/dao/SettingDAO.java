@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ public class SettingDAO {
     // get language setting
     public Map<String, String> getLanguage() {
         conn = MariaDbConnection.getConnection();
-        String sql = "SELECT * FROM setting";
+        String sql = "SELECT language, region FROM setting";
         try (Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
             if (!rs.next()) {
@@ -32,7 +33,7 @@ public class SettingDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return Collections.emptyMap();
     }
 
     private Map<String, String> getSettingResult(ResultSet rs) throws SQLException {

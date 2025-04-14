@@ -12,7 +12,7 @@ public class ClassScheduleDAO implements IDAO<ClassSchedule> {
     @Override
     public ClassSchedule get(int id) {
         conn = MariaDbConnection.getConnection();
-        String sql = "SELECT * FROM class_schedule WHERE id = ?";
+        String sql = "SELECT id, course_id, days_of_week, location, start_time, end_time FROM class_schedule WHERE id = ?";
         try (PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, id);
             try (ResultSet rs = st.executeQuery()) {
@@ -59,7 +59,7 @@ public class ClassScheduleDAO implements IDAO<ClassSchedule> {
     @Override
     public void update(ClassSchedule classSchedule) {
         conn = MariaDbConnection.getConnection();
-        String sql = "UPDATE class_schedule SET location = ?, description = ?, start_time = ?, end_time = ? WHERE class_id = ?";
+        String sql = "UPDATE class_schedule SET location = ?, description = ?, start_time = ?, end_time = ? WHERE id = ?";
         try (PreparedStatement st = conn.prepareStatement(sql)) {
             st.setString(1, classSchedule.getLocation());
             st.setString(2, classSchedule.getDescription());
@@ -76,7 +76,7 @@ public class ClassScheduleDAO implements IDAO<ClassSchedule> {
     @Override
     public void delete(int id) {
         conn = MariaDbConnection.getConnection();
-        String sql = "DELETE FROM class_schedule WHERE class_id = ?";
+        String sql = "DELETE FROM class_schedule WHERE id = ?";
         try (PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, id);
             st.executeUpdate();

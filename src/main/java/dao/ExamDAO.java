@@ -11,13 +11,13 @@ public class ExamDAO implements IDAO<Exam> {
     @Override
     public Exam get(int id) {
         conn = MariaDbConnection.getConnection();
-        String sql = "SELECT * FROM exam WHERE id = ?";
+        String sql = "SELECT exam_id, course_id, exam_date, title, description, location FROM exam WHERE exam_id = ?";
         try (PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, id);
             try (ResultSet rs = st.executeQuery()) {
                 if (rs.next()) {
                     return new Exam(
-                            rs.getInt("course_Id"),
+                            rs.getInt("course_id"),
                             rs.getTimestamp("exam_date").toLocalDateTime(),
                             rs.getString("title"),
                             rs.getString("description"),

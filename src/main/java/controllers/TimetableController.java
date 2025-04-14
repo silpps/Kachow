@@ -49,6 +49,7 @@ public class TimetableController implements Initializable {
     private Map<Integer, String> courses;
     private Locale locale;
     private ResourceBundle bundle;
+    private String bundleName = "messages";
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -67,7 +68,7 @@ public class TimetableController implements Initializable {
 
         this.locale = Locale.of(language.get("language"), language.get("region"));
         Locale.setDefault(this.locale);
-        bundle = ResourceBundle.getBundle("messages", locale);
+        bundle = ResourceBundle.getBundle(bundleName, locale);
 
         LocalDate today = LocalDate.now();
         this.startOfWeek = today.with(java.time.DayOfWeek.MONDAY);
@@ -127,7 +128,6 @@ public class TimetableController implements Initializable {
         allTasks.addAll(studySessions);
         allTasks.addAll(exams);
 
-        System.out.println("Locale: " + locale + " " + bundle.getLocale().getLanguage());
         // Add tasks to the correct day's VBox
         addTasksToDay(allTasks, bundle);
     }
@@ -273,7 +273,7 @@ public class TimetableController implements Initializable {
     private void addButtonClicked() {
         try {
             Locale locale = Locale.getDefault();
-            ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
+            ResourceBundle bundle = ResourceBundle.getBundle(bundleName, locale);
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/addTask.fxml"), bundle);
             Scene scene = new Scene(loader.load());
@@ -536,7 +536,7 @@ public class TimetableController implements Initializable {
         Locale.setDefault(new Locale("en", "UK"));
         this.locale = Locale.getDefault();
         System.out.println("English clicked");
-        bundle = ResourceBundle.getBundle("messages", locale);
+        bundle = ResourceBundle.getBundle(bundleName, locale);
         loadLanguage(locale);
 
         fetchAndDisplayCurrentWeeksData(bundle);
@@ -549,7 +549,7 @@ public class TimetableController implements Initializable {
         Locale.setDefault(new Locale("ko", "KR"));
         this.locale = Locale.getDefault();
         System.out.println("Korean clicked");
-        bundle = ResourceBundle.getBundle("messages", locale);
+        bundle = ResourceBundle.getBundle(bundleName, locale);
         loadLanguage(locale);
 
         fetchAndDisplayCurrentWeeksData(bundle);
@@ -566,13 +566,13 @@ public class TimetableController implements Initializable {
         System.out.println("Arabic clicked");
 
         loadLanguage(locale);
-        bundle = ResourceBundle.getBundle("messages", locale);
+        bundle = ResourceBundle.getBundle(bundleName, locale);
 
         fetchAndDisplayCurrentWeeksData(bundle);
     }
 
     private void loadLanguage(Locale locale) {
-        ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
+        ResourceBundle bundle = ResourceBundle.getBundle(bundleName, locale);
 
         nameLabel.setText(bundle.getString("nameLabel"));
         addButton.setText(bundle.getString("addLabel"));

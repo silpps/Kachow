@@ -12,7 +12,7 @@ public class CourseDAO implements IDAO<Course> {
     @Override
     public Course get(int id) {
         conn = MariaDbConnection.getConnection();
-        String sql = "SELECT * FROM course WHERE course_id = ?";
+        String sql = "SELECT course_id, course_name, instructor, start_date, end_date FROM course WHERE course_id = ?";
         try (PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, id);
             try (ResultSet rs = st.executeQuery()) {
@@ -76,8 +76,8 @@ public class CourseDAO implements IDAO<Course> {
     @Override
     public void delete(int id) {
         String sql = "DELETE FROM course WHERE course_id = ?";
-        try (Connection conn = MariaDbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        conn = MariaDbConnection.getConnection();
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {

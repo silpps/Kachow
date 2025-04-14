@@ -97,7 +97,6 @@ public class AddAssignmentController {
         System.out.println("Assignment added" + assignment.getCourseId() + " " + assignment.getTitle() + " " + assignment.getDescription() + " " + assignment.getDeadline() + " " + assignment.getStatus());
 
         bundle = ResourceBundle.getBundle("messages", Locale.getDefault());
-        System.out.println("Locale: " + Locale.getDefault());
         // Small delay to ensure DB update before fetching data
         // Update the UI after saving the assignment
         new Thread(() -> {
