@@ -13,18 +13,18 @@ public class AssignmentDAO implements IDAO<Assignment> {
     public Assignment get(int id) {
         conn = MariaDbConnection.getConnection();
         String sql = "SELECT * FROM assignment WHERE assignment_id = ?";
-        try {
-            PreparedStatement st = conn.prepareStatement(sql);
-            st.setInt(1,  id);
-            ResultSet rs = st.executeQuery();
-            if (rs.next()) {
-                return new Assignment(
-                        rs.getInt("course_id"),
-                        rs.getString("title"),
-                        rs.getString("description"),
-                        rs.getTimestamp("deadline").toLocalDateTime(),
-                        rs.getString("status")
-                );
+        try (PreparedStatement st = conn.prepareStatement(sql)) {
+            st.setInt(1, id);
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    return new Assignment(
+                            rs.getInt("course_id"),
+                            rs.getString("title"),
+                            rs.getString("description"),
+                            rs.getTimestamp("deadline").toLocalDateTime(),
+                            rs.getString("status")
+                    );
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -37,8 +37,7 @@ public class AssignmentDAO implements IDAO<Assignment> {
     public void add(Assignment assignment) {
         conn = MariaDbConnection.getConnection();
         String sql = "INSERT INTO assignment (course_id, title, description, deadline, status) VALUES (?, ?, ?, ?, ?)";
-        try {
-            PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        try (PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             st.setInt(1, assignment.getCourseId());
             st.setString(2, assignment.getTitle());
             st.setString(3, assignment.getDescription());
@@ -46,9 +45,10 @@ public class AssignmentDAO implements IDAO<Assignment> {
             st.setString(5, assignment.getStatus());
             st.executeUpdate();
 
-            ResultSet rs = st.getGeneratedKeys();
-            if (rs.next()) {
-                assignment.setId(rs.getInt(1));
+            try (ResultSet rs = st.getGeneratedKeys()) {
+                if (rs.next()) {
+                    assignment.setId(rs.getInt(1));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -60,9 +60,7 @@ public class AssignmentDAO implements IDAO<Assignment> {
     public void update(Assignment assignment) {
         conn = MariaDbConnection.getConnection();
         String sql = "UPDATE assignment SET course_id = ?, title = ?, description = ?, deadline = ?, status = ? WHERE assignment_id = ?";
-
-        try {
-            PreparedStatement st = conn.prepareStatement(sql);
+        try (PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, assignment.getCourseId());
             st.setString(2, assignment.getTitle());
             st.setString(3, assignment.getDescription());
@@ -80,8 +78,7 @@ public class AssignmentDAO implements IDAO<Assignment> {
     public void delete(int id) {
         conn = MariaDbConnection.getConnection();
         String sql = "DELETE FROM assignment WHERE assignment_id = ?";
-        try {
-            PreparedStatement st = conn.prepareStatement(sql);
+        try (PreparedStatement st = conn.prepareStatement(sql)) {
             st.setInt(1, id);
             st.executeUpdate();
         } catch (SQLException e) {
