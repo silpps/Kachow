@@ -8,7 +8,7 @@ import java.sql.SQLException;
  *
  * @author Veera Ruotsalainen
  */
-public class MariaDbConnection {
+public final class MariaDbConnection {
     private static Connection conn = null;
 
     /**

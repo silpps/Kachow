@@ -98,7 +98,7 @@ public class TimetableController implements Initializable {
     private Map<Integer, String> courses;
     private Locale locale;
     private ResourceBundle bundle;
-    private final String bundleName = "messages";
+    private static final String bundleName = "messages";
 
     /**
      * Initializes the controller and sets up the timetable view.
@@ -490,9 +490,9 @@ public class TimetableController implements Initializable {
                 completedButton.setToggleGroup(statusGroup);
 
                 switch (assignment.getStatus()) {
-                    case "Not Started" -> notStartedButton.setSelected(true);
                     case "Ongoing" -> ongoingButton.setSelected(true);
                     case "Completed" -> completedButton.setSelected(true);
+                    default -> notStartedButton.setSelected(true);
                 }
 
                 popupVBox.getChildren().addAll(statusLabel, notStartedButton, ongoingButton, completedButton);
@@ -515,7 +515,7 @@ public class TimetableController implements Initializable {
 
             popupVBox.getChildren().addAll(dateLabel, datePicker, timeBox, descriptionLabel, descriptionField, buttonHBox);
 
-            if (bundle.getLocale().getLanguage().equals("ar")) {
+            if ("ar".equals(bundle.getLocale().getLanguage())) {
                 popupVBox.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
             }
             Scene popupScene = new Scene(popupVBox, 300, 600);

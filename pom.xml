@@ -104,7 +104,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>Main</mainClass>
+                    <mainClass>main.Main</mainClass>
                 </configuration>
             </plugin>
 
@@ -135,9 +135,9 @@
                 </executions>
                 <configuration>
                     <rulesets>
-                        <ruleset>rulesets/java/quickstart.xml</ruleset> <!-- Default PMD ruleset -->
+                        <ruleset>rulesets/java/quickstart.xml</ruleset>
                     </rulesets>
-                    <format>html</format>  <!-- Specify report format (html or xml) -->
+                    <reportFormat>html</reportFormat>
                     <outputDirectory>${project.build.directory}/pmd-report</outputDirectory>
                 </configuration>
             </plugin>
