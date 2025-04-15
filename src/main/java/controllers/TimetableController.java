@@ -676,9 +676,13 @@ public class TimetableController implements Initializable {
     /**
      * Returns the end time of the event.
      *
-     * @param event the event object
+     * @param myEvent the event object
      * @return the end time of the event
      */
+    private String getEventStartTime(MyEvent myEvent) {
+        return myEvent.getEventStartTime().toString();
+    }
+
     private <T> String getEventEndTime(T event) {
         if (event instanceof ClassSchedule classSchedule) {
             return classSchedule.getEndTime().toLocalTime().toString();

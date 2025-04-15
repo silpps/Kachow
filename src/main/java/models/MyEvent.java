@@ -31,11 +31,11 @@ public abstract class MyEvent {
      *
      * @return the start time of the event
      */
-    public LocalTime getLTStartTime() {
+    public LocalTime getEventStartTime() {
         return getDate().toLocalTime();
     }
 
-    //abstract String getEndTime();
+    //TODO abstract String getEndTime();
 
     /**
      * Returns the description of the event.

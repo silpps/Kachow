@@ -41,7 +41,7 @@ public class ClassSchedule extends MyEvent {
         return courseId;
     }
 
-    /**
+/**
      * Returns the title of the class schedule.
      * Currently, this method returns an empty string.
      *
