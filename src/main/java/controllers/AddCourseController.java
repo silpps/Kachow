@@ -10,6 +10,11 @@ import models.Course;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
+/**
+ * Controller class for the "Add Course" view.
+ * This class handles user interactions and logic for adding a new course to the timetable.
+ * It validates user input, interacts with the database through DAOs, and updates the timetable view.
+ */
 public class AddCourseController {
 
     private IDAO<Course> courseDAO;
@@ -45,6 +50,11 @@ public class AddCourseController {
 
     private TimetableController timetableController;
 
+    /**
+     * Handles the action when the save button is clicked.
+     * Validates the input fields, checks for logical errors (e.g., start date after end date),
+     * and adds the course to the database if validation passes.
+     */
     @FXML
     private void addCourseSaveButtonClicked(){
         System.out.println("Course save button clicked");
@@ -74,11 +84,20 @@ public class AddCourseController {
         addCourseSaveButton.getScene().getWindow().hide();
     }
 
+    /**
+     * Handles the action when the back button is clicked.
+     * Closes the current window.
+     */
     @FXML
     private void addCourseBackButtonClicked() {
         addCourseBackButton.getScene().getWindow().hide();
     }
 
+
+    /**
+     * Initializes the controller.
+     * Sets up event handlers for the save and back buttons.
+     */
      @FXML
      private void initialize() {
          addCourseSaveButton.setOnAction(event -> addCourseSaveButtonClicked());
@@ -88,11 +107,19 @@ public class AddCourseController {
 
      }
 
+    /**
+     * Sets the ResourceBundle for localization.
+     * @param bundle the ResourceBundle to set for localization
+     */
     public void setBundle(ResourceBundle bundle) {
         this.bundle = bundle;
         translateUI();
     }
 
+    /**
+     * Translates the UI elements based on the provided ResourceBundle.
+     * This method updates the text of various UI components to support localization.
+     */
     private void translateUI() {
         if (bundle != null) {
             addCourseSaveButton.setText(bundle.getString("saveButton"));
@@ -109,8 +136,10 @@ public class AddCourseController {
         }
     }
 
-
-
+    /**
+     * Sets the timetable controller for this view.
+     * @param timetableController the timetable controller to set
+     */
     public void setTimetableController(TimetableController timetableController) {
         this.timetableController = timetableController;
     }

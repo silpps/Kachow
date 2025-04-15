@@ -14,6 +14,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+/**
+ * Controller class for the "Add Task" view.
+ * This class handles the user interactions and logic for adding a new task to the timetable.
+ */
 public class AddTaskController {
 
     @FXML
@@ -32,19 +36,32 @@ public class AddTaskController {
     private ResourceBundle bundle; // Store translation bundle
 
     // Map to store the mapping of localized task names to their English names
-    private Map<String, String> localizedToEnglishMap = new HashMap<>();
+    private final Map<String, String> localizedToEnglishMap = new HashMap<>();
 
+    /**
+     * Sets the TimetableController instance.
+     *
+     * @param timetableController The TimetableController instance to set.
+     */
     public void setTimetableController(TimetableController timetableController) {
         this.timetableController = timetableController;
     }
 
+    /**
+     * Sets the ResourceBundle for localization.
+     *
+     * @param bundle The ResourceBundle instance to set.
+     */
     public void setBundle(ResourceBundle bundle) {
         this.bundle = bundle;
         translateUI();
         populateLocalizedToEnglishMap();
     }
 
-    // Populate map of localized task names to English task names
+    /**
+     * Sets the localized task names to their English equivalents.
+     * This method is called to populate the map of localized task names to English task names.
+     */
     private void populateLocalizedToEnglishMap() {
         localizedToEnglishMap.put(bundle.getString("course"), "Course");
         localizedToEnglishMap.put(bundle.getString("classSchedule"), "Class Schedule");
@@ -53,6 +70,10 @@ public class AddTaskController {
         localizedToEnglishMap.put(bundle.getString("studySession"), "Study Session");
     }
 
+    /**
+     * Initializes the controller.
+     * Sets up the action handlers for the buttons and choice box.
+     */
     @FXML
     public void initialize() {
         taskChoiceBox.setOnAction(this::getTask);
@@ -60,7 +81,10 @@ public class AddTaskController {
         continueButton.setOnAction(event -> continueButtonClicked());
     }
 
-    // Translate the UI components
+    /**
+     * Translates the UI elements based on the provided ResourceBundle.
+     * This method updates the text of various UI components to support localization.
+     */
     private void translateUI() {
         if (bundle != null) {
             backButton.setText(bundle.getString("backButton"));
@@ -84,15 +108,29 @@ public class AddTaskController {
         }
     }
 
+    /**
+     * Handles the action when a task is selected from the choice box.
+     * This method retrieves the selected task and can be used for further processing.
+     *
+     * @param event The ActionEvent triggered by the choice box selection.
+     */
     public void getTask(ActionEvent event) {
         taskChoiceBox.getValue();
     }
 
+    /**
+     * Handles the action when the back button is clicked.
+     * Closes the current window.
+     */
     @FXML
     private void backButtonClicked() {
         backButton.getScene().getWindow().hide();
     }
 
+    /**
+     * Handles the action when the continue button is clicked.
+     * This method checks if a task is selected and loads the corresponding FXML file.
+     */
     @FXML
     private void continueButtonClicked() {
         String taskChoice = taskChoiceBox.getValue();

@@ -17,10 +17,14 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+/**
+ * Controller class for the "Add Exam" view.
+ * This class handles the user interactions and logic for adding a new exam to the timetable.
+ * It validates user input, interacts with the database through DAOs, and updates the timetable view.
+ */
 public class AddExamController {
 
     private IDAO<Exam> examDAO;
-    private Map<Integer, String> courses;
     private ResourceBundle bundle;
 
     @FXML
@@ -55,10 +59,17 @@ public class AddExamController {
 
     private TimetableController timetableController;
 
+
+    /**
+     * Initializes the controller.
+     * Populates the course choice box with available courses and the time choice box with predefined start times.
+     * Sets up event handlers for the save and back buttons.
+     * Retrieves course data from the database using {@link TimeTableDAO}.
+     */
     @FXML
     public void initialize(){
         TimeTableDAO timeTableDAO = new TimeTableDAO();
-        courses = timeTableDAO.getCourses();
+        Map<Integer, String> courses = timeTableDAO.getCourses();
         for (Map.Entry<Integer, String> entry : courses.entrySet()) {
             courseNameChoiceBox.getItems().add(entry.getValue() + " (ID: " + entry.getKey() + ")");
         }
@@ -70,12 +81,22 @@ public class AddExamController {
         examSaveButton.setOnAction(e -> examSaveButtonClicked());
     }
 
+    /**
+     * Handles the action when the back button is clicked.
+     * Closes the current window.
+     */
     @FXML
     private void backButtonClicked() {
         // Close the current window
         backButton.getScene().getWindow().hide();
     }
 
+    /**
+     * Handles the action when the save button is clicked.
+     * Validates the input fields, checks for logical errors (e.g., missing fields),
+     * and adds the exam to the database if validation passes.
+     * Updates the timetable view after successfully adding the exam.
+     */
     @FXML
     private void examSaveButtonClicked() {
         // Save the exam details
@@ -94,46 +115,51 @@ public class AddExamController {
             return;
         }
 
-        if (selectedItem != null) {
-            int courseId = Integer.parseInt(selectedItem.replaceAll("[^0-9]", ""));
+        int courseId = Integer.parseInt(selectedItem.replaceFirst(".*\\(ID: (\\d+)\\)$", "$1"));
 
 
-            if (examDate != null && fromTimeString != null) {
-                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
-                LocalDateTime examDateTime = LocalDateTime.of(examDate, LocalTime.parse(fromTimeString, timeFormatter));
-                System.out.println(examDateTime);
-                System.out.println(examDate);
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
+        LocalDateTime examDateTime = LocalDateTime.of(examDate, LocalTime.parse(fromTimeString, timeFormatter));
+        System.out.println(examDateTime);
+        System.out.println(examDate);
 
 
-                Exam exam = new Exam(courseId, examDateTime, examTitle, description, location);
-                examDAO.add(exam);
+        Exam exam = new Exam(courseId, examDateTime, examTitle, description, location);
+        examDAO.add(exam);
+
+        bundle = ResourceBundle.getBundle("messages", Locale.getDefault());
+        // Update the UI after saving the exam
+        new Thread(() -> {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
 
-            ResourceBundle bundle = ResourceBundle.getBundle("messages", Locale.getDefault());
-            // Update the UI after saving the exam
-            new Thread(() -> {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            Platform.runLater(() -> {
+                System.out.println("Updating UI...");
+                timetableController.fetchAndDisplayCurrentWeeksData(bundle);
+                System.out.println("UI updated.");
+            });
+        }).start();
 
-                Platform.runLater(() -> {
-                    System.out.println("Updating UI...");
-                    timetableController.fetchAndDisplayCurrentWeeksData(bundle);
-                    System.out.println("UI updated.");
-                });
-            }).start();
-
-            backButtonClicked();
-        }
+        backButtonClicked();
     }
 
+    /**
+     * Sets the ResourceBundle for localization.
+     *
+     * @param bundle the ResourceBundle to set for localization.
+     */
     public void setBundle(ResourceBundle bundle) {
         this.bundle = bundle;
         translateUI();
     }
 
+    /**
+     * Translates the UI elements based on the provided ResourceBundle.
+     */
     private void translateUI() {
         if (bundle != null) {
             examSaveButton.setText(bundle.getString("saveButton"));
@@ -152,6 +178,11 @@ public class AddExamController {
         }
     }
 
+    /**
+     * Sets the timetable controller for this view.
+     *
+     * @param timetableController the timetable controller
+     */
     public void setTimetableController(TimetableController timetableController) {
         this.timetableController = timetableController;
     }
