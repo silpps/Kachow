@@ -535,7 +535,7 @@ public class TimetableController implements Initializable {
     }
 
     private String getEventStartTime(MyEvent myEvent) {
-        return myEvent.getLTStartTime().toString();
+        return myEvent.getEventStartTime().toString();
     }
 
     private <T> String getEventEndTime(T event) {

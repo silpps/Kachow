@@ -8,10 +8,10 @@ public abstract class MyEvent {
         return "Unknown Event";
     }
     public abstract LocalDateTime getDate();
-    public LocalTime getLTStartTime() {
+    public LocalTime getEventStartTime() {
         return getDate().toLocalTime();
     }
-    //abstract String getEndTime();
+    //TODO abstract String getEndTime()
     public String getDescription() {
         return "";
     }

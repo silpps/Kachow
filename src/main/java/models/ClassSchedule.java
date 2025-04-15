@@ -22,7 +22,7 @@ public class ClassSchedule extends MyEvent {
     public int getCourseId() {
         return courseId;
     }
-    
+
     @Override
     public String getTitle() {
         return "";
