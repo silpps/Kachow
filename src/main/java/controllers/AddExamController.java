@@ -29,28 +29,42 @@ public class AddExamController {
 
     @FXML
     private AnchorPane rootPane;
-
     @FXML
     private ChoiceBox<String> courseNameChoiceBox;
-
     @FXML
-    private TextField examTitleTextField, locationTextField;
-
+    private TextField locationTextField;
+    @FXML
+    private TextField examTitleTextField;
     @FXML
     private DatePicker examDatePicker;
-
     @FXML
     private TextArea descriptionTextArea;
-
     @FXML
-    private Button backButton, examSaveButton;
-
+    private Button backButton;
     @FXML
-    private Label addExamTitleLabel, courseNameLabel,  titleLabel ,examDateLabel, fromLabel, locationLabel, descriptionLabel;
-
+    private Button examSaveButton;
     @FXML
-    private Label courseErrorLabel, titleErrorLabel, dateErrorLabel, timeErrorLabel;
-
+    private Label courseNameLabel;
+    @FXML
+    private Label titleLabel;
+    @FXML
+    private Label examDateLabel;
+    @FXML
+    private Label fromLabel;
+    @FXML
+    private Label locationLabel;
+    @FXML
+    private Label descriptionLabel;
+    @FXML
+    private Label addExamTitleLabel;
+    @FXML
+    private Label titleErrorLabel;
+    @FXML
+    private Label dateErrorLabel;
+    @FXML
+    private Label timeErrorLabel;
+    @FXML
+    private Label courseErrorLabel;
     @FXML
     private ChoiceBox<String> fromChoiceBox;
 
@@ -172,7 +186,7 @@ public class AddExamController {
             descriptionLabel.setText(bundle.getString("descriptionLabel"));
             locationLabel.setText(bundle.getString("locationBoxLabel"));
 
-            if (bundle.getLocale().getLanguage().equals("ar")) {
+            if ("ar".equals(bundle.getLocale().getLanguage())) {
                 rootPane.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
             }
         }

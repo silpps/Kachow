@@ -22,15 +22,18 @@ public class AddTaskController {
 
     @FXML
     private ChoiceBox<String> taskChoiceBox;
-
     @FXML
-    private Button continueButton, backButton;
-
+    private Button continueButton;
+    @FXML
+    private Button backButton;
     @FXML
     private AnchorPane taskPane;
-
     @FXML
-    private Label addPageTitleLabel, taskLabel, taskErrorLabel;
+    private Label taskLabel;
+    @FXML
+    private Label taskErrorLabel;
+    @FXML
+    private Label addPageTitleLabel;
 
     private TimetableController timetableController;
     private ResourceBundle bundle; // Store translation bundle
@@ -102,7 +105,7 @@ public class AddTaskController {
                     bundle.getString("studySession")
             );
 
-            if (bundle.getLocale().getLanguage().equals("ar")) {
+            if ("ar".equals(bundle.getLocale().getLanguage())) {
                 taskPane.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
             }
         }

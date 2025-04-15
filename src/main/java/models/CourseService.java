@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Singleton class to manage the list of courses.
  */
-public class CourseService {
+public final class CourseService {
     private static CourseService instance;
     private final List<String> courses = new ArrayList<>();
 
@@ -15,7 +15,7 @@ public class CourseService {
     /**
      * @return the singleton instance of CourseService
      */
-    public static CourseService getInstance() {
+    public static synchronized CourseService getInstance() {
         if (instance == null) {
             instance = new CourseService();
         }
