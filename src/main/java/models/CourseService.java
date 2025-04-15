@@ -15,7 +15,7 @@ public final class CourseService {
     /**
      * @return the singleton instance of CourseService
      */
-    public static CourseService getInstance() {
+    public static synchronized CourseService getInstance() {
         if (instance == null) {
             instance = new CourseService();
         }
