@@ -49,9 +49,27 @@ public class AddClassScheduleController {
     @FXML
     private Button scheduleSaveButton;
     @FXML
-    private Label addClassScheduleTitleLabel, courseNameLabel, locationLabel, sessionDateLabel, fromLabel, toLabel, descriptionLabel;
+    private Label courseNameLabel;
     @FXML
-    private Label courseErrorLabel, dateErrorLabel, fromTimeErrorLabel, toTimeErrorLabel;
+    private Label locationLabel;
+    @FXML
+    private Label sessionDateLabel;
+    @FXML
+    private Label fromLabel;
+    @FXML
+    private Label toLabel;
+    @FXML
+    private Label descriptionLabel;
+    @FXML
+    private Label addClassScheduleTitleLabel;
+    @FXML
+    private Label dateErrorLabel;
+    @FXML
+    private Label fromTimeErrorLabel;
+    @FXML
+    private Label toTimeErrorLabel;
+    @FXML
+    private Label courseErrorLabel;
 
     /**
      * Initializes the controller.
@@ -173,7 +191,7 @@ public class AddClassScheduleController {
             toLabel.setText(bundle.getString("toTimeLabel"));
             descriptionLabel.setText(bundle.getString("descriptionLabel"));
 
-            if (bundle.getLocale().getLanguage().equals("ar")) {
+            if ("ar".equals(bundle.getLocale().getLanguage())) {
                 rootPane.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
             }
 

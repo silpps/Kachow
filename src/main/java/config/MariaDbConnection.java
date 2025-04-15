@@ -8,7 +8,7 @@ import java.sql.SQLException;
  *
  * @author Veera Ruotsalainen
  */
-public class MariaDbConnection {
+public final class MariaDbConnection {
     private static Connection conn = null;
 
     /**
@@ -21,7 +21,7 @@ public class MariaDbConnection {
      * A method that retrieves a connection to the database.
      * @return returns the connection to the database.
      */
-    public static Connection getConnection() {
+    public static synchronized Connection getConnection() {
         if (conn == null) {
             try {
                 conn = DriverManager.getConnection(
