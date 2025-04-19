@@ -35,9 +35,13 @@ public class TimetableController implements Initializable {
 
     @FXML
     private VBox mondayColumn, tuesdayColumn, wednesdayColumn, thursdayColumn, fridayColumn, saturdayColumn, sundayColumn;
+    private VBox[] dayColumns = new VBox[] {
+            mondayColumn, tuesdayColumn, wednesdayColumn, thursdayColumn, fridayColumn, saturdayColumn, sundayColumn
+    };
 
     @FXML
     private Label mondayDate, tuesdayDate, wednesdayDate, thursdayDate, fridayDate, saturdayDate, sundayDate, currentWeekLabel, nameLabel, mondayLabel, tuesdayLabel, wednesdayLabel, thursdayLabel, fridayLabel, saturdayLabel, sundayLabel;
+    private Label[] dateLabels;
 
     @FXML
     private Button addButton, nextWeekButton, lastWeekButton;
@@ -70,6 +74,11 @@ public class TimetableController implements Initializable {
         examDAO = new ExamDAO();
         assignmentDAO = new AssignmentDAO();
         classScheduleDAO = new ClassScheduleDAO();
+
+        // setting the dateLabels array
+        dateLabels = new Label[]{
+                mondayDate, tuesdayDate, wednesdayDate, thursdayDate, fridayDate, saturdayDate, sundayDate
+        };
 
         // Fetch the language
         Map<String, String> language = settingDAO.getLanguage();
@@ -120,16 +129,13 @@ public class TimetableController implements Initializable {
 
         // Set the dates to the labels
         mondayDate.setText(startOfWeek.format(formatter));
-        tuesdayDate.setText(startOfWeek.plusDays(1).format(formatter));
-        wednesdayDate.setText(startOfWeek.plusDays(2).format(formatter));
-        thursdayDate.setText(startOfWeek.plusDays(3).format(formatter));
-        fridayDate.setText(startOfWeek.plusDays(4).format(formatter));
-        saturdayDate.setText(startOfWeek.plusDays(5).format(formatter));
-        sundayDate.setText(startOfWeek.plusDays(6).format(formatter));
+        // loop through the rest with for-loop
+        for (int i = 1; i < 7; i++) {
+            dateLabels[i].setText(startOfWeek.plusDays(i).format(formatter));
+        }
 
         // Set the current week label
         currentWeekLabel.setText(startOfWeek.format(formatter2) + " - " + endOfWeek.format(formatter2));
-
 
 
         // Fetch current week's data from database
@@ -139,7 +145,7 @@ public class TimetableController implements Initializable {
         List<Exam> exams = timeTableDAO.getExamSchedule(startOfWeek, endOfWeek);
 
         // Combine all tasks into a single list
-        List<Object> allTasks = new ArrayList<>();
+        List<MyEvent> allTasks = new ArrayList<>();
         allTasks.addAll(classSchedules);
         allTasks.addAll(assignments);
         allTasks.addAll(studySessions);
@@ -157,7 +163,6 @@ public class TimetableController implements Initializable {
         this.startOfWeek = this.startOfWeek.plusDays(7);
         this.endOfWeek = this.endOfWeek.plusDays(7);
         fetchAndDisplayCurrentWeeksData(bundle);
-
     }
 
     /**
@@ -174,13 +179,9 @@ public class TimetableController implements Initializable {
      * Clears the timetable by removing all tasks from the columns.
      */
     private void clearTimetable() {
-        mondayColumn.getChildren().clear();
-        tuesdayColumn.getChildren().clear();
-        wednesdayColumn.getChildren().clear();
-        thursdayColumn.getChildren().clear();
-        fridayColumn.getChildren().clear();
-        saturdayColumn.getChildren().clear();
-        sundayColumn.getChildren().clear();
+        for (VBox dayColumn : dayColumns) {
+            dayColumn.getChildren().clear();
+        }
     }
 
     /**
@@ -354,8 +355,8 @@ public class TimetableController implements Initializable {
     @FXML
     private void addButtonClicked() {
         try {
-            Locale locale = Locale.getDefault();
-            bundle = ResourceBundle.getBundle(bundleName, locale);
+            Locale defaultLocale = Locale.getDefault();
+            bundle = ResourceBundle.getBundle(bundleName, defaultLocale);
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/addTask.fxml"), bundle);
             Scene scene = new Scene(loader.load());
@@ -415,18 +416,18 @@ public class TimetableController implements Initializable {
             Label fromTimeLabel = new Label(bundle.getString("fromTimeLabel") + " ");
             ChoiceBox<String> fromTimeChoiceBox = new ChoiceBox<>();
             fromTimeChoiceBox.getItems().addAll("06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00");
-            fromTimeChoiceBox.setValue(getEventStartTime(event));
+            fromTimeChoiceBox.setValue(getEventStartTime((MyEvent) event));
 
             Label toTimeLabel = new Label(bundle.getString("toTimeLabel") + " ");
             ChoiceBox<String> toTimeChoiceBox = new ChoiceBox<>();
             toTimeChoiceBox.getItems().addAll("07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00");
-            toTimeChoiceBox.setValue(getEventEndTime(event));
+            toTimeChoiceBox.setValue(getEventEndTime((MyEvent) event));
 
             Label descriptionLabel = new Label(bundle.getString("descriptionLabel") + " ");
             TextArea descriptionField = new TextArea(getEventDescription((MyEvent) event));
 
             TextField locationField = null;
-            if (event instanceof ClassSchedule classSchedule || event instanceof Exam exam) {
+            if (event instanceof ClassSchedule || event instanceof Exam) {
                 Label locationLabel = new Label(bundle.getString("locationBoxLabel") + " ");
                 locationField = new TextField(getEventLocation(event));
                 popupVBox.getChildren().addAll(locationLabel, locationField);
@@ -533,7 +534,7 @@ public class TimetableController implements Initializable {
             assignment.setTitle(newTitle);
             assignment.setDescription(newDescription);
             assignment.setDeadline(startDateTime);
-            ToggleGroup statusGroup = (ToggleGroup) ((VBox) popupStage.getScene().getRoot()).getChildren().stream()
+            ToggleGroup statusGroup = ((VBox) popupStage.getScene().getRoot()).getChildren().stream()
                     .filter(node -> node instanceof RadioButton)
                     .map(node -> ((RadioButton) node).getToggleGroup())
                     .findFirst()
@@ -572,17 +573,17 @@ public class TimetableController implements Initializable {
     }
 
     private void deleteEvent(Object event) {
-        if (event instanceof ClassSchedule) {
-            int id = ((ClassSchedule) event).getId();
+        if (event instanceof ClassSchedule classSchedule) {
+            int id = classSchedule.getId();
             classScheduleDAO.delete(id);
-        } else if (event instanceof StudySession) {
-            int id = ((StudySession) event).getId();
+        } else if (event instanceof StudySession studySession) {
+            int id = studySession.getId();
             studySessionDAO.delete(id);
-        } else if (event instanceof Exam) {
-            int id = ((Exam) event).getId();
+        } else if (event instanceof Exam exam) {
+            int id = exam.getId();
             examDAO.delete(id);
-        } else if (event instanceof Assignment) {
-            int id = ((Assignment) event).getId();
+        } else if (event instanceof Assignment assignment) {
+            int id = assignment.getId();
             assignmentDAO.delete(id);
         }
 
@@ -612,43 +613,21 @@ public class TimetableController implements Initializable {
     /**
      * Returns the start time of the event.
      *
-     * @param event the event object
-     * @return the start time of the event
-     */
-    private <T> String getEventStartTime(T event) {
-        if (event instanceof ClassSchedule classSchedule) {
-            return classSchedule.getStartTime().toLocalTime().toString();
-        } else if (event instanceof StudySession studySession) {
-            return studySession.getStartTime().toLocalTime().toString();
-        } else if (event instanceof Exam exam) {
-            return exam.getExamDate().toLocalTime().toString();
-        } else if (event instanceof Assignment assignment) {
-            return assignment.getDeadline().toLocalTime().toString();
-        }
-        return "00:00"; // Default
-    }
-
-    /**
-     * Returns the end time of the event.
-     *
      * @param myEvent the event object
-     * @return the end time of the event
+     * @return the start time of the event
      */
     private String getEventStartTime(MyEvent myEvent) {
         return myEvent.getEventStartTime().toString();
     }
 
-    private <T> String getEventEndTime(T event) {
-        if (event instanceof ClassSchedule classSchedule) {
-            return classSchedule.getEndTime().toLocalTime().toString();
-        } else if (event instanceof StudySession studySession) {
-            return studySession.getEndTime().toLocalTime().toString();
-        } else if (event instanceof Exam exam) {
-            return exam.getExamDate().toLocalTime().toString();
-        } else if (event instanceof Assignment assignment) {
-            return assignment.getDeadline().toLocalTime().toString();
-        }
-        return "01:00"; // Default
+    /**
+     * Gets the end time of the event
+     *
+     * @param myEvent the event object
+     * @return the end time of the event
+     */
+    private String getEventEndTime(MyEvent myEvent) {
+        return myEvent.getEndTime().toLocalTime().toString();
     }
 
     /**
@@ -668,54 +647,38 @@ public class TimetableController implements Initializable {
 
     /**
      * Handles the action when the English button is clicked.
-     * Updates the language to English, saves it to the database, and refreshes the timetable.
      */
     @FXML
     private void onEnglishClicked() {
-        // Update the language in the database
-        settingDAO.setLanguage("en", "UK");
-
-        Locale.setDefault(new Locale("en", "UK"));
-        this.locale = Locale.getDefault();
-        System.out.println("English clicked");
-        bundle = ResourceBundle.getBundle(bundleName, locale);
-        loadLanguage(locale);
-
-        fetchAndDisplayCurrentWeeksData(bundle);
+        setLanguage("en", "UK", "English");
     }
 
     /**
-     * Handles the action when the Arabic button is clicked.
-     * Updates the language to Arabic, saves it to the database, and refreshes the timetable.
+     * Handles the action when the Korean button is clicked.
      */
     @FXML
     private void onKoreanClicked() {
-        // Update the language in the database
-        settingDAO.setLanguage("ko", "KR");
-        Locale.setDefault(new Locale("ko", "KR"));
-        this.locale = Locale.getDefault();
-        System.out.println("Korean clicked");
-        bundle = ResourceBundle.getBundle(bundleName, locale);
-        loadLanguage(locale);
-
-        fetchAndDisplayCurrentWeeksData(bundle);
+        setLanguage("ko", "KR", "Korean");
     }
 
     /**
      * Handles the action when the Arabic button is clicked.
-     * Updates the language to Arabic, saves it to the database, and refreshes the timetable.
      */
     @FXML
     private void onArabicClicked() {
+        setLanguage("ar", "AE", "Arabic");
+    }
+
+    /**
+     * Updates the language, saves it to the database, and refreshes the timetable.
+     */
+    private void setLanguage(String languageCode, String regionCode, String languageName) {
         // Update the language in the database
-        settingDAO.setLanguage("ar", "AE");
-        Locale.setDefault(new Locale("ar", "AE"));
+        settingDAO.setLanguage(languageCode, regionCode);
+        Locale.setDefault(new Locale(languageCode, regionCode));
         this.locale = Locale.getDefault();
-        System.out.println("Arabic clicked");
-
+        System.out.printf("%s clicked", languageName);
         loadLanguage(locale);
-        bundle = ResourceBundle.getBundle(bundleName, locale);
-
         fetchAndDisplayCurrentWeeksData(bundle);
     }
 
@@ -729,14 +692,16 @@ public class TimetableController implements Initializable {
 
         nameLabel.setText(bundle.getString("nameLabel"));
         addButton.setText(bundle.getString("addLabel"));
-        mondayLabel.setText(bundle.getString("mondayLabel"));
-        tuesdayLabel.setText(bundle.getString("tuesdayLabel"));
-        wednesdayLabel.setText(bundle.getString("wednesdayLabel"));
-        thursdayLabel.setText(bundle.getString("thursdayLabel"));
-        fridayLabel.setText(bundle.getString("fridayLabel"));
-        saturdayLabel.setText(bundle.getString("saturdayLabel"));
-        sundayLabel.setText(bundle.getString("sundayLabel"));
-
+        Label[] dayLabels = new Label[] {
+                mondayLabel, tuesdayLabel, wednesdayLabel, thursdayLabel, fridayLabel, saturdayLabel, sundayLabel
+        };
+        String[] dayBundleLabels = new String[] {
+                "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"
+        };
+        for (int i = 0; i < dayLabels.length; i++) {
+            Label dayLabel = dayLabels[i];
+            dayLabel.setText(bundle.getString(dayBundleLabels[i]+"Label"));
+        }
     }
 
     /**

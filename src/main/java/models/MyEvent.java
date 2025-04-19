@@ -1,5 +1,6 @@
 package models;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -35,7 +36,13 @@ public abstract class MyEvent {
         return getDate().toLocalTime();
     }
 
-    //TODO abstract String getEndTime();
+    /**
+     * Gets the end time of the event
+     * @return the end time of the event
+     */
+    public LocalDateTime getEndTime() {
+        return LocalDateTime.of(LocalDate.now(), LocalTime.of(1, 0));
+    }
 
     /**
      * Returns the description of the event.
