@@ -35,9 +35,7 @@ public class TimetableController implements Initializable {
 
     @FXML
     private VBox mondayColumn, tuesdayColumn, wednesdayColumn, thursdayColumn, fridayColumn, saturdayColumn, sundayColumn;
-    private VBox[] dayColumns = new VBox[] {
-            mondayColumn, tuesdayColumn, wednesdayColumn, thursdayColumn, fridayColumn, saturdayColumn, sundayColumn
-    };
+    private VBox[] dayColumns = new VBox[7];
 
     @FXML
     private Label mondayDate, tuesdayDate, wednesdayDate, thursdayDate, fridayDate, saturdayDate, sundayDate, currentWeekLabel, nameLabel, mondayLabel, tuesdayLabel, wednesdayLabel, thursdayLabel, fridayLabel, saturdayLabel, sundayLabel;
@@ -179,6 +177,9 @@ public class TimetableController implements Initializable {
      * Clears the timetable by removing all tasks from the columns.
      */
     private void clearTimetable() {
+        dayColumns = new VBox[] {
+                mondayColumn, tuesdayColumn, wednesdayColumn, thursdayColumn, fridayColumn, saturdayColumn, sundayColumn
+        };
         for (VBox dayColumn : dayColumns) {
             dayColumn.getChildren().clear();
         }
