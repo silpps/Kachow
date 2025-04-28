@@ -594,10 +594,15 @@ public class TimetableController implements Initializable {
      * @param popupStage the popup stage
      */
     private void handleDeleteEvent(Object event, Stage popupStage) {
-        System.out.println("Delete event: " + getEventTitle((MyEvent) event));
-
-        deleteEvent(event);
-        popupStage.close();
+        try{
+            System.out.println("Delete event: " + getEventTitle((MyEvent) event));
+            deleteEvent(event);
+            showAlert(Alert.AlertType.INFORMATION, bundle.getString("eventDeletedTitle"), bundle.getString("eventDeletedMessage"));
+            popupStage.close();
+    } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, bundle.getString("eventDeleteErrorTitle"), bundle.getString("eventDeleteErrorMessage"));
+            e.printStackTrace();
+        }
     }
 
     private void deleteEvent(Object event) {
