@@ -790,14 +790,14 @@ private void handleCourseClick(int courseId, String courseName) {
 
 
         // Buttons for actions
-        Button editButton = new Button(bundle.getString("saveButton"));
         Button deleteButton = new Button(bundle.getString("deleteButton"));
+        Button saveButton = new Button(bundle.getString("saveButton"));
 
-        HBox buttonHBox = new HBox(20, editButton, deleteButton);
+        HBox buttonHBox = new HBox(20, saveButton, deleteButton);
         buttonHBox.setAlignment(Pos.CENTER);
 
         // Add event handlers for buttons
-        editButton.setOnAction(e -> handleEditCourse(course, courseNameField.getText(), instructorField.getText(), startDatePicker.getValue(), endDatePicker.getValue(), popupStage));
+        saveButton.setOnAction(e -> handleEditCourse(course, courseNameField.getText(), instructorField.getText(), startDatePicker.getValue(), endDatePicker.getValue(), popupStage));
         deleteButton.setOnAction(e -> handleDeleteCourse(courseId, popupStage));
 
         popupVBox.getChildren().addAll(courseNameLabel, courseNameField, instructorLabel, instructorField, startDateLabel, startDatePicker, endDateLabel, endDatePicker, buttonHBox);
