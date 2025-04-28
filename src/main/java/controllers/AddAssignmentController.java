@@ -105,47 +105,94 @@ public class AddAssignmentController {
 
     /**
      * Handles the action when the save button is clicked.
-     * Validates the input fields, checks for logical errors (e.g., missing or invalid data),
-     * and saves the assignment to the database if all validations pass.
-     * Updates the timetable view after successfully saving the assignment.
+     * Calls other methods to validate input fields, save the assignment to the database,
+     * and update the timetable view.
      */
     @FXML
     private void assignmentSaveButtonClicked() {
-        // Save the assignment details
-        String selectedItem = courseNameChoiceBox.getValue();
-        String assignmentTitle = assignmentTitleTextField.getText();
-        String description = descriptionTextArea.getText();
-        LocalDate date = assignmentDatePicker.getValue();
-        String deadlineTimeString = deadlineChoiceBox.getValue();
-        if (selectedItem == null || assignmentTitle.isEmpty() || date == null || deadlineTimeString == null || (!notStartedCheckBox.isSelected() && !ongoingCheckBox.isSelected())) {
-            courseErrorLabel.setText(selectedItem == null ? bundle.getString("courseErrorLabel") : "");
-            titleErrorLabel.setText(assignmentTitle.isEmpty() ? bundle.getString("titleErrorLabel") : "");
-            dateErrorLabel.setText(date == null ? bundle.getString("dateErrorLabel") : "");
-            timeErrorLabel.setText(deadlineTimeString == null ? bundle.getString("timeErrorLabel") : "");
-            progressErrorLabel.setText((!notStartedCheckBox.isSelected() && !ongoingCheckBox.isSelected()) ? bundle.getString("progressErrorLabel") : "");
+        if (!validateInputFields()) {
             return;
         }
 
+        int courseId = extractCourseId(courseNameChoiceBox.getValue());
+        String status = determineStatus();
+        LocalDateTime assignmentDeadline = parseDeadline(assignmentDatePicker.getValue(), deadlineChoiceBox.getValue());
 
-        int courseId = Integer.parseInt(selectedItem.replaceFirst(".*\\(ID: (\\d+)\\)$", "$1"));
+        Assignment assignment = new Assignment(courseId, assignmentTitleTextField.getText(),
+                descriptionTextArea.getText(), assignmentDeadline, status);
+        assignmentDAO.add(assignment);
+        System.out.println("Assignment added" + assignment.getCourseId());
 
-        String status = "";
+        updateTimetableView();
+        backButtonClicked();
+    }
+
+    /**
+     * Validates the input fields for adding an assignment.
+     * Checks if all required fields are filled and displays error messages if not.
+     *
+     * @return true if all fields are valid, false otherwise
+     */
+    private boolean validateInputFields() {
+        String selectedItem = courseNameChoiceBox.getValue();
+        String assignmentTitle = assignmentTitleTextField.getText();
+        LocalDate date = assignmentDatePicker.getValue();
+        String deadlineTimeString = deadlineChoiceBox.getValue();
+
+        boolean isValid = true;
+
+        courseErrorLabel.setText(selectedItem == null ? bundle.getString("courseErrorLabel") : "");
+        titleErrorLabel.setText(assignmentTitle.isEmpty() ? bundle.getString("titleErrorLabel") : "");
+        dateErrorLabel.setText(date == null ? bundle.getString("dateErrorLabel") : "");
+        timeErrorLabel.setText(deadlineTimeString == null ? bundle.getString("timeErrorLabel") : "");
+        progressErrorLabel.setText((!notStartedCheckBox.isSelected() && !ongoingCheckBox.isSelected())
+                ? bundle.getString("progressErrorLabel") : "");
+
+        if (selectedItem == null || assignmentTitle.isEmpty() || date == null || deadlineTimeString == null ||
+                (!notStartedCheckBox.isSelected() && !ongoingCheckBox.isSelected())) {
+            isValid = false;
+        }
+        return isValid;
+    }
+
+    /**
+     * Extracts the course ID from the selected item in the course name choice box.
+     *
+     * @param selectedItem the selected item from the choice box
+     * @return the extracted course ID
+     */
+    private int extractCourseId(String selectedItem) {
+        return Integer.parseInt(selectedItem.replaceFirst(".*\\(ID: (\\d+)\\)$", "$1"));
+    }
+
+    private String determineStatus() {
         if (notStartedCheckBox.isSelected()) {
-            status = "Not started";
+            return "Not started";
         } else if (ongoingCheckBox.isSelected()) {
-            status = "Ongoing";
+            return "Ongoing";
         }
 
+        return "";
+    }
 
+    /**
+     * Parses the deadline time string and date into a LocalDateTime object.
+     *
+     * @param date the date of the assignment
+     * @param deadlineTimeString the deadline time string
+     * @return the parsed LocalDateTime object
+     */
+    private LocalDateTime parseDeadline(LocalDate date, String deadlineTimeString) {
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
-        LocalDateTime assignmentDeadline = LocalDateTime.of(date, LocalTime.parse(deadlineTimeString, timeFormatter));
-        Assignment assignment = new Assignment(courseId, assignmentTitle, description, assignmentDeadline, status);
-        assignmentDAO.add(assignment);
-        System.out.println("Assignment added" + assignment.getCourseId() + " " + assignment.getTitle() + " " + assignment.getDescription() + " " + assignment.getDeadline() + " " + assignment.getStatus());
+        return LocalDateTime.of(date, LocalTime.parse(deadlineTimeString, timeFormatter));
+    }
 
+    /**
+     * Updates the timetable view after adding an assignment.
+     * This method fetches the current week's data and updates the UI.
+     */
+    private void updateTimetableView() {
         bundle = ResourceBundle.getBundle("messages", Locale.getDefault());
-        // Small delay to ensure DB update before fetching data
-        // Update the UI after saving the assignment
         new Thread(() -> {
             try {
                 Thread.sleep(500); // Ensure database update completes
@@ -160,9 +207,6 @@ public class AddAssignmentController {
                 System.out.println("UI updated.");
             });
         }).start();
-
-        backButtonClicked();
-
     }
 
     /**
