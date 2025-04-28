@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -50,6 +49,7 @@ pipeline {
                 jacoco()
             }
         }
+    }
 
     post {
         always {
@@ -58,4 +58,3 @@ pipeline {
         }
     }
 }
-
