@@ -398,7 +398,6 @@ public class TimetableController implements Initializable {
                 popupVBox.getChildren().addAll(titleLabel, titleField);
             }
 
-
             Label dateLabel = new Label(bundle.getString("dateLabel"));
             DatePicker datePicker = new DatePicker(getEventDate((MyEvent) event).toLocalDate());
 
@@ -456,6 +455,7 @@ public class TimetableController implements Initializable {
 
                 popupVBox.getChildren().addAll(statusLabel, notStartedButton, ongoingButton, completedButton);
             }
+
             VBox timeBox = new VBox(10, fromTimeLabel, fromTimeChoiceBox);
 
             if (!(event instanceof Assignment || event instanceof Exam)) {
@@ -465,19 +465,25 @@ public class TimetableController implements Initializable {
 
             Button saveButton = new Button(bundle.getString("saveButton"));
             Button deleteButton = new Button(bundle.getString("deleteButton"));
+            Button backButton = new Button(bundle.getString("backButton"));
 
-            HBox buttonHBox = new HBox(30, deleteButton, saveButton);
-            buttonHBox.setAlignment(Pos.CENTER);
+            HBox actionButtons = new HBox(30, deleteButton, saveButton);
+            actionButtons.setAlignment(Pos.CENTER);
+
+            VBox buttonVBox = new VBox(40, actionButtons, backButton);
+            buttonVBox.setAlignment(Pos.CENTER);
 
             saveButton.setOnAction(e -> handleSaveEvent(event, titleField, datePicker, fromTimeChoiceBox, toTimeChoiceBox, descriptionField, finalLocationField, popupStage));
             deleteButton.setOnAction(e -> handleDeleteEvent(event, popupStage));
 
-            popupVBox.getChildren().addAll(dateLabel, datePicker, timeBox, descriptionLabel, descriptionField, buttonHBox);
+            backButton.setOnAction(e -> popupStage.close()); // Close the popup without any changes
+
+            popupVBox.getChildren().addAll(dateLabel, datePicker, timeBox, descriptionLabel, descriptionField, buttonVBox);
 
             if ("ar".equals(bundle.getLocale().getLanguage())) {
                 popupVBox.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
             }
-            Scene popupScene = new Scene(popupVBox, 300, 600);
+            Scene popupScene = new Scene(popupVBox, 400, 600);
             popupScene.getStylesheets().add("/timetable.css");
             popupStage.setScene(popupScene);
             popupStage.show();
@@ -485,6 +491,8 @@ public class TimetableController implements Initializable {
             e.printStackTrace();
         }
     }
+
+
 
     /**
      * Handles the save event when the save button is clicked in the popup.
