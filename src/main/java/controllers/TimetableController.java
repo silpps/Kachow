@@ -1,6 +1,7 @@
 package controllers;
 
 import dao.*;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -48,6 +49,9 @@ public class TimetableController implements Initializable {
     private VBox sundayColumn;
 
     @FXML
+    private VBox coursesColumn;
+
+    @FXML
     private Label mondayDate;
     @FXML
     private Label tuesdayDate;
@@ -80,6 +84,8 @@ public class TimetableController implements Initializable {
     @FXML
     private Label sundayLabel;
     @FXML
+    private Label coursesLabel;
+    @FXML
     private Button addButton;
     @FXML
     private Button nextWeekButton;
@@ -95,6 +101,7 @@ public class TimetableController implements Initializable {
     private IDAO<Assignment> assignmentDAO;
     private IDAO<ClassSchedule> classScheduleDAO;
     private SettingDAO settingDAO;
+    private IDAO<Course> courseDAO;
     private Map<Integer, String> courses;
     private Locale locale;
     private ResourceBundle bundle;
@@ -115,6 +122,7 @@ public class TimetableController implements Initializable {
         examDAO = new ExamDAO();
         assignmentDAO = new AssignmentDAO();
         classScheduleDAO = new ClassScheduleDAO();
+        courseDAO = new CourseDAO();
 
         // Fetch the language
         Map<String, String> language = settingDAO.getLanguage();
@@ -175,6 +183,7 @@ public class TimetableController implements Initializable {
         // Set the current week label
         currentWeekLabel.setText(startOfWeek.format(formatter2) + " - " + endOfWeek.format(formatter2));
 
+        populateCoursesColumn();
 
 
         // Fetch current week's data from database
@@ -712,6 +721,160 @@ public class TimetableController implements Initializable {
     }
 
     /**
+     * Populates the courses column with course boxes.
+     */
+    private void populateCoursesColumn() {
+        coursesColumn.getChildren().clear();
+
+        for (Map.Entry<Integer, String> courseEntry : courses.entrySet()) {
+            VBox courseBox = createCourseBox(courseEntry.getKey(), courseEntry.getValue());
+            coursesColumn.getChildren().add(courseBox);
+        }
+    }
+
+    /**
+     * Creates a VBox for a course.
+     *
+     * @param courseId   the ID of the course
+     * @param courseName the name of the course
+     * @return the VBox containing the course details
+     */
+    private VBox createCourseBox(int courseId, String courseName) {
+        VBox courseBox = new VBox();
+        courseBox.getStyleClass().add("course-box");
+        courseBox.setSpacing(5); // Add spacing between elements
+        courseBox.setStyle("-fx-padding: 10; -fx-border-color: #ccc; -fx-border-radius: 5; -fx-background-color: #f9f9f9;");
+
+        Label courseNameLabel = new Label(courseName);
+        courseNameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+
+        Label courseIdLabel = new Label("ID: " + courseId);
+        courseIdLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #666;");
+
+        courseBox.getChildren().addAll(courseNameLabel, courseIdLabel);
+
+        // Optional: Add click event to handle course selection or details
+        courseBox.setOnMouseClicked(e -> handleCourseClick(courseId, courseName));
+
+        return courseBox;
+    }
+
+/**
+ * Handles the action when a course box is clicked.
+ *
+ * @param courseId   the ID of the clicked course
+ * @param courseName the name of the clicked course
+ */
+private void handleCourseClick(int courseId, String courseName) {
+    try {
+        Stage popupStage = new Stage();
+        popupStage.setTitle(bundle.getString("courseDetailsLabel"));
+
+        VBox popupVBox = new VBox(10);
+        popupVBox.setStyle("-fx-padding: 20;");
+
+        Course course = courseDAO.get(courseId);
+
+
+        // Course details
+        Label courseNameLabel = new Label(bundle.getString("courseNameLabel"));
+        TextField courseNameField = new TextField(courseName);
+
+        Label instructorLabel = new Label(bundle.getString("instructorLabel"));
+        TextField instructorField = new TextField(course.getInstructor());
+
+        Label startDateLabel = new Label(bundle.getString("startDateLabel"));
+        DatePicker startDatePicker = new DatePicker(course.getStartDate());
+        Label endDateLabel = new Label(bundle.getString("endDateLabel"));
+        DatePicker endDatePicker = new DatePicker(course.getEndDate());
+
+
+        // Buttons for actions
+        Button editButton = new Button(bundle.getString("saveButton"));
+        Button deleteButton = new Button(bundle.getString("deleteButton"));
+
+        HBox buttonHBox = new HBox(20, editButton, deleteButton);
+        buttonHBox.setAlignment(Pos.CENTER);
+
+        // Add event handlers for buttons
+        editButton.setOnAction(e -> handleEditCourse(course, courseNameField.getText(), instructorField.getText(), startDatePicker.getValue(), endDatePicker.getValue(), popupStage));
+        deleteButton.setOnAction(e -> handleDeleteCourse(courseId, popupStage));
+
+        popupVBox.getChildren().addAll(courseNameLabel, courseNameField, instructorLabel, instructorField, startDateLabel, startDatePicker, endDateLabel, endDatePicker, buttonHBox);
+
+        if ("ar".equals(bundle.getLocale().getLanguage())) {
+            popupVBox.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
+        }
+
+        Scene popupScene = new Scene(popupVBox, 300, 300);
+        popupScene.getStylesheets().add("/timetable.css");
+        popupStage.setScene(popupScene);
+        popupStage.show();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
+/**
+ * Handles the edit course action.
+ *
+ *
+ */
+private void handleEditCourse(Course course, String courseName, String instructor, LocalDate startDate, LocalDate endDate, Stage popupStage) {
+    System.out.println("Edit course: " + courseName + " (ID: " + course.getCourseID() + ")");
+    course.setCourseName(courseName);
+    course.setInstructor(instructor);
+    course.setStartDate(startDate);
+    course.setEndDate(endDate);
+    courseDAO.update(course);
+    popupStage.close();
+    updateCourseMap();
+    // Update the UI after saving the exam
+    new Thread(() -> {
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        }
+
+        Platform.runLater(() -> {
+            System.out.println("Updating UI...");
+            fetchAndDisplayCurrentWeeksData(bundle);
+            System.out.println("UI updated.");
+        });
+    }).start();
+}
+
+/**
+ * Handles the delete course action.
+ *
+ * @param courseId   the ID of the course to delete
+ * @param popupStage the popup stage to close after deletion
+ */
+private void handleDeleteCourse(int courseId, Stage popupStage) {
+    System.out.println("Delete course: ID " + courseId);
+    courseDAO.delete(courseId);
+    popupStage.close();
+    updateCourseMap();
+    // Update the UI after saving the exam
+    new Thread(() -> {
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        }
+
+        Platform.runLater(() -> {
+            System.out.println("Updating UI...");
+            fetchAndDisplayCurrentWeeksData(bundle);
+            System.out.println("UI updated.");
+        });
+    }).start();
+}
+
+    /**
      * Handles the action when the English button is clicked.
      * Updates the language to English, saves it to the database, and refreshes the timetable.
      */
@@ -781,6 +944,7 @@ public class TimetableController implements Initializable {
         fridayLabel.setText(bundle.getString("fridayLabel"));
         saturdayLabel.setText(bundle.getString("saturdayLabel"));
         sundayLabel.setText(bundle.getString("sundayLabel"));
+        coursesLabel.setText(bundle.getString("coursesLabel"));
 
     }
 

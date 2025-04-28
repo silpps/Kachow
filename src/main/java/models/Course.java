@@ -8,7 +8,7 @@ import java.time.LocalDate;
  * It provides methods to get and set these details.
  */
 public class Course {
-    private final String courseName;
+    private String courseName;
     private int courseID;
     private String instructor;
     private LocalDate startDate;
@@ -54,6 +54,10 @@ public class Course {
      */
     public String getCourseName() {
         return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
 
     /**

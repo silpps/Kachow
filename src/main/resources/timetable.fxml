@@ -6,13 +6,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="742.0" prefWidth="1276.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TimetableController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="742.0" prefWidth="1318.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TimetableController">
     <children>
-        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="742.0" prefWidth="1276.0" stylesheets="@timetable.css" VBox.vgrow="ALWAYS">
+        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="742.0" prefWidth="1319.0" stylesheets="@timetable.css" VBox.vgrow="ALWAYS">
             <children>
-                <Label id="studyFlowLabel" fx:id="nameLabel" alignment="CENTER" layoutX="533.0" layoutY="24.0" prefHeight="68.0" prefWidth="209.0" />
-                <Button id="addButton" fx:id="addButton" layoutX="871.0" layoutY="43.0" mnemonicParsing="false" onAction="#addButtonClicked" prefHeight="25.0" prefWidth="81.0" />
-            <HBox id="weekElement" layoutX="148.0" layoutY="100.0" prefHeight="573.0" prefWidth="980.0">
+                <Label id="studyFlowLabel" fx:id="nameLabel" alignment="CENTER" layoutX="79.0" layoutY="24.0" prefHeight="68.0" prefWidth="209.0" />
+                <Button id="addButton" fx:id="addButton" layoutX="977.0" layoutY="43.0" mnemonicParsing="false" onAction="#addButtonClicked" prefHeight="25.0" prefWidth="81.0" />
+            <HBox id="weekElement" layoutX="79.0" layoutY="99.0" prefHeight="573.0" prefWidth="980.0">
                <children>
                   <VBox id="monday" alignment="CENTER" prefHeight="591.0" prefWidth="140.0">
                      <children>
@@ -93,20 +93,22 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox fx:id="weekBox" alignment="TOP_CENTER" layoutX="148.0" layoutY="53.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="37.0" prefWidth="383.0">
+            <HBox fx:id="weekBox" alignment="CENTER" layoutX="377.0" layoutY="39.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="37.0" prefWidth="383.0">
                <children>
                   <Button fx:id="lastWeekButton" mnemonicParsing="false" onAction="#showPreviousWeek" text="Last" />
                   <Label fx:id="currentWeekLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="37.0" prefWidth="241.0" style="-fx-padding: 10px;" />
                   <Button fx:id="nextWeekButton" mnemonicParsing="false" onAction="#showNextWeek" text="Next" />
                </children>
             </HBox>
-            <AnchorPane layoutX="430.0" layoutY="682.0" prefHeight="45.0" prefWidth="413.0">
+            <AnchorPane layoutX="79.0" layoutY="682.0" prefHeight="45.0" prefWidth="413.0">
                <children>
                   <Button fx:id="englishButton" layoutX="14.0" layoutY="8.0" mnemonicParsing="false" onAction="#onEnglishClicked" prefHeight="30.0" prefWidth="37.0" text="EN" />
                   <Button fx:id="koreanButton" layoutX="188.0" layoutY="8.0" mnemonicParsing="false" onAction="#onKoreanClicked" prefHeight="30.0" prefWidth="37.0" text="KR" />
                   <Button fx:id="arabicButton" layoutX="361.0" layoutY="8.0" mnemonicParsing="false" onAction="#onArabicClicked" prefHeight="30.0" prefWidth="37.0" text="AR" />
                </children>
             </AnchorPane>
+            <Label fx:id="coursesLabel" layoutX="1085.0" layoutY="99.0" text="Courses:" />
+            <VBox fx:id="coursesColumn" layoutX="1085.0" layoutY="127.0" prefHeight="545.0" prefWidth="183.0" />
             </children>
         </AnchorPane>
     </children>

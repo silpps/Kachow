@@ -2,6 +2,7 @@ package controllers;
 
 import dao.CourseDAO;
 import dao.IDAO;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -86,6 +87,22 @@ public class AddCourseController {
 
         //Update the course list in the timetable controller
         timetableController.updateCourseMap();
+
+        // Update the UI after saving the exam
+        new Thread(() -> {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
+            }
+
+            Platform.runLater(() -> {
+                System.out.println("Updating UI...");
+                timetableController.fetchAndDisplayCurrentWeeksData(bundle);
+                System.out.println("UI updated.");
+            });
+        }).start();
 
         addCourseSaveButton.getScene().getWindow().hide();
     }
