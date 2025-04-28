@@ -594,14 +594,25 @@ public class TimetableController implements Initializable {
      * @param popupStage the popup stage
      */
     private void handleDeleteEvent(Object event, Stage popupStage) {
-        try{
-            System.out.println("Delete event: " + getEventTitle((MyEvent) event));
-            deleteEvent(event);
-            showAlert(Alert.AlertType.INFORMATION, bundle.getString("eventDeletedTitle"), bundle.getString("eventDeletedMessage"));
-            popupStage.close();
-    } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, bundle.getString("eventDeleteErrorTitle"), bundle.getString("eventDeleteErrorMessage"));
-            e.printStackTrace();
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle(bundle.getString("confirmationTitle"));
+        confirmationAlert.setHeaderText(bundle.getString("confirmationHeader"));
+        confirmationAlert.setContentText(bundle.getString("confirmationMessage"));
+
+        Optional<ButtonType> result = confirmationAlert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                System.out.println("Delete event: " + getEventTitle((MyEvent) event));
+                deleteEvent(event);
+                showAlert(Alert.AlertType.INFORMATION, bundle.getString("eventDeletedTitle"), bundle.getString("eventDeletedMessage"));
+                popupStage.close();
+            } catch (Exception e) {
+                showAlert(Alert.AlertType.ERROR, bundle.getString("eventDeleteErrorTitle"), bundle.getString("eventDeleteErrorMessage"));
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Delete action canceled");
         }
     }
 
