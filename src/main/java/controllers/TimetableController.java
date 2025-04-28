@@ -45,6 +45,7 @@ public class TimetableController implements Initializable {
     private Label coursesLabel;
     @FXML
     private Button addButton;
+    @FXML
     private Label mondayDate, tuesdayDate, wednesdayDate, thursdayDate, fridayDate, saturdayDate, sundayDate, currentWeekLabel, nameLabel, mondayLabel, tuesdayLabel, wednesdayLabel, thursdayLabel, fridayLabel, saturdayLabel, sundayLabel;
     private Label[] dateLabels;
 

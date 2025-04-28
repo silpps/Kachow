@@ -107,7 +107,7 @@
                   <Button fx:id="arabicButton" layoutX="361.0" layoutY="8.0" mnemonicParsing="false" onAction="#onArabicClicked" prefHeight="30.0" prefWidth="37.0" text="AR" />
                </children>
             </AnchorPane>
-            <Label fx:id="coursesLabel" layoutX="1085.0" layoutY="99.0" text="Courses:" />
+            <Label fx:id="coursesLabel" layoutX="1085.0" layoutY="99.0" />
             <VBox fx:id="coursesColumn" layoutX="1085.0" layoutY="127.0" prefHeight="545.0" prefWidth="183.0" />
             </children>
         </AnchorPane>
