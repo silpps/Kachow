@@ -27,7 +27,7 @@ pipeline {
 
         stage('Run JMeter Tests') {
             steps {
-                bat 'jmeter -n -t tests/performance/demo.jmx -l result.jtl'
+                bat 'jmeter -n -t src/test/performance/loadTesting.jmx -l result.jtl'
             }
         }
 
