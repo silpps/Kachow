@@ -118,13 +118,26 @@ public class AddAssignmentController {
         String status = determineStatus();
         LocalDateTime assignmentDeadline = parseDeadline(assignmentDatePicker.getValue(), deadlineChoiceBox.getValue());
 
-        Assignment assignment = new Assignment(courseId, assignmentTitleTextField.getText(),
-                descriptionTextArea.getText(), assignmentDeadline, status);
-        assignmentDAO.add(assignment);
-        System.out.println("Assignment added" + assignment.getCourseId());
+        Assignment assignment = new Assignment(courseId, assignmentTitleTextField.getText(), descriptionTextArea.getText(), assignmentDeadline, status);
+        try{
+            assignmentDAO.add(assignment);
+            System.out.println("Assignment added" + assignment.getCourseId());
+            showAlert(Alert.AlertType.INFORMATION, bundle.getString("eventSavedTitle"), bundle.getString("eventSavedMessage"));
+        } catch (Exception e) {
+            System.out.println("Error adding assignment");
+            showAlert(Alert.AlertType.ERROR, bundle.getString("eventSaveErrorTitle"), bundle.getString("eventSaveErrorMessage"));
+            e.printStackTrace();
+        }
 
         updateTimetableView();
         backButtonClicked();
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     /**

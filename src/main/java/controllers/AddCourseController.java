@@ -63,7 +63,7 @@ public class AddCourseController {
      * and adds the course to the database if validation passes.
      */
     @FXML
-    private void addCourseSaveButtonClicked(){
+    private void addCourseSaveButtonClicked() {
         System.out.println("Course save button clicked");
         String courseName = courseNameTextField.getText();
         String instructor = instructorTextField.getText();
@@ -83,28 +83,33 @@ public class AddCourseController {
             return;
         }
         Course course = new Course(courseName, instructor, startDate, endDate);
-        courseDAO.add(course);
+        try {
+            courseDAO.add(course);
 
-        //Update the course list in the timetable controller
-        timetableController.updateCourseMap();
+            //Update the course list in the timetable controller
+            timetableController.updateCourseMap();
+            // Update the UI after saving the exam
+            new Thread(() -> {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
+                }
 
-        // Update the UI after saving the exam
-        new Thread(() -> {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                Thread.currentThread().interrupt();
-            }
-
-            Platform.runLater(() -> {
-                System.out.println("Updating UI...");
-                timetableController.fetchAndDisplayCurrentWeeksData(bundle);
-                System.out.println("UI updated.");
-            });
-        }).start();
-
-        addCourseSaveButton.getScene().getWindow().hide();
+                Platform.runLater(() -> {
+                    System.out.println("Updating UI...");
+                    timetableController.fetchAndDisplayCurrentWeeksData(bundle);
+                    System.out.println("UI updated.");
+                });
+            }).start();
+            showAlert(Alert.AlertType.INFORMATION, bundle.getString("eventSavedTitle"), bundle.getString("eventSavedMessage"));
+            addCourseSaveButton.getScene().getWindow().hide();
+        } catch (Exception e) {
+            System.out.println("Error adding course");
+            showAlert(Alert.AlertType.ERROR, bundle.getString("eventSaveErrorTitle"), bundle.getString("eventSaveErrorMessage"));
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -129,6 +134,13 @@ public class AddCourseController {
          courseDAO = new CourseDAO();
 
      }
+
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 
     /**
      * Sets the ResourceBundle for localization.

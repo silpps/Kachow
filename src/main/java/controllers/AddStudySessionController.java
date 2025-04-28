@@ -148,29 +148,42 @@ public class AddStudySessionController {
         }
 
         StudySession studySession = new StudySession(courseId, sessionTitle, description, fromTime, toTime);
-        studySessionDAO.add(studySession);
-        System.out.println("Study session added, CourseId:" + studySession.getCourseId() + " " + studySession.getTitle() + " " + studySession.getDescription());
+        try {
+            studySessionDAO.add(studySession);
+            System.out.println("Study session added, CourseId:" + studySession.getCourseId() + " " + studySession.getTitle() + " " + studySession.getDescription());
+            showAlert(Alert.AlertType.INFORMATION, bundle.getString("eventSavedTitle"), bundle.getString("eventSavedMessage"));
+            bundle = ResourceBundle.getBundle("messages", Locale.getDefault());
 
-        bundle = ResourceBundle.getBundle("messages", Locale.getDefault());
+            new Thread(() -> {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
+                }
 
-        new Thread(() -> {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                Thread.currentThread().interrupt();
-            }
-
-            Platform.runLater(() -> {
-                System.out.println("Updating UI...");
-                timetableController.fetchAndDisplayCurrentWeeksData(bundle);
-                System.out.println("UI updated.");
-            });
-        }).start();
+                Platform.runLater(() -> {
+                    System.out.println("Updating UI...");
+                    timetableController.fetchAndDisplayCurrentWeeksData(bundle);
+                    System.out.println("UI updated.");
+                });
+            }).start();
 
 
-        sessionBackButtonClicked();
+            sessionBackButtonClicked();
 
+        } catch (Exception e) {
+            System.out.println("Error adding study session");
+            showAlert(Alert.AlertType.ERROR, bundle.getString("eventSaveErrorTitle"), bundle.getString("assignmentSaveErrorMessage"));
+            e.printStackTrace();
+        }
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     /**

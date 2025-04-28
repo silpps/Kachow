@@ -78,6 +78,11 @@ public class Assignment extends MyEvent {
         return deadline;
     }
 
+    @Override
+    public LocalDateTime getEndTime() {
+        return getDeadline();
+    }
+
     /**
      * Returns the status of the assignment.
      *

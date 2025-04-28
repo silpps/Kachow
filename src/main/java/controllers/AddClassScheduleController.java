@@ -139,11 +139,11 @@ public class AddClassScheduleController {
             return;
         }
         ClassSchedule classSchedule = new ClassSchedule(courseId, location, description, fromTime, toTime);
-        classScheduleDAO.add(classSchedule);
-        System.out.println("Class Schedule added" + classSchedule.getCourseId() + " " + classSchedule.getLocation());
-
-
-        bundle = ResourceBundle.getBundle("messages", Locale.getDefault());
+        try{
+            classScheduleDAO.add(classSchedule);
+            System.out.println("Class Schedule added" + classSchedule.getCourseId() + " " + classSchedule.getLocation());
+            showAlert(Alert.AlertType.INFORMATION, bundle.getString("eventSavedTitle"), bundle.getString("eventSavedMessage"));
+            bundle = ResourceBundle.getBundle("messages", Locale.getDefault());
 
         new Thread(() -> {
             try {
@@ -162,7 +162,19 @@ public class AddClassScheduleController {
 
         // Close the window
         scheduleBackButtonClicked();
+    }
+        catch (Exception e) {
+            System.out.println("Error adding class schedule");
+            showAlert(Alert.AlertType.ERROR, bundle.getString("eventSaveErrorTitle"), bundle.getString("assignmentSaveErrorMessage"));
+            e.printStackTrace();
+        }
+    }
 
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     /**
