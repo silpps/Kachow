@@ -25,7 +25,7 @@ public final class MariaDbConnection {
         if (conn == null) {
             try {
                 conn = DriverManager.getConnection(
-                        "jdbc:mariadb://localhost:3306/study_planner?user=student_test&password=schedule");
+                        DBConfig.getUrl()+"?"+"user="+DBConfig.getUsername()+"&password="+DBConfig.getPassword());
                 System.out.println("Connection successful");
             } catch (SQLException e) {
                 System.out.println("Connection failed");
