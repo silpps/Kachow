@@ -752,11 +752,10 @@ private void handleCourseClick(int courseId, String courseName) {
         Stage popupStage = new Stage();
         popupStage.setTitle(bundle.getString("courseDetailsLabel"));
 
-        VBox popupVBox = new VBox(10);
-        popupVBox.setStyle("-fx-padding: 20;");
+        VBox popupVBox = new VBox(20);
+        popupVBox.setStyle("-fx-padding: 40;");
 
         Course course = courseDAO.get(courseId);
-
 
         // Course details
         Label courseNameLabel = new Label(bundle.getString("courseNameLabel"));
@@ -770,25 +769,35 @@ private void handleCourseClick(int courseId, String courseName) {
         Label endDateLabel = new Label(bundle.getString("endDateLabel"));
         DatePicker endDatePicker = new DatePicker(course.getEndDate());
 
-
-        // Buttons for actions
         Button deleteButton = new Button(bundle.getString("deleteButton"));
         Button saveButton = new Button(bundle.getString("saveButton"));
+        Button backButton = new Button(bundle.getString("backButton"));
 
-        HBox buttonHBox = new HBox(20, saveButton, deleteButton);
+        HBox buttonHBox = new HBox(40, deleteButton, saveButton);
         buttonHBox.setAlignment(Pos.CENTER);
 
-        // Add event handlers for buttons
+        HBox backButtonHBox = new HBox(backButton);
+        backButtonHBox.setAlignment(Pos.CENTER);
+        backButton.setMaxWidth(Double.MAX_VALUE);
+
         saveButton.setOnAction(e -> handleEditCourse(course, courseNameField.getText(), instructorField.getText(), startDatePicker.getValue(), endDatePicker.getValue(), popupStage));
         deleteButton.setOnAction(e -> handleDeleteCourse(courseId, popupStage));
+        backButton.setOnAction(e -> popupStage.close());
 
-        popupVBox.getChildren().addAll(courseNameLabel, courseNameField, instructorLabel, instructorField, startDateLabel, startDatePicker, endDateLabel, endDatePicker, buttonHBox);
+        popupVBox.getChildren().addAll(
+                courseNameLabel, courseNameField,
+                instructorLabel, instructorField,
+                startDateLabel, startDatePicker,
+                endDateLabel, endDatePicker,
+                buttonHBox,
+                backButtonHBox
+        );
 
         if ("ar".equals(bundle.getLocale().getLanguage())) {
             popupVBox.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
         }
 
-        Scene popupScene = new Scene(popupVBox, 300, 300);
+        Scene popupScene = new Scene(popupVBox, 300, 500);
         popupScene.getStylesheets().add("/timetable.css");
         popupStage.setScene(popupScene);
         popupStage.show();
@@ -796,6 +805,7 @@ private void handleCourseClick(int courseId, String courseName) {
         e.printStackTrace();
     }
 }
+
 
 /**
  * Handles the edit course action.
@@ -808,24 +818,38 @@ private void handleEditCourse(Course course, String courseName, String instructo
     course.setInstructor(instructor);
     course.setStartDate(startDate);
     course.setEndDate(endDate);
-    courseDAO.update(course);
-    popupStage.close();
-    updateCourseMap();
-    // Update the UI after saving the exam
-    new Thread(() -> {
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            Thread.currentThread().interrupt();
-        }
+    Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+    confirmationAlert.setTitle(bundle.getString("confirmationTitle"));
+    confirmationAlert.setHeaderText(bundle.getString("confirmationHeader"));
+    confirmationAlert.setContentText(bundle.getString("confirmationMessage"));
 
-        Platform.runLater(() -> {
-            System.out.println("Updating UI...");
-            fetchAndDisplayCurrentWeeksData(bundle);
-            System.out.println("UI updated.");
-        });
-    }).start();
+    Optional<ButtonType> result = confirmationAlert.showAndWait();
+    if (result.isPresent() && result.get() == ButtonType.OK) {
+        try {
+            courseDAO.update(course);
+            popupStage.close();
+            updateCourseMap();
+            showAlert(Alert.AlertType.INFORMATION, bundle.getString("eventSavedTitle"), bundle.getString("eventSavedMessage"));
+            // Update the UI after saving the exam
+            new Thread(() -> {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
+                }
+
+                Platform.runLater(() -> {
+                    System.out.println("Updating UI...");
+                    fetchAndDisplayCurrentWeeksData(bundle);
+                    System.out.println("UI updated.");
+                });
+            }).start();
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, bundle.getString("eventSaveErrorTitle"), bundle.getString("eventSaveErrorMessage"));
+            e.printStackTrace();
+        }
+    }
 }
 
 /**
@@ -836,25 +860,41 @@ private void handleEditCourse(Course course, String courseName, String instructo
  */
 private void handleDeleteCourse(int courseId, Stage popupStage) {
     System.out.println("Delete course: ID " + courseId);
-    courseDAO.delete(courseId);
-    popupStage.close();
-    updateCourseMap();
-    // Update the UI after saving the exam
-    new Thread(() -> {
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            Thread.currentThread().interrupt();
-        }
+    Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+    confirmationAlert.setTitle(bundle.getString("confirmationTitle"));
+    confirmationAlert.setHeaderText(bundle.getString("confirmationHeader"));
+    confirmationAlert.setContentText(bundle.getString("confirmationMessage"));
 
-        Platform.runLater(() -> {
-            System.out.println("Updating UI...");
-            fetchAndDisplayCurrentWeeksData(bundle);
-            System.out.println("UI updated.");
-        });
-    }).start();
+    Optional<ButtonType> result = confirmationAlert.showAndWait();
+
+    if (result.isPresent() && result.get() == ButtonType.OK) {
+        try {
+
+            courseDAO.delete(courseId);
+            popupStage.close();
+            updateCourseMap();
+            // Update the UI after saving the exam
+            new Thread(() -> {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
+                }
+
+                Platform.runLater(() -> {
+                    System.out.println("Updating UI...");
+                    fetchAndDisplayCurrentWeeksData(bundle);
+                    System.out.println("UI updated.");
+                });
+            }).start();
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, bundle.getString("eventDeleteErrorTitle"), bundle.getString("eventDeleteErrorMessage"));
+            e.printStackTrace();
+        }
+    }
 }
+
 
     /**
      * Handles the action when the English button is clicked.
