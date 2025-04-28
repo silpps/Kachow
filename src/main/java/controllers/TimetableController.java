@@ -1,6 +1,7 @@
 package controllers;
 
 import dao.*;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -565,6 +566,7 @@ public class TimetableController implements Initializable {
                 }
                 classScheduleDAO.update(classSchedule);
             }
+            System.out.println("Event saved successfully: " + getEventTitle((MyEvent) event));
 
             showAlert(Alert.AlertType.INFORMATION, bundle.getString("eventSavedTitle"), bundle.getString("eventSavedMessage"));
 

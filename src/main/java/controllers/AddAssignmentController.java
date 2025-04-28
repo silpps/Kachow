@@ -140,10 +140,12 @@ public class AddAssignmentController {
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
         LocalDateTime assignmentDeadline = LocalDateTime.of(date, LocalTime.parse(deadlineTimeString, timeFormatter));
         Assignment assignment = new Assignment(courseId, assignmentTitle, description, assignmentDeadline, status);
-        assignmentDAO.add(assignment);
-        System.out.println("Assignment added" + assignment.getCourseId() + " " + assignment.getTitle() + " " + assignment.getDescription() + " " + assignment.getDeadline() + " " + assignment.getStatus());
+        try{
+            assignmentDAO.add(assignment);
+            System.out.println("Assignment added" + assignment.getCourseId() + " " + assignment.getTitle() + " " + assignment.getDescription() + " " + assignment.getDeadline() + " " + assignment.getStatus());
 
-        bundle = ResourceBundle.getBundle("messages", Locale.getDefault());
+            bundle = ResourceBundle.getBundle("messages", Locale.getDefault());
+            showAlert(Alert.AlertType.INFORMATION, bundle.getString("eventSavedTitle"), bundle.getString("eventSavedMessage"));
         // Small delay to ensure DB update before fetching data
         // Update the UI after saving the assignment
         new Thread(() -> {
@@ -163,6 +165,19 @@ public class AddAssignmentController {
 
         backButtonClicked();
 
+    }
+        catch (Exception e){
+            System.out.println("Error adding assignment");
+            showAlert(Alert.AlertType.ERROR, bundle.getString("eventSaveErrorTitle"), bundle.getString("assignmentSaveErrorMessage"));
+            e.printStackTrace();
+        }
+        }
+
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     /**

@@ -139,26 +139,39 @@ public class AddExamController {
 
 
         Exam exam = new Exam(courseId, examDateTime, examTitle, description, location);
-        examDAO.add(exam);
+        try {
+            examDAO.add(exam);
+            showAlert(Alert.AlertType.INFORMATION, bundle.getString("eventSavedTitle"), bundle.getString("eventSavedMessage"));
+            bundle = ResourceBundle.getBundle("messages", Locale.getDefault());
+            // Update the UI after saving the exam
+            new Thread(() -> {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
+                }
 
-        bundle = ResourceBundle.getBundle("messages", Locale.getDefault());
-        // Update the UI after saving the exam
-        new Thread(() -> {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                Thread.currentThread().interrupt();
-            }
+                Platform.runLater(() -> {
+                    System.out.println("Updating UI...");
+                    timetableController.fetchAndDisplayCurrentWeeksData(bundle);
+                    System.out.println("UI updated.");
+                });
+            }).start();
 
-            Platform.runLater(() -> {
-                System.out.println("Updating UI...");
-                timetableController.fetchAndDisplayCurrentWeeksData(bundle);
-                System.out.println("UI updated.");
-            });
-        }).start();
+            backButtonClicked();
+        } catch (Exception e) {
+            System.out.println("Error adding exam");
+            showAlert(Alert.AlertType.ERROR, bundle.getString("eventSaveErrorTitle"), bundle.getString("assignmentSaveErrorMessage"));
+            e.printStackTrace();
+        }
+    }
 
-        backButtonClicked();
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     /**
