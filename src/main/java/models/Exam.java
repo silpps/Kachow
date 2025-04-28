@@ -68,6 +68,11 @@ public class Exam extends MyEvent {
         this.examDate = examDate;
     }
 
+    @Override
+    public LocalDateTime getEndTime() {
+        return getExamDate();
+    }
+
     /**
      * Returns the title of the exam.
      *
