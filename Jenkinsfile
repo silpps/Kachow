@@ -27,7 +27,7 @@ pipeline {
 
         stage('Run JMeter Tests') {
             steps {
-                bat 'jmeter -n -t "C:\\Koodit\\ProjektiK25\\StudyFlow\\src\\test\\performance\\loadTesting.jmx" -l result.jtl'
+                bat 'jmeter -n -t C:\\Koodit\\ProjektiK25\\StudyFlow\\src\\test\\performance\\loadTesting.jmx -l result.jtl'
             }
         }
 
