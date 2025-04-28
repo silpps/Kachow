@@ -12,10 +12,6 @@ pipeline {
         DOCKER_IMAGE_TAG = 'ver1'
     }
 
-    tools {
-        maven 'Maven3'
-    }
-
     stages {
         stage('Checkout') {
             steps {
