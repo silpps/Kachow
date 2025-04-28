@@ -517,7 +517,6 @@ public class TimetableController implements Initializable {
         LocalTime endTime = LocalTime.parse(newToTime, DateTimeFormatter.ofPattern("H:mm"));
 
 
-        // Automatically set end time to one hour after start time if end time is not after start time
         if (!endTime.isAfter(startTime)) {
             endTime = startTime.plusHours(1);
             toTimeChoiceBox.setValue(endTime.toString());
@@ -526,49 +525,65 @@ public class TimetableController implements Initializable {
         LocalDateTime startDateTime = LocalDateTime.of(newDate, startTime);
         LocalDateTime endDateTime = LocalDateTime.of(newDate, endTime);
 
-        if (event instanceof StudySession studySession) {
-            studySession.setTitle(newTitle);
-            studySession.setDescription(newDescription);
-            studySession.setStartTime(startDateTime);
-            studySession.setEndTime(endDateTime);
-            studySessionDAO.update(studySession);
-        } else if (event instanceof Exam exam) {
-            exam.setTitle(newTitle);
-            exam.setDescription(newDescription);
-            LocalDateTime updatedExamDate = LocalDateTime.of(newDate, startTime);
-            exam.setExamDate(updatedExamDate);
-            if (locationField != null) {
-                exam.setLocation(locationField.getText());
-            }
-            examDAO.update(exam);
-        } else if (event instanceof Assignment assignment) {
-            assignment.setTitle(newTitle);
-            assignment.setDescription(newDescription);
-            assignment.setDeadline(startDateTime);
-            ToggleGroup statusGroup = ((VBox) popupStage.getScene().getRoot()).getChildren().stream()
-                    .filter(node -> node instanceof RadioButton)
-                    .map(node -> ((RadioButton) node).getToggleGroup())
-                    .findFirst()
-                    .orElse(null);
+        try {
+            if (event instanceof StudySession studySession) {
+                studySession.setTitle(newTitle);
+                studySession.setDescription(newDescription);
+                studySession.setStartTime(startDateTime);
+                studySession.setEndTime(endDateTime);
+                studySessionDAO.update(studySession);
+            } else if (event instanceof Exam exam) {
+                exam.setTitle(newTitle);
+                exam.setDescription(newDescription);
+                LocalDateTime updatedExamDate = LocalDateTime.of(newDate, startTime);
+                exam.setExamDate(updatedExamDate);
+                if (locationField != null) {
+                    exam.setLocation(locationField.getText());
+                }
+                examDAO.update(exam);
+            } else if (event instanceof Assignment assignment) {
+                assignment.setTitle(newTitle);
+                assignment.setDescription(newDescription);
+                assignment.setDeadline(startDateTime);
+                ToggleGroup statusGroup = ((VBox) popupStage.getScene().getRoot()).getChildren().stream()
+                        .filter(node -> node instanceof RadioButton)
+                        .map(node -> ((RadioButton) node).getToggleGroup())
+                        .findFirst()
+                        .orElse(null);
 
-            if (statusGroup != null) {
-                RadioButton selectedStatus = (RadioButton) statusGroup.getSelectedToggle();
-                assignment.setStatus(selectedStatus.getText());
+                if (statusGroup != null) {
+                    RadioButton selectedStatus = (RadioButton) statusGroup.getSelectedToggle();
+                    assignment.setStatus(selectedStatus.getText());
+                }
+                assignmentDAO.update(assignment);
+            } else if (event instanceof ClassSchedule classSchedule) {
+                classSchedule.setDescription(newDescription);
+                classSchedule.setStartTime(startDateTime);
+                classSchedule.setEndTime(endDateTime);
+                if (locationField != null) {
+                    classSchedule.setLocation(locationField.getText());
+                }
+                classScheduleDAO.update(classSchedule);
             }
-            assignmentDAO.update(assignment);
-        } else if (event instanceof ClassSchedule classSchedule) {
-            classSchedule.setDescription(newDescription);
-            classSchedule.setStartTime(startDateTime);
-            classSchedule.setEndTime(endDateTime);
-            if (locationField != null) {
-                classSchedule.setLocation(locationField.getText());
-            }
-            classScheduleDAO.update(classSchedule);
+
+            showAlert(Alert.AlertType.INFORMATION, bundle.getString("eventSavedTitle"), bundle.getString("eventSavedMessage"));
+
+            popupStage.close();
+            fetchAndDisplayCurrentWeeksData(bundle);
+
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, bundle.getString("eventSaveErrorTitle"), bundle.getString("eventSaveErrorMessage"));
+            e.printStackTrace();
         }
-
-        popupStage.close();
-        fetchAndDisplayCurrentWeeksData(bundle);
     }
+
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 
     /**
      * Handles the delete event when the delete button is clicked in the popup.
