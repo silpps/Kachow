@@ -5,6 +5,14 @@ pipeline {
         DOCKERHUB_CREDENTIALS_ID = 'dockerhub-credentials'
         DOCKERHUB_REPO = 'hildd/studyflow'
         DOCKER_IMAGE_TAG = 'ver1'
+        JAVA_HOME = 'C:\\Program Files\\Java\\jdk-21'
+        JMETER_HOME = 'C:\\Program Files\\apache-jmeter-5.6.3'
+        PATH = "${JAVA_HOME}\\bin;${JMETER_HOME}\\bin;${env.PATH}"
+        }
+        tools {
+        maven 'Maven3'
+        }
+
     }
 
     stages {
@@ -13,6 +21,26 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/silpps/Kachow.git'
             }
         }
+        stage('Build') {
+            steps {
+                bat 'mvn clean install'
+            }
+        }
+        stage('Run JMeter Tests') {
+            steps {
+                script {
+                    bat 'jmeter -n -t tests/performance/demo.jmx -l result.jtl'
+                }
+            }
+        }
+        post {
+            always {
+                archiveArtifacts artifacts: 'result.jtl', allowEmptyArchive: true
+                perfReport sourceDataFiles: 'result.jtl'
+            }
+        }
+
+
         stage('Run Tests') {
             steps {
                 // Run the tests first to generate data for Jacoco and JUnit
