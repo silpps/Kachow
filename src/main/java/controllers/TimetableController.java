@@ -1022,6 +1022,9 @@ private void handleDeleteCourse(int courseId, Stage popupStage) {
         return myEvent.getDescription();
     }
 
+    /**
+     * Opens the help window
+     */
     @FXML
     private void openHelpDialog() {
         try {
