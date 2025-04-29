@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="742.0" prefWidth="1318.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TimetableController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="742.0" prefWidth="1318.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TimetableController">
     <children>
         <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="742.0" prefWidth="1319.0" stylesheets="@timetable.css" VBox.vgrow="ALWAYS">
             <children>
@@ -109,6 +109,7 @@
             </AnchorPane>
             <Label fx:id="coursesLabel" layoutX="1085.0" layoutY="99.0" />
             <VBox fx:id="coursesColumn" layoutX="1085.0" layoutY="127.0" prefHeight="545.0" prefWidth="183.0" />
+            <Button fx:id="helpButton" mnemonicParsing="false" onAction="#openHelpDialog" prefHeight="30.0" prefWidth="30.0" text="?" AnchorPane.rightAnchor="79.0" AnchorPane.topAnchor="43.0" />
             </children>
         </AnchorPane>
     </children>
