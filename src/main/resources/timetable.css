@@ -94,3 +94,12 @@
 #errorLabel {
     -fx-text-fill: red;
 }
+
+#courseBox {
+    -fx-padding: 10;
+    -fx-border-color: #645f88;
+    -fx-background-color: #dfcff9;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
