@@ -72,7 +72,7 @@ public class AddCourseController {
 
         if (courseName.isEmpty() || instructor.isEmpty() || startDate == null || endDate == null) {
             nameErrorLabel.setText(courseName.isEmpty() ? bundle.getString("courseNameErrorLabel") : "");
-            instructorErrorLabel.setText(instructor.isEmpty() ? bundle.getString("instructionErrorLabel") : "");
+            instructorErrorLabel.setText(instructor.isEmpty() ? bundle.getString("instructorErrorLabel") : "");
             startDateErrorLabel.setText(startDate == null ? bundle.getString("startDateErrorLabel") : "");
             endDateErrorLabel.setText(endDate == null ? bundle.getString("endDateErrorLabel") : "");
             return;
