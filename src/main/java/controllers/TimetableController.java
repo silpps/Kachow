@@ -964,4 +964,27 @@ private void handleDeleteCourse(int courseId, Stage popupStage) {
     private String getEventDescription(MyEvent myEvent) {
         return myEvent.getDescription();
     }
+
+    @FXML
+    private void openHelpDialog() {
+        try {
+            Locale defaultLocale = Locale.getDefault();
+            bundle = ResourceBundle.getBundle(bundleName, defaultLocale);
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/helpView.fxml"), bundle);
+            Scene scene = new Scene(loader.load());
+            scene.getStylesheets().add("/timetable.css");
+
+            HelpViewController controller = loader.getController();
+            controller.setMainDialog(bundle.getString("helpMainDialog"));
+            controller.setMainGuide(bundle.getString("helpMainGuide"));
+
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle(bundle.getString("helpWindowName"));
+            stage.show();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
