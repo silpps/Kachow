@@ -407,13 +407,17 @@ public class TimetableController implements Initializable {
 
             Label titleLabel = new Label(bundle.getString("titleLabel") + " ");
             TextField titleField = new TextField(getEventTitle((MyEvent) event));
+            Label titleErrorLabel = new Label();
+            titleErrorLabel.setId("errorLabel");
 
             if (!(event instanceof ClassSchedule)) {
-                popupVBox.getChildren().addAll(titleLabel, titleField);
+                popupVBox.getChildren().addAll(titleLabel, titleField, titleErrorLabel);
             }
 
             Label dateLabel = new Label(bundle.getString("dateLabel"));
             DatePicker datePicker = new DatePicker(getEventDate((MyEvent) event).toLocalDate());
+            Label dateErrorLabel = new Label();
+            dateErrorLabel.setId("errorLabel");
 
             datePicker.setConverter(new StringConverter<LocalDate>() {
                 final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -438,6 +442,8 @@ public class TimetableController implements Initializable {
             ChoiceBox<String> toTimeChoiceBox = new ChoiceBox<>();
             toTimeChoiceBox.getItems().addAll("07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00");
             toTimeChoiceBox.setValue(getEventEndTime((MyEvent) event));
+            Label toTimeErrorLabel= new Label();
+            toTimeErrorLabel.setId("errorLabel");
 
             Label descriptionLabel = new Label(bundle.getString("descriptionLabel") + " ");
             TextArea descriptionField = new TextArea(getEventDescription((MyEvent) event));
@@ -472,10 +478,16 @@ public class TimetableController implements Initializable {
 
             VBox timeBox = new VBox(10, fromTimeLabel, fromTimeChoiceBox);
 
+
             if (!(event instanceof Assignment || event instanceof Exam)) {
                 timeBox.getChildren().add(toTimeLabel);
                 timeBox.getChildren().add(toTimeChoiceBox);
+                timeBox.getChildren().add(toTimeErrorLabel);
+                toTimeErrorLabel = timeBox.getChildren().get(4) instanceof Label ? (Label) timeBox.getChildren().get(4) : new Label();
             }
+
+            Label finalToTimeErrorLabel = toTimeErrorLabel;
+
 
             Button saveButton = new Button(bundle.getString("saveButton"));
             Button deleteButton = new Button(bundle.getString("deleteButton"));
@@ -487,12 +499,12 @@ public class TimetableController implements Initializable {
             VBox buttonVBox = new VBox(40, actionButtons, backButton);
             buttonVBox.setAlignment(Pos.CENTER);
 
-            saveButton.setOnAction(e -> handleSaveEvent(event, titleField, datePicker, fromTimeChoiceBox, toTimeChoiceBox, descriptionField, finalLocationField, popupStage));
+            saveButton.setOnAction(e -> handleSaveEvent(event, titleField, titleErrorLabel, datePicker, dateErrorLabel, fromTimeChoiceBox, finalToTimeErrorLabel, toTimeChoiceBox, descriptionField, finalLocationField, popupStage));
             deleteButton.setOnAction(e -> handleDeleteEvent(event, popupStage));
 
             backButton.setOnAction(e -> popupStage.close()); // Close the popup without any changes
 
-            popupVBox.getChildren().addAll(dateLabel, datePicker, timeBox, descriptionLabel, descriptionField, buttonVBox);
+            popupVBox.getChildren().addAll(dateLabel, datePicker, dateErrorLabel, timeBox, descriptionLabel, descriptionField, buttonVBox);
 
             if ("ar".equals(bundle.getLocale().getLanguage())) {
                 popupVBox.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
@@ -520,33 +532,45 @@ public class TimetableController implements Initializable {
      * @param locationField     the location field
      * @param popupStage        the popup stage
      */
-    private <T> void handleSaveEvent(T event, TextField titleField, DatePicker datePicker, ChoiceBox<String> fromTimeChoiceBox, ChoiceBox<String> toTimeChoiceBox, TextArea descriptionField, TextField locationField, Stage popupStage) {
+    private <T> void handleSaveEvent(T event, TextField titleField, Label titleErrorLabel, DatePicker datePicker, Label dateErrorLabel, ChoiceBox<String> fromTimeChoiceBox, Label toTimeErrorLabel, ChoiceBox<String> toTimeChoiceBox, TextArea descriptionField, TextField locationField, Stage popupStage) {
         String newTitle = titleField.getText();
         LocalDate newDate = datePicker.getValue();
         String newFromTime = fromTimeChoiceBox.getValue();
         String newToTime = toTimeChoiceBox.getValue();
         String newDescription = descriptionField.getText();
 
+        dateErrorLabel.setText("");
+        titleErrorLabel.setText("");
+        toTimeErrorLabel.setText("");
+
+        if (newDate == null) {
+            dateErrorLabel.setText(bundle.getString("dateErrorLabel"));
+            return;
+        }
+
         LocalTime startTime = LocalTime.parse(newFromTime, DateTimeFormatter.ofPattern("H:mm"));
         LocalTime endTime = LocalTime.parse(newToTime, DateTimeFormatter.ofPattern("H:mm"));
-
-
-        if (!endTime.isAfter(startTime)) {
-            endTime = startTime.plusHours(1);
-            toTimeChoiceBox.setValue(endTime.toString());
-        }
 
         LocalDateTime startDateTime = LocalDateTime.of(newDate, startTime);
         LocalDateTime endDateTime = LocalDateTime.of(newDate, endTime);
 
         try {
-            if (event instanceof StudySession studySession) {
+            if (event instanceof StudySession studySession) {       // STUDY SESSION
+                if(newTitle.isEmpty() || startTime.isAfter(endTime)) {
+                    titleErrorLabel.setText(newTitle.isEmpty() ? bundle.getString("titleErrorLabel") : "");
+                    toTimeErrorLabel.setText(startTime.isAfter(endTime) ? bundle.getString("toTimeBeforeFromTimeError") : "");
+                    return;
+                }
                 studySession.setTitle(newTitle);
                 studySession.setDescription(newDescription);
                 studySession.setStartTime(startDateTime);
                 studySession.setEndTime(endDateTime);
                 studySessionDAO.update(studySession);
-            } else if (event instanceof Exam exam) {
+            } else if (event instanceof Exam exam) {        // EXAM
+                if (newTitle.isEmpty()) {
+                    titleErrorLabel.setText(bundle.getString("titleErrorLabel"));
+                    return;
+                }
                 exam.setTitle(newTitle);
                 exam.setDescription(newDescription);
                 LocalDateTime updatedExamDate = LocalDateTime.of(newDate, startTime);
@@ -555,7 +579,11 @@ public class TimetableController implements Initializable {
                     exam.setLocation(locationField.getText());
                 }
                 examDAO.update(exam);
-            } else if (event instanceof Assignment assignment) {
+            } else if (event instanceof Assignment assignment) {        // ASSIGNMENT
+                if (newTitle.isEmpty()) {
+                    titleErrorLabel.setText(bundle.getString("titleErrorLabel"));
+                    return;
+                }
                 assignment.setTitle(newTitle);
                 assignment.setDescription(newDescription);
                 assignment.setDeadline(startDateTime);
@@ -570,7 +598,12 @@ public class TimetableController implements Initializable {
                     assignment.setStatus(selectedStatus.getText());
                 }
                 assignmentDAO.update(assignment);
-            } else if (event instanceof ClassSchedule classSchedule) {
+            } else if (event instanceof ClassSchedule classSchedule) {  // CLASS SCHEDULE
+                if (startTime.isAfter(endTime)) {
+                    toTimeErrorLabel.setText(bundle.getString("toTimeBeforeFromTimeError"));
+                    return;
+                }
+
                 classSchedule.setDescription(newDescription);
                 classSchedule.setStartTime(startDateTime);
                 classSchedule.setEndTime(endDateTime);
@@ -903,6 +936,7 @@ private void handleDeleteCourse(int courseId, Stage popupStage) {
 
         nameLabel.setText(bundle.getString("nameLabel"));
         addButton.setText(bundle.getString("addLabel"));
+        coursesLabel.setText(bundle.getString("coursesLabel"));
         Label[] dayLabels = new Label[] {
                 mondayLabel, tuesdayLabel, wednesdayLabel, thursdayLabel, fridayLabel, saturdayLabel, sundayLabel
         };
