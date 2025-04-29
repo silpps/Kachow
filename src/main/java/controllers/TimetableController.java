@@ -758,17 +758,16 @@ public class TimetableController implements Initializable {
         VBox courseBox = new VBox();
         courseBox.getStyleClass().add("course-box");
         courseBox.setSpacing(5); // Add spacing between elements
-        courseBox.setStyle("-fx-padding: 10; -fx-border-color: #ccc; -fx-border-radius: 5; -fx-background-color: #f9f9f9;");
+        courseBox.setId("courseBox");
 
         Label courseNameLabel = new Label(courseName);
         courseNameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
         Label courseIdLabel = new Label("ID: " + courseId);
-        courseIdLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #666;");
+        courseIdLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #3a3a3a;");
 
         courseBox.getChildren().addAll(courseNameLabel, courseIdLabel);
 
-        // Optional: Add click event to handle course selection or details
         courseBox.setOnMouseClicked(e -> handleCourseClick(courseId, courseName));
 
         return courseBox;
@@ -793,14 +792,22 @@ private void handleCourseClick(int courseId, String courseName) {
         // Course details
         Label courseNameLabel = new Label(bundle.getString("courseNameLabel"));
         TextField courseNameField = new TextField(courseName);
+        Label courseNameErrorLabel = new Label();
+        courseNameErrorLabel.setId("errorLabel");
 
         Label instructorLabel = new Label(bundle.getString("instructorLabel"));
         TextField instructorField = new TextField(course.getInstructor());
+        Label instructorErrorLabel = new Label();
+        instructorErrorLabel.setId("errorLabel");
 
         Label startDateLabel = new Label(bundle.getString("startDateLabel"));
         DatePicker startDatePicker = new DatePicker(course.getStartDate());
+        Label startDateErrorLabel = new Label();
+        startDateErrorLabel.setId("errorLabel");
         Label endDateLabel = new Label(bundle.getString("endDateLabel"));
         DatePicker endDatePicker = new DatePicker(course.getEndDate());
+        Label endDateErrorLabel = new Label();
+        endDateErrorLabel.setId("errorLabel");
 
         Button deleteButton = new Button(bundle.getString("deleteButton"));
         Button saveButton = new Button(bundle.getString("saveButton"));
@@ -813,15 +820,15 @@ private void handleCourseClick(int courseId, String courseName) {
         backButtonHBox.setAlignment(Pos.CENTER);
         backButton.setMaxWidth(Double.MAX_VALUE);
 
-        saveButton.setOnAction(e -> handleEditCourse(course, courseNameField.getText(), instructorField.getText(), startDatePicker.getValue(), endDatePicker.getValue(), popupStage));
+        saveButton.setOnAction(e -> handleEditCourse(course, courseNameField.getText(), instructorField.getText(), startDatePicker.getValue(), endDatePicker.getValue(), courseNameErrorLabel, instructorErrorLabel, startDateErrorLabel, endDateErrorLabel, popupStage));
         deleteButton.setOnAction(e -> handleDeleteCourse(courseId, popupStage));
         backButton.setOnAction(e -> popupStage.close());
 
         popupVBox.getChildren().addAll(
-                courseNameLabel, courseNameField,
-                instructorLabel, instructorField,
-                startDateLabel, startDatePicker,
-                endDateLabel, endDatePicker,
+                courseNameLabel, courseNameField, courseNameErrorLabel,
+                instructorLabel, instructorField, instructorErrorLabel,
+                startDateLabel, startDatePicker, startDateErrorLabel,
+                endDateLabel, endDatePicker, endDateErrorLabel,
                 buttonHBox,
                 backButtonHBox
         );
@@ -830,7 +837,7 @@ private void handleCourseClick(int courseId, String courseName) {
             popupVBox.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
         }
 
-        Scene popupScene = new Scene(popupVBox, 300, 500);
+        Scene popupScene = new Scene(popupVBox, 300, 600);
         popupScene.getStylesheets().add("/timetable.css");
         popupStage.setScene(popupScene);
         popupStage.show();
@@ -845,8 +852,22 @@ private void handleCourseClick(int courseId, String courseName) {
  *
  *
  */
-private void handleEditCourse(Course course, String courseName, String instructor, LocalDate startDate, LocalDate endDate, Stage popupStage) {
-    System.out.println("Edit course: " + courseName + " (ID: " + course.getCourseID() + ")");
+private void handleEditCourse(Course course, String courseName, String instructor, LocalDate startDate, LocalDate endDate, Label courseNameErrorLabel, Label instructorErrorLabel, Label startDateErrorLabel, Label endDateErrorLabel, Stage popupStage) {
+    courseNameErrorLabel.setText("");
+    instructorErrorLabel.setText("");
+    startDateErrorLabel.setText("");
+    endDateErrorLabel.setText("");
+    if (courseName.isEmpty() || instructor.isEmpty() || startDate == null || endDate == null) {
+        courseNameErrorLabel.setText(courseName.isEmpty() ? bundle.getString("courseNameErrorLabel") : "");
+        instructorErrorLabel.setText(instructor.isEmpty() ? bundle.getString("instructorErrorLabel") : "");
+        startDateErrorLabel.setText(startDate == null ? bundle.getString("startDateErrorLabel") : "");
+        endDateErrorLabel.setText(endDate == null ? bundle.getString("endDateErrorLabel") : "");
+        return;
+    }
+    if (startDate.isAfter(endDate)) {
+        endDateErrorLabel.setText(bundle.getString("startDateAfterEndDateErrorLabel"));
+        return;
+    }
     course.setCourseName(courseName);
     course.setInstructor(instructor);
     course.setStartDate(startDate);
@@ -860,7 +881,6 @@ private void handleEditCourse(Course course, String courseName, String instructo
     if (result.isPresent() && result.get() == ButtonType.OK) {
         try {
             courseDAO.update(course);
-            popupStage.close();
             updateCourseMap();
             showAlert(Alert.AlertType.INFORMATION, bundle.getString("eventSavedTitle"), bundle.getString("eventSavedMessage"));
             // Update the UI after saving the exam
@@ -878,6 +898,9 @@ private void handleEditCourse(Course course, String courseName, String instructo
                     System.out.println("UI updated.");
                 });
             }).start();
+
+            // close window
+            popupStage.close();
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, bundle.getString("eventSaveErrorTitle"), bundle.getString("eventSaveErrorMessage"));
             e.printStackTrace();
