@@ -850,7 +850,16 @@ private void handleCourseClick(int courseId, String courseName) {
 /**
  * Handles the edit course action.
  *
- *
+ * @param course             the course object to edit
+ * @param courseName         the new course name
+ * @param instructor         the new instructor name
+ * @param startDate          the new start date
+ * @param endDate            the new end date
+ * @param courseNameErrorLabel the error label for course name
+ * @param instructorErrorLabel the error label for instructor
+ * @param startDateErrorLabel the error label for start date
+ * @param endDateErrorLabel   the error label for end date
+ * @param popupStage         the popup stage to close after editing
  */
 private void handleEditCourse(Course course, String courseName, String instructor, LocalDate startDate, LocalDate endDate, Label courseNameErrorLabel, Label instructorErrorLabel, Label startDateErrorLabel, Label endDateErrorLabel, Stage popupStage) {
     courseNameErrorLabel.setText("");
